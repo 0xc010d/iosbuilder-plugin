@@ -1,0 +1,52 @@
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+  <j:set var="resizeOnLoad" value="javascript:this.style.height=this.contentWindow.document.body.scrollHeight+'px';"/>
+  <j:set var="baseURL" value="${rootURL}/descriptor/org.jenkinsci.plugins.xcodebuild_iOS.XcodeIOSBuilder/uploadForm?job=${it.fullName}&amp;"/>
+  <f:entry title=".xcworkspace path">
+    <f:textbox field="xcworkspacePath" help="${resURL}/plugins/org.jenkinsci.plugins.xcodebuild_iOS/help-xcworkspacePath.html" />
+  </f:entry>
+  <f:entry title=".xcodeproj path">
+    <f:textbox field="xcodeprojPath" />
+  </f:entry>
+  <f:entry title="Target">
+    <f:textbox field="target" />
+  </f:entry>
+  <f:entry title="Scheme">
+    <f:textbox field="scheme" />
+  </f:entry>
+  <f:entry title="Configuration">
+    <f:textbox field="configuration" />
+  </f:entry>
+  <f:entry title="Additional xcodebuild parameters">
+    <f:textbox field="additionalParameters" />
+  </f:entry>
+  <f:entry title="SDK" field="sdk">
+    <select name="sdk">
+      <option value="iphoneos">iOS SDK</option>
+      <option value="iphonesimulator">iOS Simulator SDK</option>
+    </select>
+  </f:entry>
+  <f:entry title=".p12 key file">
+    <j:set var="url" value="${baseURL}name=key.p12"/>
+    <iframe src="${url}" frameborder="0" width="100%" height="0" onload="${resizeOnLoad}" scrolling="no">
+      <a href="${url}" target="_blank">Upload .p12 key file...</a>
+    </iframe>
+  </f:entry>
+  <f:entry title=".p12 key password">
+    <f:password field="keyPassword" />
+  </f:entry>
+  <f:entry title=".cer certificate file">
+    <j:set var="url" value="${baseURL}name=certificate.cer"/>
+    <iframe src="${url}" frameborder="0" width="100%" height="0" onload="${resizeOnLoad}" scrolling="no">
+      <a href="${url}" target="_blank">Upload .cer certificate file...</a>
+    </iframe>
+  </f:entry>
+  <f:entry title=".mobileprovision file">
+    <j:set var="url" value="${baseURL}name=profile.mobileprovision"/>
+    <iframe src="${url}" frameborder="0" width="100%" height="0" onload="${resizeOnLoad}" scrolling="no">
+      <a href="${url}" target="_blank">Upload .mobileprovision file...</a>
+    </iframe>
+  </f:entry>
+  <f:entry title="Build .ipa">
+    <f:checkbox field="buildIPA" />
+  </f:entry>
+</j:jelly>
