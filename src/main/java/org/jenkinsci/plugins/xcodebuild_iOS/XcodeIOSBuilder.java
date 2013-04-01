@@ -1,5 +1,6 @@
 package org.jenkinsci.plugins.xcodebuild_iOS;
 
+import java.util.Arrays;
 import hudson.Launcher;
 import hudson.Extension;
 import hudson.util.FormValidation;
@@ -21,8 +22,13 @@ import hudson.model.Item;
 import org.apache.commons.fileupload.FileItem;
 import java.io.OutputStream;
 import java.io.FileOutputStream;
+import java.util.logging.Logger;
+import java.lang.Thread;
+import org.apache.commons.codec.binary.Base64;
 
 public class XcodeIOSBuilder extends Builder {
+    private final static Logger LOG = Logger.getLogger(PluginImpl.class.getName());
+
     private final String xcworkspacePath;
     private final String xcodeprojPath;
     private final String target;
@@ -67,10 +73,10 @@ public class XcodeIOSBuilder extends Builder {
 
     @Override
     public boolean perform(AbstractBuild build, Launcher launcher, BuildListener listener) {
-        String xcodebuildPath = getDescriptor().getXcodebuildPath();
-        String securityPath = getDescriptor().getSecurityPath();
-        String opensslPath = getDescriptor().getOpensslPath();
-        String xcrunPath = getDescriptor().getXcrunPath();
+        String xcodebuild = getDescriptor().getXcodebuildPath();
+        String security = getDescriptor().getSecurityPath();
+        String openssl = getDescriptor().getOpensslPath();
+        String xcrun = getDescriptor().getXcrunPath();
 
         listener.getLogger().println("Hello!");
 
@@ -94,6 +100,28 @@ public class XcodeIOSBuilder extends Builder {
         private String opensslPath;
         private String xcrunPath;
 
+        private void processFile(StaplerRequest req, JSONObject formData, String name, String key) throws FormException {
+            FileItem file = null;
+            try {
+                file = req.getFileItem(name);
+            }
+            catch (Exception e) {}
+
+            if (file != null && file.getSize() != 0) {
+                byte[] data = file.get();
+                byte[] encodedData = Base64.encodeBase64(data);
+                formData.put(key, new String(encodedData));
+            }
+        }
+
+        @Override
+        public XcodeIOSBuilder newInstance(StaplerRequest req, JSONObject formData) throws FormException {
+            processFile(req, formData, (String)formData.get("keyFile"), "key");
+            processFile(req, formData, (String)formData.get("certificateFile"), "certificate");
+            processFile(req, formData, (String)formData.get("mobileprovisionFile"), "mobileprovision");
+            return (XcodeIOSBuilder)super.newInstance(req, formData);
+        }
+
         private FormValidation doCheckPath(@QueryParameter String value, String name) throws IOException, ServletException {
             if (value.length() == 0) {
                 return FormValidation.error("Please set " + name + " path");
@@ -109,16 +137,16 @@ public class XcodeIOSBuilder extends Builder {
         }
 
         public FormValidation doCheckXcodebuildPath(@QueryParameter String value) throws IOException, ServletException {
-            return this.doCheckPath(value, "xcodebuild");
+            return doCheckPath(value, "xcodebuild");
         }
         public FormValidation doCheckSecurityPath(@QueryParameter String value) throws IOException, ServletException {
-            return this.doCheckPath(value, "security");
+            return doCheckPath(value, "security");
         }
         public FormValidation doCheckOpensslPath(@QueryParameter String value) throws IOException, ServletException {
-            return this.doCheckPath(value, "openssl");
+            return doCheckPath(value, "openssl");
         }
         public FormValidation doCheckXcrunPath(@QueryParameter String value) throws IOException, ServletException {
-            return this.doCheckPath(value, "xcrun");
+            return doCheckPath(value, "xcrun");
         }
 
         public boolean isApplicable(Class<? extends AbstractProject> aClass) {
@@ -136,44 +164,17 @@ public class XcodeIOSBuilder extends Builder {
             opensslPath = formData.getString("opensslPath");
             xcrunPath = formData.getString("xcrunPath");
             save();
-            return super.configure(req,formData);
+            return super.configure(req, formData);
         }
 
-        public String getXcodebuildPath() { return xcodebuildPath; }
-        public String getSecurityPath() { return securityPath; }
-        public String getOpensslPath() { return opensslPath; }
-        public String getXcrunPath() { return xcrunPath; }
+        public String getXcodebuildPath() { return xcodebuildPath != null ? xcodebuildPath : getDefaultXcodebuildPath(); }
+        public String getSecurityPath() { return securityPath != null ? securityPath : getDefaultSecurityPath(); }
+        public String getOpensslPath() { return opensslPath != null ? opensslPath : getDefaultOpensslPath(); }
+        public String getXcrunPath() { return xcrunPath != null ? xcrunPath : getDefaultXcrunPath(); }
 
         public String getDefaultXcodebuildPath() { return DEFAULT_XCODEBUILD_PATH; }
         public String getDefaultSecurityPath() { return DEFAULT_SECURITY_PATH; }
         public String getDefaultOpensslPath() { return DEFAULT_OPENSSL_PATH; }
         public String getDefaultXcrunPath() { return DEFAULT_XCRUN_PATH; }
-
-        public void doUploadForm(StaplerRequest req, StaplerResponse rsp) throws IOException, ServletException {
-            rsp.setContentType("text/html");
-            req.getView(XcodeIOSBuilder.class, "uploadForm.jelly").forward(req, rsp);
-        }
-        public void doUpload(StaplerRequest req, StaplerResponse rsp, @QueryParameter String job, @QueryParameter String name) throws IOException, ServletException {
-            AbstractProject project = (AbstractProject)Hudson.getInstance().getItemByFullName(job);
-            project.checkPermission(Item.CONFIGURE);
-            FileItem fileItem = req.getFileItem("file");
-            if (fileItem == null) {
-                throw new ServletException("File was not uploaded");
-            }
-            byte[] data = fileItem.get();
-            File file = new File(project.getRootDir(), name);
-            OutputStream stream = new FileOutputStream(file);
-            try {
-                stream.write(data);
-            } finally {
-                stream.close();
-            }
-            try {
-                Hudson.getInstance().createPath(file.getAbsolutePath()).chmod(0600);
-            } catch (InterruptedException x) {
-                throw (IOException) new IOException(x.toString()).initCause(x);
-            }
-            doUploadForm(req, rsp);
-        }
     }
 }

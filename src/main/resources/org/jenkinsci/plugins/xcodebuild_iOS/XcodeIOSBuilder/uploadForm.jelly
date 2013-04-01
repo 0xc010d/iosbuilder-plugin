@@ -1,7 +1,0 @@
-<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
-    <body style="margin:0;">
-        <form method="post" action="upload?job=${request.getParameter('job')}&amp;name=${request.getParameter('name')}" enctype="multipart/form-data" style="margin:0;">
-            <input type="file" name="file" onchange="this.form.submit();" />
-        </form>
-    </body>
-</j:jelly>
