@@ -1,32 +1,26 @@
-package org.jenkinsci.plugins.xcodebuild_iOS;
+package org.jenkinsci.plugins.iosbuilder;
 
-import java.util.Arrays;
-import hudson.Launcher;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Logger;
+import javax.servlet.ServletException;
 import hudson.Extension;
+import hudson.Launcher;
 import hudson.util.FormValidation;
 import hudson.model.AbstractBuild;
-import hudson.model.BuildListener;
 import hudson.model.AbstractProject;
+import hudson.model.BuildListener;
+import hudson.model.Item;
 import hudson.tasks.Builder;
 import hudson.tasks.BuildStepDescriptor;
 import net.sf.json.JSONObject;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.fileupload.FileItem;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.QueryParameter;
-import javax.servlet.ServletException;
-import java.io.IOException;
-import java.io.File;
-import org.kohsuke.stapler.StaplerResponse;
-import hudson.model.Hudson;
-import hudson.model.Item;
-import org.apache.commons.fileupload.FileItem;
-import java.io.OutputStream;
-import java.io.FileOutputStream;
-import java.util.logging.Logger;
-import java.lang.Thread;
-import org.apache.commons.codec.binary.Base64;
 
-public class XcodeIOSBuilder extends Builder {
+public class iOSBuilder extends Builder {
     private final static Logger LOG = Logger.getLogger(PluginImpl.class.getName());
 
     private final String xcworkspacePath;
@@ -43,7 +37,7 @@ public class XcodeIOSBuilder extends Builder {
     private final boolean buildIPA;
 
     @DataBoundConstructor
-    public XcodeIOSBuilder(String xcworkspacePath, String xcodeprojPath, String target, String scheme, String configuration, String additionalParameters, String sdk, String key, String keyPassword, String certificate, String mobileprovision, boolean buildIPA) {
+    public iOSBuilder(String xcworkspacePath, String xcodeprojPath, String target, String scheme, String configuration, String additionalParameters, String sdk, String key, String keyPassword, String certificate, String mobileprovision, boolean buildIPA) {
         this.xcworkspacePath = xcworkspacePath;
         this.xcodeprojPath = xcodeprojPath;
         this.target = target;
@@ -100,33 +94,33 @@ public class XcodeIOSBuilder extends Builder {
         private String opensslPath;
         private String xcrunPath;
 
-        private void processFile(StaplerRequest req, JSONObject formData, String name, String key) throws FormException {
+        private void processFile(StaplerRequest req, JSONObject formData, String fileKey, String valueKey) throws FormException {
             FileItem file = null;
             try {
-                file = req.getFileItem(name);
+                file = req.getFileItem((String)formData.get(fileKey));
             }
             catch (Exception e) {}
 
             if (file != null && file.getSize() != 0) {
                 byte[] data = file.get();
                 byte[] encodedData = Base64.encodeBase64(data);
-                formData.put(key, new String(encodedData));
+                formData.put(valueKey, new String(encodedData));
             }
         }
 
         @Override
-        public XcodeIOSBuilder newInstance(StaplerRequest req, JSONObject formData) throws FormException {
-            processFile(req, formData, (String)formData.get("keyFile"), "key");
-            processFile(req, formData, (String)formData.get("certificateFile"), "certificate");
-            processFile(req, formData, (String)formData.get("mobileprovisionFile"), "mobileprovision");
-            return (XcodeIOSBuilder)super.newInstance(req, formData);
+        public iOSBuilder newInstance(StaplerRequest req, JSONObject formData) throws FormException {
+            processFile(req, formData, "keyFile", "key");
+            processFile(req, formData, "certificateFile", "certificate");
+            processFile(req, formData, "mobileprovisionFile", "mobileprovision");
+            return (iOSBuilder)super.newInstance(req, formData);
         }
 
-        private FormValidation doCheckPath(@QueryParameter String value, String name) throws IOException, ServletException {
-            if (value.length() == 0) {
+        private FormValidation checkPath(@QueryParameter String path, String name) throws IOException, ServletException {
+            if (path.length() == 0) {
                 return FormValidation.error("Please set " + name + " path");
             }
-            File file = new File(value);
+            File file = new File(path);
             if (!file.isFile()) {
                 return FormValidation.error("Please set correct " + name + " path");
             }
@@ -137,16 +131,16 @@ public class XcodeIOSBuilder extends Builder {
         }
 
         public FormValidation doCheckXcodebuildPath(@QueryParameter String value) throws IOException, ServletException {
-            return doCheckPath(value, "xcodebuild");
+            return checkPath(value, "xcodebuild");
         }
         public FormValidation doCheckSecurityPath(@QueryParameter String value) throws IOException, ServletException {
-            return doCheckPath(value, "security");
+            return checkPath(value, "security");
         }
         public FormValidation doCheckOpensslPath(@QueryParameter String value) throws IOException, ServletException {
-            return doCheckPath(value, "openssl");
+            return checkPath(value, "openssl");
         }
         public FormValidation doCheckXcrunPath(@QueryParameter String value) throws IOException, ServletException {
-            return doCheckPath(value, "xcrun");
+            return checkPath(value, "xcrun");
         }
 
         public boolean isApplicable(Class<? extends AbstractProject> aClass) {
@@ -154,7 +148,7 @@ public class XcodeIOSBuilder extends Builder {
         }
 
         public String getDisplayName() {
-            return "xcodebuild-iOS";
+            return "iOS builder";
         }
 
         @Override
@@ -163,7 +157,6 @@ public class XcodeIOSBuilder extends Builder {
             securityPath = formData.getString("securityPath");
             opensslPath = formData.getString("opensslPath");
             xcrunPath = formData.getString("xcrunPath");
-            save();
             return super.configure(req, formData);
         }
 

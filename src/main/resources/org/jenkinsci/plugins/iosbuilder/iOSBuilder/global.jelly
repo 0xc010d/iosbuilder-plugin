@@ -1,5 +1,5 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
-  <f:section title="xcodebuild-iOS Builder">
+  <f:section title="iOS builder">
     <f:entry title="xcodebuild path">
       <f:textbox field="xcodebuildPath" default="${descriptor.getDefaultXcodebuildPath()}" />
     </f:entry>

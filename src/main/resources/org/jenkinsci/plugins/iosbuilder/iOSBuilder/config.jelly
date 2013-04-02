@@ -24,18 +24,18 @@
     </select>
   </f:entry>
   <f:entry title=".p12 key file">
-    <input type="text" name="key" value="${instance.key}" />
+    <input type="hidden" name="key" value="${instance.key}" />
     <input type="file" name="keyFile" jsonAware="yes" />
   </f:entry>
   <f:entry title=".p12 key password">
     <f:password field="keyPassword" />
   </f:entry>
   <f:entry title=".cer certificate file">
-    <input type="text" name="certificate" value="${instance.certificate}" />
+    <input type="hidden" name="certificate" value="${instance.certificate}" />
     <input type="file" name="certificateFile" jsonAware="yes" />
   </f:entry>
   <f:entry title=".mobileprovision file">
-    <input type="text" name="mobileprovision" value="${instance.mobileprovision}" />
+    <input type="hidden" name="mobileprovision" value="${instance.mobileprovision}" />
     <input type="file" name="mobileprovisionFile" jsonAware="yes" />
   </f:entry>
   <f:entry title="Build .ipa">
