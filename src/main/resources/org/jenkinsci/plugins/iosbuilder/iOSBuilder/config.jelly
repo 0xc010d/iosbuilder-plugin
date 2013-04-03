@@ -17,11 +17,8 @@
   <f:entry title="Additional xcodebuild parameters">
     <f:textbox field="additionalParameters" />
   </f:entry>
-  <f:entry title="SDK">
-    <select name="sdk">
-      <option value="iphoneos">iOS SDK</option>
-      <option value="iphonesimulator">iOS Simulator SDK</option>
-    </select>
+  <f:entry title="SDK" field="sdk">
+    <f:select />
   </f:entry>
   <f:entry title=".p12 key file">
     <input type="hidden" name="key" value="${instance.key}" />

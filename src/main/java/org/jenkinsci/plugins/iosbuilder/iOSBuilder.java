@@ -6,13 +6,14 @@ import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import hudson.Extension;
 import hudson.Launcher;
-import hudson.util.FormValidation;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 import hudson.model.BuildListener;
 import hudson.model.Item;
 import hudson.tasks.Builder;
 import hudson.tasks.BuildStepDescriptor;
+import hudson.util.FormValidation;
+import hudson.util.ListBoxModel;
 import net.sf.json.JSONObject;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.fileupload.FileItem;
@@ -141,6 +142,13 @@ public class iOSBuilder extends Builder {
         }
         public FormValidation doCheckXcrunPath(@QueryParameter String value) throws IOException, ServletException {
             return checkPath(value, "xcrun");
+        }
+
+        public ListBoxModel doFillSdkItems() {
+            ListBoxModel items = new ListBoxModel();
+            items.add("iOS SDK", "iphoneos");
+            items.add("iOS Simulator SDK", "iphonesimulator");
+            return items;
         }
 
         public boolean isApplicable(Class<? extends AbstractProject> aClass) {
