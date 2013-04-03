@@ -24,6 +24,7 @@ import org.kohsuke.stapler.QueryParameter;
 public class iOSBuilder extends Builder {
     private final static Logger LOG = Logger.getLogger(PluginImpl.class.getName());
 
+    private final boolean usePods;
     private final String xcworkspacePath;
     private final String xcodeprojPath;
     private final String target;
@@ -39,7 +40,8 @@ public class iOSBuilder extends Builder {
     private final boolean buildIPA;
 
     @DataBoundConstructor
-    public iOSBuilder(String xcworkspacePath, String xcodeprojPath, String target, String scheme, String configuration, String additionalParameters, String sdk, CodeSign codeSign) {
+    public iOSBuilder(boolean usePods, String xcworkspacePath, String xcodeprojPath, String target, String scheme, String configuration, String additionalParameters, String sdk, CodeSign codeSign) {
+        this.usePods = usePods;
         this.xcworkspacePath = xcworkspacePath;
         this.xcodeprojPath = xcodeprojPath;
         this.target = target;
@@ -55,6 +57,7 @@ public class iOSBuilder extends Builder {
         this.buildIPA = this.codeSign ? codeSign.buildIPA : false;
     }
 
+    public boolean getUsePods() { return usePods; };
     public String getXcworkspacePath() { return xcworkspacePath; }
     public String getXcodeprojPath() { return xcodeprojPath; }
     public String getTarget() { return target; }
@@ -115,11 +118,13 @@ public class iOSBuilder extends Builder {
         private static final String DEFAULT_SECURITY_PATH = "/usr/bin/security";
         private static final String DEFAULT_OPENSSL_PATH = "/usr/bin/openssl";
         private static final String DEFAULT_XCRUN_PATH = "/usr/bin/xcrun";
+        private static final String DEFAULT_POD_PATH = "/usr/bin/pod";
 
         private String xcodebuildPath;
         private String securityPath;
         private String opensslPath;
         private String xcrunPath;
+        private String podPath;
 
         private void processFile(StaplerRequest req, JSONObject formData, String fileKey, String valueKey) throws FormException {
             FileItem file = null;
@@ -173,7 +178,11 @@ public class iOSBuilder extends Builder {
         public FormValidation doCheckXcrunPath(@QueryParameter String value) throws IOException, ServletException {
             return checkPath(value, "xcrun");
         }
+        public FormValidation doCheckPodPath(@QueryParameter String value) throws IOException, ServletException {
+            return checkPath(value, "pod");
+        }
 
+        // TODO: Get available SDKs list from xcodebuild
         public ListBoxModel doFillSdkItems() {
             ListBoxModel items = new ListBoxModel();
             items.add("iOS SDK", "iphoneos");
@@ -195,6 +204,7 @@ public class iOSBuilder extends Builder {
             securityPath = formData.getString("securityPath");
             opensslPath = formData.getString("opensslPath");
             xcrunPath = formData.getString("xcrunPath");
+            podPath = formData.getString("podPath");
             return super.configure(req, formData);
         }
 
@@ -202,5 +212,6 @@ public class iOSBuilder extends Builder {
         public String getSecurityPath() { return securityPath != null ? securityPath : DEFAULT_SECURITY_PATH; }
         public String getOpensslPath() { return opensslPath != null ? opensslPath : DEFAULT_OPENSSL_PATH; }
         public String getXcrunPath() { return xcrunPath != null ? xcrunPath : DEFAULT_XCRUN_PATH; }
+        public String getPodPath() { return podPath != null ? podPath : DEFAULT_POD_PATH; }
     }
 }
