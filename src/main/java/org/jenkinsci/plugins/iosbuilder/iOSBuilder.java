@@ -31,14 +31,15 @@ public class iOSBuilder extends Builder {
     private final String configuration;
     private final String additionalParameters;
     private final String sdk;
+    private final boolean codeSign;
     private final String key;
-    private final String keyPassword;
+    private final String password;
     private final String certificate;
     private final String mobileprovision;
     private final boolean buildIPA;
 
     @DataBoundConstructor
-    public iOSBuilder(String xcworkspacePath, String xcodeprojPath, String target, String scheme, String configuration, String additionalParameters, String sdk, String key, String keyPassword, String certificate, String mobileprovision, boolean buildIPA) {
+    public iOSBuilder(String xcworkspacePath, String xcodeprojPath, String target, String scheme, String configuration, String additionalParameters, String sdk, CodeSign codeSign) {
         this.xcworkspacePath = xcworkspacePath;
         this.xcodeprojPath = xcodeprojPath;
         this.target = target;
@@ -46,11 +47,12 @@ public class iOSBuilder extends Builder {
         this.configuration = configuration;
         this.additionalParameters = additionalParameters;
         this.sdk = sdk;
-        this.key = key;
-        this.keyPassword = keyPassword;
-        this.certificate = certificate;
-        this.mobileprovision = mobileprovision;
-        this.buildIPA = buildIPA;
+        this.codeSign = codeSign != null;
+        this.key = this.codeSign ? codeSign.key : null;
+        this.password = this.codeSign ? codeSign.password : null;
+        this.certificate = this.codeSign ? codeSign.certificate : null;
+        this.mobileprovision = this.codeSign ? codeSign.mobileprovision : null;
+        this.buildIPA = this.codeSign ? codeSign.buildIPA : false;
     }
 
     public String getXcworkspacePath() { return xcworkspacePath; }
@@ -60,11 +62,35 @@ public class iOSBuilder extends Builder {
     public String getConfiguration() { return configuration; }
     public String getAdditionalParameters() { return additionalParameters; }
     public String getSdk() { return sdk; }
+    public boolean getCodeSign() { return codeSign; }
     public String getKey() { return key; }
-    public String getKeyPassword() { return keyPassword; }
+    public String getPassword() { return password; }
     public String getCertificate() { return certificate; }
     public String getMobileprovision() { return mobileprovision; }
     public boolean getBuildIPA() { return buildIPA; }
+
+    public static final class CodeSign {
+        private final String key;
+        private final String password;
+        private final String certificate;
+        private final String mobileprovision;
+        private final boolean buildIPA;
+
+        @DataBoundConstructor
+        public CodeSign(String key, String password, String certificate, String mobileprovision, boolean buildIPA) {
+            this.key = key;
+            this.password = password;
+            this.certificate = certificate;
+            this.mobileprovision = mobileprovision;
+            this.buildIPA = buildIPA;
+        }
+
+        public String getKey() { return key; }
+        public String getPassword() { return password; }
+        public String getCertificate() { return certificate; }
+        public String getMobileprovision() { return mobileprovision; }
+        public boolean getBuildIPA() { return buildIPA; }
+    }
 
     @Override
     public boolean perform(AbstractBuild build, Launcher launcher, BuildListener listener) {
@@ -111,9 +137,13 @@ public class iOSBuilder extends Builder {
 
         @Override
         public iOSBuilder newInstance(StaplerRequest req, JSONObject formData) throws FormException {
-            processFile(req, formData, "keyFile", "key");
-            processFile(req, formData, "certificateFile", "certificate");
-            processFile(req, formData, "mobileprovisionFile", "mobileprovision");
+            JSONObject codeSign = (JSONObject)formData.get("codeSign");
+            if (codeSign != null) {
+                processFile(req, codeSign, "keyFile", "key");
+                processFile(req, codeSign, "certificateFile", "certificate");
+                processFile(req, codeSign, "mobileprovisionFile", "mobileprovision");
+                formData.put("codeSign", codeSign);
+            }
             return (iOSBuilder)super.newInstance(req, formData);
         }
 

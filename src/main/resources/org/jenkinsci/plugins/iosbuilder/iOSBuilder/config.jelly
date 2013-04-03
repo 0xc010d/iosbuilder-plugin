@@ -1,41 +1,43 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
   <f:entry title=".xcworkspace path" field="xcworkspacePath">
-    <f:textbox field="xcworkspacePath" />
+    <f:textbox />
   </f:entry>
   <f:entry title=".xcodeproj path" field="xcodeprojPath">
-    <f:textbox field="xcodeprojPath" />
+    <f:textbox />
   </f:entry>
-  <f:entry title="Target">
-    <f:textbox field="target" />
+  <f:entry title="Target" field="target">
+    <f:textbox />
   </f:entry>
-  <f:entry title="Scheme">
-    <f:textbox field="scheme" />
+  <f:entry title="Scheme" field="scheme">
+    <f:textbox />
   </f:entry>
-  <f:entry title="Configuration">
-    <f:textbox field="configuration" />
+  <f:entry title="Configuration" field="configuration">
+    <f:textbox />
   </f:entry>
-  <f:entry title="Additional xcodebuild parameters">
-    <f:textbox field="additionalParameters" />
+  <f:entry title="Additional xcodebuild parameters" field="additionalParameters">
+    <f:textbox />
   </f:entry>
   <f:entry title="SDK" field="sdk">
     <f:select />
   </f:entry>
-  <f:entry title=".p12 key file">
-    <input type="hidden" name="key" value="${instance.key}" />
-    <input type="file" name="keyFile" jsonAware="yes" />
-  </f:entry>
-  <f:entry title=".p12 key password">
-    <f:password field="keyPassword" />
-  </f:entry>
-  <f:entry title=".cer certificate file">
-    <input type="hidden" name="certificate" value="${instance.certificate}" />
-    <input type="file" name="certificateFile" jsonAware="yes" />
-  </f:entry>
-  <f:entry title=".mobileprovision file">
-    <input type="hidden" name="mobileprovision" value="${instance.mobileprovision}" />
-    <input type="file" name="mobileprovisionFile" jsonAware="yes" />
-  </f:entry>
-  <f:entry title="Build .ipa">
-    <f:checkbox field="buildIPA" />
-  </f:entry>
+  <f:optionalBlock field="codeSign" title="Sign the binary">
+    <f:entry title=".p12 key file" field="key">
+      <input type="hidden" name="key" value="${instance.key}" />
+      <input type="file" name="keyFile" jsonAware="yes" />
+    </f:entry>
+    <f:entry title=".p12 key password" field="password">
+      <f:password />
+    </f:entry>
+    <f:entry title=".cer certificate file" field="certificate">
+      <input type="hidden" name="certificate" value="${instance.certificate}" />
+      <input type="file" name="certificateFile" jsonAware="yes" />
+    </f:entry>
+    <f:entry title=".mobileprovision file" field="mobileprovision">
+      <input type="hidden" name="mobileprovision" value="${instance.mobileprovision}" />
+      <input type="file" name="mobileprovisionFile" jsonAware="yes" />
+    </f:entry>
+    <f:entry title="Build .ipa" field="buildIPA">
+      <f:checkbox />
+    </f:entry>
+  </f:optionalBlock>
 </j:jelly>
