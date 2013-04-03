@@ -1,16 +1,16 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
   <f:section title="iOS builder">
-    <f:entry title="xcodebuild path">
-      <f:textbox field="xcodebuildPath" default="${descriptor.getDefaultXcodebuildPath()}" />
+    <f:entry title="xcodebuild path" field="xcodebuildPath">
+      <f:textbox default="${descriptor.getXcodebuildPath()}" />
     </f:entry>
-    <f:entry title="security path">
-      <f:textbox field="securityPath" default="${descriptor.getDefaultSecurityPath()}" />
+    <f:entry title="security path" field="securityPath">
+      <f:textbox default="${descriptor.getSecurityPath()}" />
     </f:entry>
-    <f:entry title="openssl path">
-      <f:textbox field="opensslPath" default="${descriptor.getDefaultOpensslPath()}" />
+    <f:entry title="openssl path" field="opensslPath">
+      <f:textbox default="${descriptor.getOpensslPath()}" />
     </f:entry>
-    <f:entry title="xcrun path">
-      <f:textbox field="xcrunPath" default="${descriptor.getDefaultXcrunPath()}" />
+    <f:entry title="xcrun path" field="xcrunPath">
+      <f:textbox default="${descriptor.getXcrunPath()}" />
     </f:entry>
   </f:section>
 </j:jelly>

@@ -198,14 +198,9 @@ public class iOSBuilder extends Builder {
             return super.configure(req, formData);
         }
 
-        public String getXcodebuildPath() { return xcodebuildPath != null ? xcodebuildPath : getDefaultXcodebuildPath(); }
-        public String getSecurityPath() { return securityPath != null ? securityPath : getDefaultSecurityPath(); }
-        public String getOpensslPath() { return opensslPath != null ? opensslPath : getDefaultOpensslPath(); }
-        public String getXcrunPath() { return xcrunPath != null ? xcrunPath : getDefaultXcrunPath(); }
-
-        public String getDefaultXcodebuildPath() { return DEFAULT_XCODEBUILD_PATH; }
-        public String getDefaultSecurityPath() { return DEFAULT_SECURITY_PATH; }
-        public String getDefaultOpensslPath() { return DEFAULT_OPENSSL_PATH; }
-        public String getDefaultXcrunPath() { return DEFAULT_XCRUN_PATH; }
+        public String getXcodebuildPath() { return xcodebuildPath != null ? xcodebuildPath : DEFAULT_XCODEBUILD_PATH; }
+        public String getSecurityPath() { return securityPath != null ? securityPath : DEFAULT_SECURITY_PATH; }
+        public String getOpensslPath() { return opensslPath != null ? opensslPath : DEFAULT_OPENSSL_PATH; }
+        public String getXcrunPath() { return xcrunPath != null ? xcrunPath : DEFAULT_XCRUN_PATH; }
     }
 }
