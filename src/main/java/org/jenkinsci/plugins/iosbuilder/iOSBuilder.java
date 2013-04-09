@@ -126,27 +126,29 @@ public class iOSBuilder extends Builder {
         private String xcrunPath;
         private String podPath;
 
-        private void processFile(StaplerRequest req, JSONObject formData, String fileKey, String valueKey) throws FormException {
+        private byte[] processFile(StaplerRequest req, JSONObject formData, String fileKey, String valueKey) throws FormException {
             FileItem file = null;
+            byte[] data = null;
             try {
                 file = req.getFileItem((String)formData.get(fileKey));
             }
             catch (Exception e) {}
 
             if (file != null && file.getSize() != 0) {
-                byte[] data = file.get();
+                data = file.get();
                 byte[] encodedData = Base64.encodeBase64(data);
                 formData.put(valueKey, new String(encodedData));
             }
+            return data;
         }
 
         @Override
         public iOSBuilder newInstance(StaplerRequest req, JSONObject formData) throws FormException {
             JSONObject codeSign = (JSONObject)formData.get("codeSign");
             if (codeSign != null) {
-                processFile(req, codeSign, "keyFile", "key");
-                processFile(req, codeSign, "certificateFile", "certificate");
-                processFile(req, codeSign, "mobileprovisionFile", "mobileprovision");
+                new PKCS12Archive(processFile(req, codeSign, "keyFile", "key"), ((String)codeSign.get("password")).toCharArray());
+                new Certificate(processFile(req, codeSign, "certificateFile", "certificate"));
+                new Mobileprovision(processFile(req, codeSign, "mobileprovisionFile", "mobileprovision"));
                 formData.put("codeSign", codeSign);
             }
             return (iOSBuilder)super.newInstance(req, formData);
