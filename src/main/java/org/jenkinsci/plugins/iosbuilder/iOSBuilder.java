@@ -146,9 +146,15 @@ public class iOSBuilder extends Builder {
         public iOSBuilder newInstance(StaplerRequest req, JSONObject formData) throws FormException {
             JSONObject codeSign = (JSONObject)formData.get("codeSign");
             if (codeSign != null) {
-                new PKCS12Archive(processFile(req, codeSign, "keyFile", "key"), ((String)codeSign.get("password")).toCharArray());
-                new Certificate(processFile(req, codeSign, "certificateFile", "certificate"));
-                new Mobileprovision(processFile(req, codeSign, "mobileprovisionFile", "mobileprovision"));
+                PKCS12Archive archive = new PKCS12Archive(processFile(req, codeSign, "keyFile", "key"), ((String)codeSign.get("password")).toCharArray());
+                Certificate certificate = new Certificate(processFile(req, codeSign, "certificateFile", "certificate"));
+                Mobileprovision mobileprovision = new Mobileprovision(processFile(req, codeSign, "mobileprovisionFile", "mobileprovision"));
+
+                LOG.info(new Boolean(archive.checkCertificate(certificate)).toString());
+                for (int index = 0; index < mobileprovision.getCertificates().length; index ++) {
+                    LOG.info(new Boolean(archive.checkCertificate(mobileprovision.getCertificates()[index])).toString());
+                }
+
                 formData.put("codeSign", codeSign);
             }
             return (iOSBuilder)super.newInstance(req, formData);

@@ -1,49 +1,52 @@
 package org.jenkinsci.plugins.iosbuilder;
 
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.security.KeyStore;
-import java.security.PrivateKey;
-import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
-import sun.security.x509.X500Name;
+import java.util.List;
 
 import java.util.logging.Logger;
 
 public class PKCS12Archive {
     private final static Logger LOG = Logger.getLogger(PluginImpl.class.getName());
 
-    private Map<String, Certificate> keys;
+    private PrivateKey[] privateKeys;
 
     public PKCS12Archive(byte[] data, char[] password) {
-        this.keys = new HashMap();
+        List<PrivateKey> privateKeys = new ArrayList();
 
         try {
             KeyStore keyStore = KeyStore.getInstance("PKCS12");
-            InputStream inputStream = new ByteArrayInputStream(data);
-            keyStore.load(inputStream, password);
+            keyStore.load(new ByteArrayInputStream(data), password);
             Enumeration<String> aliases = keyStore.aliases();
             while (aliases.hasMoreElements()) {
                 String alias = aliases.nextElement();
                 if (keyStore.isKeyEntry(alias)) {
-                    LOG.info(alias);
-                    Certificate certificate = null;
                     try {
-                        KeyStore.PrivateKeyEntry entry = (KeyStore.PrivateKeyEntry)keyStore.getEntry(alias, new KeyStore.PasswordProtection(password));
-                        certificate = new Certificate((X509Certificate)entry.getCertificate());
+                        privateKeys.add(new PrivateKey(alias, (java.security.PrivateKey)keyStore.getKey(alias, password)));
                     }
-                    catch (NullPointerException e) {}
-                    this.keys.put(alias, certificate);
+                    catch (NullPointerException e) {
+                        e.printStackTrace();
+                    }
+                    this.privateKeys = privateKeys.toArray(new PrivateKey[privateKeys.size()]);
                 }
             }
-            LOG.info(this.keys.toString());
         }
         catch (Exception e) {
-            LOG.info(e.toString());
+            e.printStackTrace();
         }
     }
 
-    public Map<String, Certificate> getKeys() { return keys; }
+    PrivateKey[] getPrivateKeys() { return privateKeys; }
+
+    public boolean checkCertificate(Certificate certificate) {
+        for (int index = 0; index < this.privateKeys.length; index ++) {
+            PrivateKey privateKey = this.privateKeys[index];
+            if (privateKey.checkPublicKey(certificate.getX509Certificate().getPublicKey())) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

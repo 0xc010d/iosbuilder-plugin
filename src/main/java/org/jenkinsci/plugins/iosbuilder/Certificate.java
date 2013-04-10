@@ -41,4 +41,5 @@ public class Certificate {
 
     public String getName() { return name; }
     public Date getExpirationDate() { return expirationDate; }
+    X509Certificate getX509Certificate() { return x509Certificate; }
 }
