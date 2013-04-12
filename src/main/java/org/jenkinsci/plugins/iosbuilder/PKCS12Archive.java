@@ -2,35 +2,27 @@ package org.jenkinsci.plugins.iosbuilder;
 
 import java.io.ByteArrayInputStream;
 import java.security.KeyStore;
-import java.util.ArrayList;
+import java.security.cert.X509Certificate;
 import java.util.Enumeration;
-import java.util.List;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 public class PKCS12Archive {
     private final static Logger LOG = Logger.getLogger(PluginImpl.class.getName());
 
-    private PrivateKey[] privateKeys;
+    private Map<String, Certificate> certificates;
 
-    public PKCS12Archive(byte[] data, char[] password) {
-        List<PrivateKey> privateKeys = new ArrayList();
-
+    private PKCS12Archive(byte[] data, char[] password) {
+        certificates = new HashMap<String, Certificate>();
         try {
             KeyStore keyStore = KeyStore.getInstance("PKCS12");
             keyStore.load(new ByteArrayInputStream(data), password);
             Enumeration<String> aliases = keyStore.aliases();
             while (aliases.hasMoreElements()) {
                 String alias = aliases.nextElement();
-                if (keyStore.isKeyEntry(alias)) {
-                    try {
-                        privateKeys.add(new PrivateKey(alias, (java.security.PrivateKey)keyStore.getKey(alias, password)));
-                    }
-                    catch (NullPointerException e) {
-                        e.printStackTrace();
-                    }
-                    this.privateKeys = privateKeys.toArray(new PrivateKey[privateKeys.size()]);
-                }
+                certificates.put(alias, new Certificate((X509Certificate)keyStore.getCertificate(alias)));
             }
         }
         catch (Exception e) {
@@ -38,15 +30,25 @@ public class PKCS12Archive {
         }
     }
 
-    PrivateKey[] getPrivateKeys() { return privateKeys; }
+    public static PKCS12Archive getInstance(byte[] data, char[] password) {
+        if (data != null && data.length != 0 && password != null && password.length != 0) {
+            return new PKCS12Archive(data, password);
+        }
+        return null;
+    }
 
-    public boolean checkCertificate(Certificate certificate) {
-        for (int index = 0; index < this.privateKeys.length; index ++) {
-            PrivateKey privateKey = this.privateKeys[index];
-            if (privateKey.checkPublicKey(certificate.getX509Certificate().getPublicKey())) {
-                return true;
+    public Map<String, Certificate> getCertificates() { return certificates; }
+
+    public Certificate chooseCertificate(Mobileprovision mobileprovision) {
+        if (mobileprovision != null && mobileprovision.getCertificates() != null) {
+            for (Certificate certificate : mobileprovision.getCertificates()) {
+                for (String key : certificates.keySet()) {
+                    if (certificate.equals(certificates.get(key))) {
+                        return certificate;
+                    }
+                }
             }
         }
-        return false;
+        return null;
     }
 }

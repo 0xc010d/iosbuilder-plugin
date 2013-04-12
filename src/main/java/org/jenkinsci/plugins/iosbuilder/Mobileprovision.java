@@ -29,25 +29,27 @@ public class Mobileprovision {
     private String applicationIdentifier;
     private Certificate[] certificates;
 
-    public Mobileprovision(byte[] data) {
+    private Mobileprovision(byte[] data) {
         try {
-            ContentInfo contentInfo = ContentInfo.getInstance(new ASN1InputStream(data).readObject());
-            SignedData signedData = SignedData.getInstance(contentInfo.getContent());
-            byte[] plist = ((ASN1OctetString)(signedData.getEncapContentInfo().getContent())).getOctets();
+            if (data != null && data.length != 0) {
+                ContentInfo contentInfo = ContentInfo.getInstance(new ASN1InputStream(data).readObject());
+                SignedData signedData = SignedData.getInstance(contentInfo.getContent());
+                byte[] plist = ((ASN1OctetString)(signedData.getEncapContentInfo().getContent())).getOctets();
 
-            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            Document document = builder.parse(new ByteArrayInputStream(plist));
-            XPath xPath = XPathFactory.newInstance().newXPath();
+                DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+                Document document = builder.parse(new ByteArrayInputStream(plist));
+                XPath xPath = XPathFactory.newInstance().newXPath();
 
-            this.name = (String)xPath.compile(nameXPath).evaluate(document, XPathConstants.STRING);
-            this.UUID = (String)xPath.compile(uuidXPath).evaluate(document, XPathConstants.STRING);
-            this.applicationIdentifier = (String)xPath.compile(applicationIdentifierXPath).evaluate(document, XPathConstants.STRING);
+                this.name = (String)xPath.compile(nameXPath).evaluate(document, XPathConstants.STRING);
+                this.UUID = (String)xPath.compile(uuidXPath).evaluate(document, XPathConstants.STRING);
+                this.applicationIdentifier = (String)xPath.compile(applicationIdentifierXPath).evaluate(document, XPathConstants.STRING);
 
-            NodeList certificateNodes = (NodeList)xPath.compile(certificatesXPath).evaluate(document, XPathConstants.NODESET);
-            this.certificates = new Certificate[certificateNodes.getLength()];
-            for (int index = 0; index < certificateNodes.getLength(); index++) {
-                String encodedCertificate = certificateNodes.item(index).getTextContent();
-                this.certificates[index] = new Certificate(Base64.decode(encodedCertificate));
+                NodeList certificateNodes = (NodeList)xPath.compile(certificatesXPath).evaluate(document, XPathConstants.NODESET);
+                this.certificates = new Certificate[certificateNodes.getLength()];
+                for (int index = 0; index < certificateNodes.getLength(); index++) {
+                    String encodedCertificate = certificateNodes.item(index).getTextContent();
+                    this.certificates[index] = Certificate.getInstance(Base64.decode(encodedCertificate));
+                }
             }
         }
         catch (Exception e) {
@@ -55,8 +57,26 @@ public class Mobileprovision {
         }
     }
 
+    public static Mobileprovision getInstance(byte[] data) {
+        if (data != null && data.length != 0) {
+            return new Mobileprovision(data);
+        }
+        return null;
+    }
+
     public String getName() { return name; }
     public String getUUID() { return UUID; }
     public String getApplicationIdentifier() { return applicationIdentifier; }
     public Certificate[] getCertificates() { return certificates; }
+
+    public boolean checkCertificate(Certificate certificate) {
+        if (certificate != null) {
+            for (Certificate developerCertificate : certificates) {
+                if (certificate.equals(developerCertificate)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

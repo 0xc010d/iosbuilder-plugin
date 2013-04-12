@@ -9,7 +9,6 @@ import hudson.Launcher;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 import hudson.model.BuildListener;
-import hudson.model.Item;
 import hudson.tasks.Builder;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.util.FormValidation;
@@ -146,14 +145,17 @@ public class iOSBuilder extends Builder {
         public iOSBuilder newInstance(StaplerRequest req, JSONObject formData) throws FormException {
             JSONObject codeSign = (JSONObject)formData.get("codeSign");
             if (codeSign != null) {
-                PKCS12Archive archive = new PKCS12Archive(processFile(req, codeSign, "keyFile", "key"), ((String)codeSign.get("password")).toCharArray());
-                Certificate certificate = new Certificate(processFile(req, codeSign, "certificateFile", "certificate"));
-                Mobileprovision mobileprovision = new Mobileprovision(processFile(req, codeSign, "mobileprovisionFile", "mobileprovision"));
+                PKCS12Archive archive = PKCS12Archive.getInstance(processFile(req, codeSign, "keyFile", "key"), ((String)codeSign.get("password")).toCharArray());
+                Certificate certificate = Certificate.getInstance(processFile(req, codeSign, "certificateFile", "certificate"));
+                Mobileprovision mobileprovision = Mobileprovision.getInstance(processFile(req, codeSign, "mobileprovisionFile", "mobileprovision"));
 
-                LOG.info(new Boolean(archive.checkCertificate(certificate)).toString());
-                for (int index = 0; index < mobileprovision.getCertificates().length; index ++) {
-                    LOG.info(new Boolean(archive.checkCertificate(mobileprovision.getCertificates()[index])).toString());
-                }
+                LOG.info(new Boolean(certificate != null).toString());
+                LOG.info(archive.chooseCertificate(mobileprovision).getCommonName());
+
+//                LOG.info(new Boolean(archive.checkCertificate(certificate)).toString());
+//                for (int index = 0; index < mobileprovision.getCertificates().length; index ++) {
+//                    LOG.info(new Boolean(archive.checkCertificate(mobileprovision.getCertificates()[index])).toString());
+//                }
 
                 formData.put("codeSign", codeSign);
             }
