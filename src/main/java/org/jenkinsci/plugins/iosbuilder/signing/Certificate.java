@@ -1,4 +1,4 @@
-package org.jenkinsci.plugins.iosbuilder;
+package org.jenkinsci.plugins.iosbuilder.signing;
 
 import sun.security.x509.X500Name;
 
@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.logging.Logger;
 
 public class Certificate {
-    private final static Logger LOG = Logger.getLogger(PluginImpl.class.getName());
+    private final static Logger LOG = Logger.getLogger(org.jenkinsci.plugins.iosbuilder.PluginImpl.class.getName());
 
     private X509Certificate x509Certificate;
     private String commonName;

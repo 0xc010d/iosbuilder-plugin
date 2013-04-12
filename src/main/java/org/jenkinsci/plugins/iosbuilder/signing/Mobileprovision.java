@@ -1,4 +1,4 @@
-package org.jenkinsci.plugins.iosbuilder;
+package org.jenkinsci.plugins.iosbuilder.signing;
 
 import hudson.remoting.Base64;
 import org.bouncycastle.asn1.ASN1InputStream;
@@ -18,7 +18,8 @@ import java.io.ByteArrayInputStream;
 import java.util.logging.Logger;
 
 public class Mobileprovision {
-    private final static Logger LOG = Logger.getLogger(PluginImpl.class.getName());
+    private final static Logger LOG = Logger.getLogger(org.jenkinsci.plugins.iosbuilder.PluginImpl.class.getName());
+
     private final static String nameXPath = "//dict/key[text()='Name']/following-sibling::string[1]/text()";
     private final static String uuidXPath = "//dict/key[text()='UUID']/following-sibling::string[1]/text()";
     private final static String applicationIdentifierXPath = "//dict/key[text()='Entitlements']/following-sibling::dict[1]/key[text()='application-identifier']/following-sibling::string[1]/text()";

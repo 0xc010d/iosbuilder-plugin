@@ -1,5 +1,7 @@
 package org.jenkinsci.plugins.iosbuilder;
 
+import org.jenkinsci.plugins.iosbuilder.signing.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Logger;

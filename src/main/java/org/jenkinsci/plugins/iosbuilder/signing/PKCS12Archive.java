@@ -1,4 +1,4 @@
-package org.jenkinsci.plugins.iosbuilder;
+package org.jenkinsci.plugins.iosbuilder.signing;
 
 import java.io.ByteArrayInputStream;
 import java.security.KeyStore;
@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 public class PKCS12Archive {
-    private final static Logger LOG = Logger.getLogger(PluginImpl.class.getName());
+    private final static Logger LOG = Logger.getLogger(org.jenkinsci.plugins.iosbuilder.PluginImpl.class.getName());
 
     private Map<String, Certificate> certificates;
 
