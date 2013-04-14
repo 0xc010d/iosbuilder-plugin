@@ -16,11 +16,11 @@ import hudson.tasks.BuildStepDescriptor;
 import hudson.util.FormValidation;
 import hudson.util.ListBoxModel;
 import net.sf.json.JSONObject;
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.fileupload.FileItem;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.QueryParameter;
+import sun.misc.BASE64Encoder;
 
 public class iOSBuilder extends Builder {
     private final static Logger LOG = Logger.getLogger(PluginImpl.class.getName());
@@ -137,8 +137,7 @@ public class iOSBuilder extends Builder {
 
             if (file != null && file.getSize() != 0) {
                 data = file.get();
-                byte[] encodedData = Base64.encodeBase64(data);
-                formData.put(valueKey, new String(encodedData));
+                formData.put(valueKey, new BASE64Encoder().encode(data));
             }
             return data;
         }
@@ -151,8 +150,10 @@ public class iOSBuilder extends Builder {
                 Certificate certificate = Certificate.getInstance(processFile(req, codeSign, "certificateFile", "certificate"));
                 Mobileprovision mobileprovision = Mobileprovision.getInstance(processFile(req, codeSign, "mobileprovisionFile", "mobileprovision"));
 
-                LOG.info(new Boolean(certificate != null).toString());
-                LOG.info(archive.chooseCertificate(mobileprovision).getCommonName());
+                Certificate choosenCertificate = archive.chooseCertificate(mobileprovision);
+                if (choosenCertificate != null) {
+                    LOG.info(choosenCertificate.getCommonName());
+                }
 
 //                LOG.info(new Boolean(archive.checkCertificate(certificate)).toString());
 //                for (int index = 0; index < mobileprovision.getCertificates().length; index ++) {

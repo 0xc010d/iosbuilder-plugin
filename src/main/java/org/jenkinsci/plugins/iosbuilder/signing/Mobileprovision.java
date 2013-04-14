@@ -1,12 +1,12 @@
 package org.jenkinsci.plugins.iosbuilder.signing;
 
-import hudson.remoting.Base64;
 import org.bouncycastle.asn1.ASN1InputStream;
 import org.bouncycastle.asn1.ASN1OctetString;
 import org.bouncycastle.asn1.cms.ContentInfo;
 import org.bouncycastle.asn1.cms.SignedData;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
+import sun.misc.BASE64Decoder;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -49,7 +49,7 @@ public class Mobileprovision {
                 this.certificates = new Certificate[certificateNodes.getLength()];
                 for (int index = 0; index < certificateNodes.getLength(); index++) {
                     String encodedCertificate = certificateNodes.item(index).getTextContent();
-                    this.certificates[index] = Certificate.getInstance(Base64.decode(encodedCertificate));
+                    this.certificates[index] = Certificate.getInstance(new BASE64Decoder().decodeBuffer(encodedCertificate));
                 }
             }
         }

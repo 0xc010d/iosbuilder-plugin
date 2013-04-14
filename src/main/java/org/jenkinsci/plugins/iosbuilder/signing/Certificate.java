@@ -3,9 +3,6 @@ package org.jenkinsci.plugins.iosbuilder.signing;
 import sun.security.x509.X500Name;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
