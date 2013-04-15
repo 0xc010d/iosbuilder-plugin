@@ -34,10 +34,10 @@ public class iOSBuilder extends Builder {
     private final String additionalParameters;
     private final String sdk;
     private final boolean codeSign;
-    private final String key;
-    private final String password;
-    private final String certificate;
-    private final String mobileprovision;
+    private final String pkcs12ArchiveData;
+    private final String pkcs12ArchivePassword;
+    private final String certificateData;
+    private final String mobileprovisionData;
     private final boolean buildIPA;
 
     @DataBoundConstructor
@@ -51,14 +51,14 @@ public class iOSBuilder extends Builder {
         this.additionalParameters = additionalParameters;
         this.sdk = sdk;
         this.codeSign = codeSign != null;
-        this.key = this.codeSign ? codeSign.key : null;
-        this.password = this.codeSign ? codeSign.password : null;
-        this.certificate = this.codeSign ? codeSign.certificate : null;
-        this.mobileprovision = this.codeSign ? codeSign.mobileprovision : null;
+        this.pkcs12ArchiveData = this.codeSign ? codeSign.pkcs12ArchiveData : null;
+        this.pkcs12ArchivePassword = this.codeSign ? codeSign.pkcs12ArchivePassword : null;
+        this.certificateData = this.codeSign ? codeSign.certificateData : null;
+        this.mobileprovisionData = this.codeSign ? codeSign.mobileprovisionData : null;
         this.buildIPA = this.codeSign ? codeSign.buildIPA : false;
     }
 
-    public boolean getUsePods() { return usePods; };
+    public boolean isUsePods() { return usePods; }
     public String getXcworkspacePath() { return xcworkspacePath; }
     public String getXcodeprojPath() { return xcodeprojPath; }
     public String getTarget() { return target; }
@@ -66,34 +66,28 @@ public class iOSBuilder extends Builder {
     public String getConfiguration() { return configuration; }
     public String getAdditionalParameters() { return additionalParameters; }
     public String getSdk() { return sdk; }
-    public boolean getCodeSign() { return codeSign; }
-    public String getKey() { return key; }
-    public String getPassword() { return password; }
-    public String getCertificate() { return certificate; }
-    public String getMobileprovision() { return mobileprovision; }
-    public boolean getBuildIPA() { return buildIPA; }
+    public boolean isCodeSign() { return codeSign; }
+    public String getPkcs12ArchiveData() { return pkcs12ArchiveData; }
+    public String getPkcs12ArchivePassword() { return pkcs12ArchivePassword; }
+    public String getCertificateData() { return certificateData; }
+    public String getMobileprovisionData() { return mobileprovisionData; }
+    public boolean isBuildIPA() { return buildIPA; }
 
     public static final class CodeSign {
-        private final String key;
-        private final String password;
-        private final String certificate;
-        private final String mobileprovision;
+        private final String pkcs12ArchiveData;
+        private final String pkcs12ArchivePassword;
+        private final String certificateData;
+        private final String mobileprovisionData;
         private final boolean buildIPA;
 
         @DataBoundConstructor
-        public CodeSign(String key, String password, String certificate, String mobileprovision, boolean buildIPA) {
-            this.key = key;
-            this.password = password;
-            this.certificate = certificate;
-            this.mobileprovision = mobileprovision;
+        public CodeSign(String pkcs12ArchiveData, String pkcs12ArchivePassword, String certificateData, String mobileprovisionData, boolean buildIPA) {
+            this.pkcs12ArchiveData = pkcs12ArchiveData;
+            this.pkcs12ArchivePassword = pkcs12ArchivePassword;
+            this.certificateData = certificateData;
+            this.mobileprovisionData = mobileprovisionData;
             this.buildIPA = buildIPA;
         }
-
-        public String getKey() { return key; }
-        public String getPassword() { return password; }
-        public String getCertificate() { return certificate; }
-        public String getMobileprovision() { return mobileprovision; }
-        public boolean getBuildIPA() { return buildIPA; }
     }
 
     @Override
@@ -146,20 +140,9 @@ public class iOSBuilder extends Builder {
         public iOSBuilder newInstance(StaplerRequest req, JSONObject formData) throws FormException {
             JSONObject codeSign = (JSONObject)formData.get("codeSign");
             if (codeSign != null) {
-                PKCS12Archive archive = PKCS12Archive.getInstance(processFile(req, codeSign, "keyFile", "key"), ((String)codeSign.get("password")).toCharArray());
-                Certificate certificate = Certificate.getInstance(processFile(req, codeSign, "certificateFile", "certificate"));
-                Mobileprovision mobileprovision = Mobileprovision.getInstance(processFile(req, codeSign, "mobileprovisionFile", "mobileprovision"));
-
-                Certificate choosenCertificate = archive.chooseCertificate(mobileprovision);
-                if (choosenCertificate != null) {
-                    LOG.info(choosenCertificate.getCommonName());
-                }
-
-//                LOG.info(new Boolean(archive.checkCertificate(certificate)).toString());
-//                for (int index = 0; index < mobileprovision.getCertificates().length; index ++) {
-//                    LOG.info(new Boolean(archive.checkCertificate(mobileprovision.getCertificates()[index])).toString());
-//                }
-
+                processFile(req, codeSign, "pkcs12ArchiveFile", "pkcs12ArchiveData");
+                processFile(req, codeSign, "certificateFile", "certificateData");
+                processFile(req, codeSign, "mobileprovisionFile", "mobileprovisionData");
                 formData.put("codeSign", codeSign);
             }
             return (iOSBuilder)super.newInstance(req, formData);

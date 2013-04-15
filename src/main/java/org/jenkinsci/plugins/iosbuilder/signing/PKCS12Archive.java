@@ -1,5 +1,7 @@
 package org.jenkinsci.plugins.iosbuilder.signing;
 
+import sun.misc.BASE64Decoder;
+
 import java.io.ByteArrayInputStream;
 import java.security.KeyStore;
 import java.security.cert.X509Certificate;
@@ -34,6 +36,13 @@ public class PKCS12Archive {
         if (data != null && data.length != 0 && password != null && password.length != 0) {
             return new PKCS12Archive(data, password);
         }
+        return null;
+    }
+    public static PKCS12Archive getInstance(String encodedData, String password) {
+        try {
+            return getInstance(new BASE64Decoder().decodeBuffer(encodedData), password.toCharArray());
+        }
+        catch (Exception e) {}
         return null;
     }
 

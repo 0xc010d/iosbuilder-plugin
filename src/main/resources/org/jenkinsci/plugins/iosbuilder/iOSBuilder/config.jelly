@@ -1,46 +1,89 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
-  <f:entry title="Perform `pod install`" field="usePods">
-    <f:checkbox />
-  </f:entry>
-  <f:entry title=".xcworkspace path" field="xcworkspacePath">
-    <f:textbox />
-  </f:entry>
-  <f:entry title=".xcodeproj path" field="xcodeprojPath">
-    <f:textbox />
-  </f:entry>
-  <f:entry title="Target" field="target">
-    <f:textbox />
-  </f:entry>
-  <f:entry title="Scheme" field="scheme">
-    <f:textbox />
-  </f:entry>
-  <f:entry title="Configuration" field="configuration">
-    <f:textbox />
-  </f:entry>
-  <f:entry title="Additional xcodebuild parameters" field="additionalParameters">
-    <f:textbox />
-  </f:entry>
-  <f:entry title="SDK" field="sdk">
-    <f:select />
-  </f:entry>
-  <f:optionalBlock field="codeSign" title="Sign the binary">
-    <f:entry title=".p12 key file" field="key">
-      <input type="hidden" name="key" value="${instance.key}" />
-      <input type="file" name="keyFile" jsonAware="yes" />
+    <f:entry title="Perform `pod install`" field="usePods">
+        <f:checkbox />
     </f:entry>
-    <f:entry title=".p12 key password" field="password">
-      <f:password />
+    <f:entry title=".xcworkspace path" field="xcworkspacePath">
+        <f:textbox />
     </f:entry>
-    <f:entry title=".cer certificate file" field="certificate">
-      <input type="hidden" name="certificate" value="${instance.certificate}" />
-      <input type="file" name="certificateFile" jsonAware="yes" />
+    <f:entry title=".xcodeproj path" field="xcodeprojPath">
+        <f:textbox />
     </f:entry>
-    <f:entry title=".mobileprovision file" field="mobileprovision">
-      <input type="hidden" name="mobileprovision" value="${instance.mobileprovision}" />
-      <input type="file" name="mobileprovisionFile" jsonAware="yes" />
+    <f:entry title="Target" field="target">
+        <f:textbox />
     </f:entry>
-    <f:entry title="Build .ipa" field="buildIPA">
-      <f:checkbox />
+    <f:entry title="Scheme" field="scheme">
+        <f:textbox />
     </f:entry>
-  </f:optionalBlock>
+    <f:entry title="Configuration" field="configuration">
+        <f:textbox />
+    </f:entry>
+    <f:entry title="Additional xcodebuild parameters" field="additionalParameters">
+        <f:textbox />
+    </f:entry>
+    <f:entry title="SDK" field="sdk">
+        <f:select />
+    </f:entry>
+    <f:optionalBlock field="codeSign" title="Sign the binary">
+        <f:entry title=".p12 key file" field="pkcs12ArchiveData">
+            <j:invokeStatic className="org.jenkinsci.plugins.iosbuilder.signing.PKCS12Archive" method="getInstance" var="pkcs12Archive">
+                <j:arg type="java.lang.String" value="${instance.pkcs12ArchiveData}" />
+                <j:arg type="java.lang.String" value="${instance.pkcs12ArchivePassword}" />
+            </j:invokeStatic>
+            <j:if test="${pkcs12Archive != null}">
+                Current:
+                <dl>
+                    <j:forEach items="${pkcs12Archive.certificates}" var="certificate">
+                        <dt>${certificate.getKey()}</dt>
+                        <j:if test="${certificate.getValue().commonName != null}">
+                            <dd>
+                                ${certificate.getValue().commonName} / ${certificate.getValue().expirationDate}
+                            </dd>
+                        </j:if>
+                    </j:forEach>
+                </dl>
+                Select another:<br />
+            </j:if>
+            <input type="hidden" name="pkcs12ArchiveData" value="${instance.pkcs12ArchiveData}" />
+            <input type="file" name="pkcs12ArchiveFile" jsonAware="yes" />
+        </f:entry>
+        <f:entry title=".p12 key password" field="pkcs12ArchivePassword">
+            <f:password />
+        </f:entry>
+        <f:entry title=".cer certificate file" field="certificateData">
+            <j:invokeStatic className="org.jenkinsci.plugins.iosbuilder.signing.Certificate" method="getInstance" var="certificate">
+                <j:arg type="java.lang.String" value="${instance.certificateData}" />
+            </j:invokeStatic>
+            <j:if test="${certificate != null}">
+                Current:
+                <dl>
+                    <dd>${certificate.commonName} / ${certificate.expirationDate}</dd>
+                </dl>
+            </j:if>
+            <input type="hidden" name="certificateData" value="${instance.certificateData}" />
+            <input type="file" name="certificateFile" jsonAware="yes" />
+        </f:entry>
+        <f:entry title=".mobileprovision file" field="mobileprovisionData">
+            <j:invokeStatic className="org.jenkinsci.plugins.iosbuilder.signing.Mobileprovision" method="getInstance" var="mobileprovision">
+                <j:arg type="java.lang.String" value="${instance.mobileprovisionData}" />
+            </j:invokeStatic>
+            <j:if test="${mobileprovision != null}">
+                Current:<br />
+                <dl>
+                    <dt>Mobileprovision</dt>
+                    <dd>${mobileprovision.name}</dd>
+                    <dt>Certificates</dt>
+                    <ul>
+                        <j:forEach items="${mobileprovision.certificates}" var="certificate">
+                            <li>${certificate.commonName} / ${certificate.expirationDate}</li>
+                        </j:forEach>
+                    </ul>
+                </dl>
+            </j:if>
+            <input type="hidden" name="mobileprovisionData" value="${instance.mobileprovisionData}" />
+            <input type="file" name="mobileprovisionFile" jsonAware="yes" />
+        </f:entry>
+        <f:entry title="Build .ipa" field="buildIPA">
+            <f:checkbox />
+        </f:entry>
+    </f:optionalBlock>
 </j:jelly>

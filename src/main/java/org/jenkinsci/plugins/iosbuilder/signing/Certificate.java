@@ -1,5 +1,6 @@
 package org.jenkinsci.plugins.iosbuilder.signing;
 
+import sun.misc.BASE64Decoder;
 import sun.security.x509.X500Name;
 
 import java.io.ByteArrayInputStream;
@@ -33,7 +34,7 @@ public class Certificate {
                 CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
                 return getInstance((X509Certificate)certificateFactory.generateCertificate(new ByteArrayInputStream(data)));
             }
-            catch (CertificateException e) {
+            catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -43,6 +44,13 @@ public class Certificate {
         if (x509Certificate != null) {
             return new Certificate(x509Certificate);
         }
+        return null;
+    }
+    public static Certificate getInstance(String encodedData) {
+        try {
+            return getInstance(new BASE64Decoder().decodeBuffer(encodedData));
+        }
+        catch (Exception e) {}
         return null;
     }
 

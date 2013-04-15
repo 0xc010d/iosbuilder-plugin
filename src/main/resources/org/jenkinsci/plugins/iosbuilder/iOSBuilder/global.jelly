@@ -1,19 +1,19 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
-  <f:section title="iOS builder">
-    <f:entry title="xcodebuild path" field="xcodebuildPath">
-      <f:textbox default="${descriptor.getXcodebuildPath()}" />
-    </f:entry>
-    <f:entry title="security path" field="securityPath">
-      <f:textbox default="${descriptor.getSecurityPath()}" />
-    </f:entry>
-    <f:entry title="openssl path" field="opensslPath">
-      <f:textbox default="${descriptor.getOpensslPath()}" />
-    </f:entry>
-    <f:entry title="xcrun path" field="xcrunPath">
-      <f:textbox default="${descriptor.getXcrunPath()}" />
-    </f:entry>
-    <f:entry title="pod path" field="podPath">
-      <f:textbox default="${descriptor.getPodPath()}" />
-    </f:entry>
-  </f:section>
+    <f:section title="iOS builder">
+        <f:entry title="xcodebuild path" field="xcodebuildPath">
+            <f:textbox default="${descriptor.getXcodebuildPath()}" />
+        </f:entry>
+        <f:entry title="security path" field="securityPath">
+            <f:textbox default="${descriptor.getSecurityPath()}" />
+        </f:entry>
+        <f:entry title="openssl path" field="opensslPath">
+            <f:textbox default="${descriptor.getOpensslPath()}" />
+        </f:entry>
+        <f:entry title="xcrun path" field="xcrunPath">
+            <f:textbox default="${descriptor.getXcrunPath()}" />
+        </f:entry>
+        <f:entry title="pod path" field="podPath">
+            <f:textbox default="${descriptor.getPodPath()}" />
+        </f:entry>
+    </f:section>
 </j:jelly>

@@ -5,6 +5,7 @@ import org.bouncycastle.asn1.ASN1OctetString;
 import org.bouncycastle.asn1.cms.ContentInfo;
 import org.bouncycastle.asn1.cms.SignedData;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import sun.misc.BASE64Decoder;
 
@@ -14,7 +15,6 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 import java.io.ByteArrayInputStream;
-
 import java.util.logging.Logger;
 
 public class Mobileprovision {
@@ -30,38 +30,42 @@ public class Mobileprovision {
     private String applicationIdentifier;
     private Certificate[] certificates;
 
-    private Mobileprovision(byte[] data) {
-        try {
-            if (data != null && data.length != 0) {
-                ContentInfo contentInfo = ContentInfo.getInstance(new ASN1InputStream(data).readObject());
-                SignedData signedData = SignedData.getInstance(contentInfo.getContent());
-                byte[] plist = ((ASN1OctetString)(signedData.getEncapContentInfo().getContent())).getOctets();
+    private Mobileprovision(byte[] data) throws Exception {
+        if (data != null && data.length != 0) {
+            ContentInfo contentInfo = ContentInfo.getInstance(new ASN1InputStream(data).readObject());
+            SignedData signedData = SignedData.getInstance(contentInfo.getContent());
+            byte[] plist = ((ASN1OctetString)(signedData.getEncapContentInfo().getContent())).getOctets();
 
-                DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-                Document document = builder.parse(new ByteArrayInputStream(plist));
-                XPath xPath = XPathFactory.newInstance().newXPath();
+            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            Document document = builder.parse(new ByteArrayInputStream(plist));
 
-                this.name = (String)xPath.compile(nameXPath).evaluate(document, XPathConstants.STRING);
-                this.UUID = (String)xPath.compile(uuidXPath).evaluate(document, XPathConstants.STRING);
-                this.applicationIdentifier = (String)xPath.compile(applicationIdentifierXPath).evaluate(document, XPathConstants.STRING);
+            XPath xPath = XPathFactory.newInstance().newXPath();
 
-                NodeList certificateNodes = (NodeList)xPath.compile(certificatesXPath).evaluate(document, XPathConstants.NODESET);
-                this.certificates = new Certificate[certificateNodes.getLength()];
-                for (int index = 0; index < certificateNodes.getLength(); index++) {
-                    String encodedCertificate = certificateNodes.item(index).getTextContent();
-                    this.certificates[index] = Certificate.getInstance(new BASE64Decoder().decodeBuffer(encodedCertificate));
-                }
+            this.name = xPath.evaluate(nameXPath, document);
+            this.UUID = xPath.evaluate(uuidXPath, document);
+            this.applicationIdentifier = xPath.evaluate(applicationIdentifierXPath, document);
+
+            NodeList certificateNodes = (NodeList)xPath.evaluate(certificatesXPath, document, XPathConstants.NODESET);
+            this.certificates = new Certificate[certificateNodes.getLength()];
+            for (int index = 0; index < certificateNodes.getLength(); index++) {
+                String encodedCertificate = certificateNodes.item(index).getTextContent().replaceAll("\\s+", "");
+                this.certificates[index] = Certificate.getInstance(encodedCertificate);
             }
-        }
-        catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
     public static Mobileprovision getInstance(byte[] data) {
-        if (data != null && data.length != 0) {
+        try {
             return new Mobileprovision(data);
         }
+        catch (Exception e) {}
+        return null;
+    }
+    public static Mobileprovision getInstance(String encodedData) {
+        try {
+            return getInstance(new BASE64Decoder().decodeBuffer(encodedData));
+        }
+        catch (Exception e) {}
         return null;
     }
 
