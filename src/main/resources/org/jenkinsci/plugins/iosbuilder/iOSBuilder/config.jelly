@@ -30,15 +30,19 @@
                 <j:arg type="java.lang.String" value="${instance.pkcs12ArchivePassword}" />
             </j:invokeStatic>
             <j:if test="${pkcs12Archive != null}">
-                Current:
+                Current archive:
                 <dl>
                     <j:forEach items="${pkcs12Archive.certificates}" var="certificate">
-                        <dt>${certificate.getKey()}</dt>
-                        <j:if test="${certificate.getValue().commonName != null}">
-                            <dd>
-                                ${certificate.getValue().commonName} / ${certificate.getValue().expirationDate}
-                            </dd>
-                        </j:if>
+                        <dt>Private key</dt>
+                        <dd>
+                            ${certificate.getKey()}
+                            <j:if test="${certificate.getValue().commonName != null}">
+                                <dl>
+                                    <dt>Certificate</dt>
+                                    <dd>${certificate.getValue().commonName}</dd>
+                                </dl>
+                            </j:if>
+                        </dd>
                     </j:forEach>
                 </dl>
                 Select another:<br />
@@ -56,7 +60,7 @@
             <j:if test="${certificate != null}">
                 Current:
                 <dl>
-                    <dd>${certificate.commonName} / ${certificate.expirationDate}</dd>
+                    <dd>${certificate.commonName}</dd>
                 </dl>
             </j:if>
             <input type="hidden" name="certificateData" value="${instance.certificateData}" />
@@ -72,11 +76,13 @@
                     <dt>Mobileprovision</dt>
                     <dd>${mobileprovision.name}</dd>
                     <dt>Certificates</dt>
-                    <ul>
-                        <j:forEach items="${mobileprovision.certificates}" var="certificate">
-                            <li>${certificate.commonName} / ${certificate.expirationDate}</li>
-                        </j:forEach>
-                    </ul>
+                    <dd>
+                        <ul>
+                            <j:forEach items="${mobileprovision.certificates}" var="certificate">
+                                <li>${certificate.commonName}</li>
+                            </j:forEach>
+                        </ul>
+                    </dd>
                 </dl>
             </j:if>
             <input type="hidden" name="mobileprovisionData" value="${instance.mobileprovisionData}" />

@@ -1,7 +1,5 @@
 package org.jenkinsci.plugins.iosbuilder;
 
-import org.jenkinsci.plugins.iosbuilder.signing.*;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -121,19 +119,14 @@ public class iOSBuilder extends Builder {
         private String xcrunPath;
         private String podPath;
 
-        private byte[] processFile(StaplerRequest req, JSONObject formData, String fileKey, String valueKey) throws FormException {
-            FileItem file = null;
-            byte[] data = null;
+        private void processFile(StaplerRequest req, JSONObject formData, String fileKey, String valueKey) throws FormException {
             try {
-                file = req.getFileItem((String)formData.get(fileKey));
+                FileItem file = req.getFileItem((String)formData.get(fileKey));
+                if (file.getSize() != 0) {
+                    formData.put(valueKey, new BASE64Encoder().encode(file.get()));
+                }
             }
             catch (Exception e) {}
-
-            if (file != null && file.getSize() != 0) {
-                data = file.get();
-                formData.put(valueKey, new BASE64Encoder().encode(data));
-            }
-            return data;
         }
 
         @Override
