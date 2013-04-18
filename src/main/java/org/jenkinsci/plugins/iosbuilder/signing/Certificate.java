@@ -4,6 +4,7 @@ import sun.misc.BASE64Decoder;
 import sun.security.x509.X500Name;
 
 import java.io.ByteArrayInputStream;
+import java.security.PublicKey;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
@@ -18,7 +19,7 @@ public class Certificate {
     private String commonName;
     private Date expirationDate;
 
-    public Certificate(X509Certificate certificate) {
+    private Certificate(X509Certificate certificate) {
         try {
             if (certificate != null) {
                 this.x509Certificate = certificate;
@@ -55,7 +56,7 @@ public class Certificate {
     }
 
     public boolean equals(Certificate certificate) {
-        if (certificate instanceof Certificate) {
+        if (certificate != null && certificate instanceof Certificate) {
             return this.x509Certificate.equals(certificate.getX509Certificate());
         }
         else {
@@ -66,4 +67,7 @@ public class Certificate {
     private X509Certificate getX509Certificate() { return x509Certificate; }
     public String getCommonName() { return commonName; }
     public Date getExpirationDate() { return expirationDate; }
+    public PublicKey getPublicKey() {
+        return x509Certificate.getPublicKey();
+    }
 }

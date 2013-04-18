@@ -60,6 +60,7 @@ public class Mobileprovision {
         catch (Exception e) {}
         return null;
     }
+
     public static Mobileprovision getInstance(String encodedData) {
         try {
             return getInstance(new BASE64Decoder().decodeBuffer(encodedData));

@@ -15,6 +15,9 @@ import hudson.util.FormValidation;
 import hudson.util.ListBoxModel;
 import net.sf.json.JSONObject;
 import org.apache.commons.fileupload.FileItem;
+import org.jenkinsci.plugins.iosbuilder.signing.Certificate;
+import org.jenkinsci.plugins.iosbuilder.signing.Mobileprovision;
+import org.jenkinsci.plugins.iosbuilder.signing.PKCS12Archive;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.QueryParameter;
@@ -90,12 +93,12 @@ public class iOSBuilder extends Builder {
 
     @Override
     public boolean perform(AbstractBuild build, Launcher launcher, BuildListener listener) {
-        String xcodebuild = getDescriptor().getXcodebuildPath();
-        String security = getDescriptor().getSecurityPath();
-        String openssl = getDescriptor().getOpensslPath();
-        String xcrun = getDescriptor().getXcrunPath();
-
-        listener.getLogger().println("Hello!");
+        PKCS12Archive pkcs12Archive = PKCS12Archive.getInstance(this.pkcs12ArchiveData, this.pkcs12ArchivePassword);
+        Mobileprovision mobileprovision = Mobileprovision.getInstance(this.mobileprovisionData);
+        Certificate certificate = pkcs12Archive.chooseCertificate(mobileprovision);
+        if (certificate != null) {
+            listener.getLogger().println(certificate.getCommonName() + " / " + certificate.getExpirationDate());
+        }
 
         return true;
     }

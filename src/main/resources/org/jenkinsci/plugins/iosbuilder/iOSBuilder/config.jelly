@@ -32,14 +32,14 @@
             <j:if test="${pkcs12Archive != null}">
                 Current archive:
                 <dl>
-                    <j:forEach items="${pkcs12Archive.certificates}" var="certificate">
+                    <j:forEach items="${pkcs12Archive.content}" var="item">
                         <dt>Private key</dt>
                         <dd>
-                            ${certificate.getKey()}
-                            <j:if test="${certificate.getValue().commonName != null}">
+                            ${item.getKey().getAlias()}
+                            <j:if test="${item.getValue().commonName != null}">
                                 <dl>
                                     <dt>Certificate</dt>
-                                    <dd>${certificate.getValue().commonName}</dd>
+                                    <dd>${item.getValue().commonName}</dd>
                                 </dl>
                             </j:if>
                         </dd>
