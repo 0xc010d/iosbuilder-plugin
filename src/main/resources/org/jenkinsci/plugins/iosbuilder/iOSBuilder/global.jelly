@@ -6,9 +6,6 @@
         <f:entry title="security path" field="securityPath">
             <f:textbox default="${descriptor.getSecurityPath()}" />
         </f:entry>
-        <f:entry title="openssl path" field="opensslPath">
-            <f:textbox default="${descriptor.getOpensslPath()}" />
-        </f:entry>
         <f:entry title="xcrun path" field="xcrunPath">
             <f:textbox default="${descriptor.getXcrunPath()}" />
         </f:entry>

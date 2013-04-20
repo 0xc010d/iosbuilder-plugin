@@ -25,7 +25,7 @@
     </f:entry>
     <f:optionalBlock field="codeSign" title="Sign the binary">
         <f:entry title=".p12 key file" field="pkcs12ArchiveData">
-            <j:invokeStatic className="org.jenkinsci.plugins.iosbuilder.signing.PKCS12Archive" method="getInstance" var="pkcs12Archive">
+            <j:invokeStatic className="org.jenkinsci.plugins.iosbuilder.signing.PKCS12ArchiveFactory" method="newInstance" var="pkcs12Archive">
                 <j:arg type="java.lang.String" value="${instance.pkcs12ArchiveData}" />
                 <j:arg type="java.lang.String" value="${instance.pkcs12ArchivePassword}" />
             </j:invokeStatic>
@@ -53,21 +53,8 @@
         <f:entry title=".p12 key password" field="pkcs12ArchivePassword">
             <f:password />
         </f:entry>
-        <f:entry title=".cer certificate file" field="certificateData">
-            <j:invokeStatic className="org.jenkinsci.plugins.iosbuilder.signing.Certificate" method="getInstance" var="certificate">
-                <j:arg type="java.lang.String" value="${instance.certificateData}" />
-            </j:invokeStatic>
-            <j:if test="${certificate != null}">
-                Current:
-                <dl>
-                    <dd>${certificate.commonName}</dd>
-                </dl>
-            </j:if>
-            <input type="hidden" name="certificateData" value="${instance.certificateData}" />
-            <input type="file" name="certificateFile" jsonAware="yes" />
-        </f:entry>
         <f:entry title=".mobileprovision file" field="mobileprovisionData">
-            <j:invokeStatic className="org.jenkinsci.plugins.iosbuilder.signing.Mobileprovision" method="getInstance" var="mobileprovision">
+            <j:invokeStatic className="org.jenkinsci.plugins.iosbuilder.signing.MobileprovisionFactory" method="newInstance" var="mobileprovision">
                 <j:arg type="java.lang.String" value="${instance.mobileprovisionData}" />
             </j:invokeStatic>
             <j:if test="${mobileprovision != null}">

@@ -15,9 +15,11 @@ import hudson.util.FormValidation;
 import hudson.util.ListBoxModel;
 import net.sf.json.JSONObject;
 import org.apache.commons.fileupload.FileItem;
-import org.jenkinsci.plugins.iosbuilder.signing.Certificate;
+import org.jenkinsci.plugins.iosbuilder.signing.Identity;
 import org.jenkinsci.plugins.iosbuilder.signing.Mobileprovision;
+import org.jenkinsci.plugins.iosbuilder.signing.MobileprovisionFactory;
 import org.jenkinsci.plugins.iosbuilder.signing.PKCS12Archive;
+import org.jenkinsci.plugins.iosbuilder.signing.PKCS12ArchiveFactory;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.QueryParameter;
@@ -37,7 +39,6 @@ public class iOSBuilder extends Builder {
     private final boolean codeSign;
     private final String pkcs12ArchiveData;
     private final String pkcs12ArchivePassword;
-    private final String certificateData;
     private final String mobileprovisionData;
     private final boolean buildIPA;
 
@@ -54,7 +55,6 @@ public class iOSBuilder extends Builder {
         this.codeSign = codeSign != null;
         this.pkcs12ArchiveData = this.codeSign ? codeSign.pkcs12ArchiveData : null;
         this.pkcs12ArchivePassword = this.codeSign ? codeSign.pkcs12ArchivePassword : null;
-        this.certificateData = this.codeSign ? codeSign.certificateData : null;
         this.mobileprovisionData = this.codeSign ? codeSign.mobileprovisionData : null;
         this.buildIPA = this.codeSign ? codeSign.buildIPA : false;
     }
@@ -70,22 +70,19 @@ public class iOSBuilder extends Builder {
     public boolean isCodeSign() { return codeSign; }
     public String getPkcs12ArchiveData() { return pkcs12ArchiveData; }
     public String getPkcs12ArchivePassword() { return pkcs12ArchivePassword; }
-    public String getCertificateData() { return certificateData; }
     public String getMobileprovisionData() { return mobileprovisionData; }
     public boolean isBuildIPA() { return buildIPA; }
 
     public static final class CodeSign {
         private final String pkcs12ArchiveData;
         private final String pkcs12ArchivePassword;
-        private final String certificateData;
         private final String mobileprovisionData;
         private final boolean buildIPA;
 
         @DataBoundConstructor
-        public CodeSign(String pkcs12ArchiveData, String pkcs12ArchivePassword, String certificateData, String mobileprovisionData, boolean buildIPA) {
+        public CodeSign(String pkcs12ArchiveData, String pkcs12ArchivePassword, String mobileprovisionData, boolean buildIPA) {
             this.pkcs12ArchiveData = pkcs12ArchiveData;
             this.pkcs12ArchivePassword = pkcs12ArchivePassword;
-            this.certificateData = certificateData;
             this.mobileprovisionData = mobileprovisionData;
             this.buildIPA = buildIPA;
         }
@@ -93,11 +90,17 @@ public class iOSBuilder extends Builder {
 
     @Override
     public boolean perform(AbstractBuild build, Launcher launcher, BuildListener listener) {
-        PKCS12Archive pkcs12Archive = PKCS12Archive.getInstance(this.pkcs12ArchiveData, this.pkcs12ArchivePassword);
-        Mobileprovision mobileprovision = Mobileprovision.getInstance(this.mobileprovisionData);
-        Certificate certificate = pkcs12Archive.chooseCertificate(mobileprovision);
-        if (certificate != null) {
-            listener.getLogger().println(certificate.getCommonName() + " / " + certificate.getExpirationDate());
+        PKCS12Archive pkcs12Archive = PKCS12ArchiveFactory.newInstance(this.pkcs12ArchiveData, this.pkcs12ArchivePassword);
+        Mobileprovision mobileprovision = MobileprovisionFactory.newInstance(this.mobileprovisionData);
+        Identity identity = pkcs12Archive.chooseIdentity(mobileprovision.getCertificates());
+        if (identity != null) {
+            listener.getLogger().println(identity.getCommonName() + " / " + identity.getExpirationDate());
+            try {
+                identity.saveToFile("/tmp/identity.p12", "password".toCharArray());
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         return true;
@@ -112,13 +115,11 @@ public class iOSBuilder extends Builder {
     public static final class BuildStepDescriptorImpl extends BuildStepDescriptor<Builder> {
         private static final String DEFAULT_XCODEBUILD_PATH = "/usr/bin/xcodebuild";
         private static final String DEFAULT_SECURITY_PATH = "/usr/bin/security";
-        private static final String DEFAULT_OPENSSL_PATH = "/usr/bin/openssl";
         private static final String DEFAULT_XCRUN_PATH = "/usr/bin/xcrun";
         private static final String DEFAULT_POD_PATH = "/usr/bin/pod";
 
         private String xcodebuildPath;
         private String securityPath;
-        private String opensslPath;
         private String xcrunPath;
         private String podPath;
 
@@ -137,7 +138,6 @@ public class iOSBuilder extends Builder {
             JSONObject codeSign = (JSONObject)formData.get("codeSign");
             if (codeSign != null) {
                 processFile(req, codeSign, "pkcs12ArchiveFile", "pkcs12ArchiveData");
-                processFile(req, codeSign, "certificateFile", "certificateData");
                 processFile(req, codeSign, "mobileprovisionFile", "mobileprovisionData");
                 formData.put("codeSign", codeSign);
             }
@@ -163,9 +163,6 @@ public class iOSBuilder extends Builder {
         }
         public FormValidation doCheckSecurityPath(@QueryParameter String value) throws IOException, ServletException {
             return checkPath(value, "security");
-        }
-        public FormValidation doCheckOpensslPath(@QueryParameter String value) throws IOException, ServletException {
-            return checkPath(value, "openssl");
         }
         public FormValidation doCheckXcrunPath(@QueryParameter String value) throws IOException, ServletException {
             return checkPath(value, "xcrun");
@@ -194,7 +191,6 @@ public class iOSBuilder extends Builder {
         public boolean configure(StaplerRequest req, JSONObject formData) throws FormException {
             xcodebuildPath = formData.getString("xcodebuildPath");
             securityPath = formData.getString("securityPath");
-            opensslPath = formData.getString("opensslPath");
             xcrunPath = formData.getString("xcrunPath");
             podPath = formData.getString("podPath");
             return super.configure(req, formData);
@@ -202,7 +198,6 @@ public class iOSBuilder extends Builder {
 
         public String getXcodebuildPath() { return xcodebuildPath != null ? xcodebuildPath : DEFAULT_XCODEBUILD_PATH; }
         public String getSecurityPath() { return securityPath != null ? securityPath : DEFAULT_SECURITY_PATH; }
-        public String getOpensslPath() { return opensslPath != null ? opensslPath : DEFAULT_OPENSSL_PATH; }
         public String getXcrunPath() { return xcrunPath != null ? xcrunPath : DEFAULT_XCRUN_PATH; }
         public String getPodPath() { return podPath != null ? podPath : DEFAULT_POD_PATH; }
     }

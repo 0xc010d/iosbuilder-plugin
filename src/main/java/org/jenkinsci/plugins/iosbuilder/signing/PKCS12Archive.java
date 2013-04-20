@@ -1,8 +1,7 @@
 package org.jenkinsci.plugins.iosbuilder.signing;
 
-import sun.misc.BASE64Decoder;
-
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.security.KeyStore;
 import java.security.cert.X509Certificate;
 import java.util.Enumeration;
@@ -16,17 +15,19 @@ public class PKCS12Archive {
 
     private Map<PrivateKey, Certificate> content;
 
-    private PKCS12Archive(byte[] data, char[] password) {
-        content = new HashMap<PrivateKey, Certificate>();
+    public Map<PrivateKey, Certificate> getContent() { return content; }
+
+    PKCS12Archive(byte[] data, char[] password) throws IOException {
         try {
+            content = new HashMap<PrivateKey, Certificate>();
             KeyStore keyStore = KeyStore.getInstance("PKCS12");
             keyStore.load(new ByteArrayInputStream(data), password);
             Enumeration<String> aliases = keyStore.aliases();
             while (aliases.hasMoreElements()) {
                 try {
                     String alias = aliases.nextElement();
-                    PrivateKey privateKey = PrivateKey.getInstance(alias, keyStore, password);
-                    Certificate certificate = Certificate.getInstance((X509Certificate)keyStore.getCertificate(alias));
+                    PrivateKey privateKey = PrivateKeyFactory.newInstance(alias, keyStore, password);
+                    Certificate certificate = CertificateFactory.newInstance((X509Certificate) keyStore.getCertificate(alias));
                     content.put(privateKey, certificate);
                 }
                 catch (Exception e) {
@@ -36,45 +37,26 @@ public class PKCS12Archive {
         }
         catch (Exception e) {
             e.printStackTrace();
+            throw new IOException("Can not instantiate PKCS#12 archive object");
+        }
+        if (content.size() == 0) {
+            throw new IOException("Can not instantiate PKCS#12 archive object: private keys were not found");
         }
     }
 
-    public static PKCS12Archive getInstance(byte[] data, char[] password) {
+    public Identity chooseIdentity(Certificate[] certificates) {
         try {
-            return new PKCS12Archive(data, password);
-        }
-        catch (Exception e) {}
-        return null;
-    }
-
-    public static PKCS12Archive getInstance(String encodedData, String password) {
-        try {
-            return getInstance(new BASE64Decoder().decodeBuffer(encodedData), password.toCharArray());
-        }
-        catch (Exception e) {}
-        return null;
-    }
-
-    public Map<PrivateKey, Certificate> getContent() { return content; }
-
-    public Certificate chooseCertificate(Mobileprovision mobileprovision) {
-        return chooseCertificate(mobileprovision, true);
-    }
-    public Certificate chooseCertificate(Mobileprovision mobileprovision, boolean checkKeys) {
-        if (mobileprovision != null && mobileprovision.getCertificates() != null) {
-            for (Certificate certificate : mobileprovision.getCertificates()) {
-                for (Map.Entry<PrivateKey, Certificate> entry : content.entrySet()) {
-                    if (checkKeys) {
-                        PrivateKey privateKey = entry.getKey();
-                        if (privateKey != null && privateKey.checkPublicKey(certificate.getPublicKey())) {
-                            return certificate;
-                        }
-                    }
-                    else if (certificate.equals(entry.getValue())) {
-                        return certificate;
+            for (Certificate certificate : certificates) {
+                for (PrivateKey privateKey : content.keySet()) {
+                    if (privateKey.checkPublicKey(certificate.getPublicKey())) {
+                        return new Identity(privateKey, certificate);
                     }
                 }
             }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
         return null;
     }
