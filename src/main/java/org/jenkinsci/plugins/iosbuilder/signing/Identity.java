@@ -1,6 +1,7 @@
 package org.jenkinsci.plugins.iosbuilder.signing;
 
 import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.security.KeyStore;
 import java.security.cert.X509Certificate;
 import java.util.Date;
@@ -17,13 +18,17 @@ public class Identity {
         this.certificate = certificate;
     }
 
-    public void saveToFile(String path, char[] password) throws Exception {
+    public void save(OutputStream outputStream, char[] password) throws Exception {
         KeyStore keyStore = KeyStore.getInstance("PKCS12");
         keyStore.load(null, null);
         X509Certificate[] certificateChain = {certificate.getX509Certificate()};
         keyStore.setKeyEntry(privateKey.getAlias(), privateKey.getPrivateKey(), password, certificateChain);
+        keyStore.store(outputStream, password);
+    }
+
+    public void save(String path, char[] password) throws Exception {
         FileOutputStream fileOutputStream = new FileOutputStream(path);
-        keyStore.store(fileOutputStream, password);
+        save(fileOutputStream, password);
         fileOutputStream.close();
     }
 }

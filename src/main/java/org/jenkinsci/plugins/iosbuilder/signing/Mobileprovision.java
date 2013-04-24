@@ -25,18 +25,20 @@ public class Mobileprovision {
     private final static String applicationIdentifierXPath = "//dict/key[text()='Entitlements']/following-sibling::dict[1]/key[text()='application-identifier']/following-sibling::string[1]/text()";
     private final static String certificatesXPath = "//dict/key[text()='DeveloperCertificates']/following-sibling::array[1]/data/text()";
 
+    private byte[] bytes;
     private String name;
     private String UUID;
     private String applicationIdentifier;
     private Certificate[] certificates;
 
+    public byte[] getBytes() { return bytes; }
     public String getName() { return name; }
     public String getUUID() { return UUID; }
     public String getApplicationIdentifier() { return applicationIdentifier; }
     public Certificate[] getCertificates() { return certificates; }
 
-    Mobileprovision(byte[] data) throws Exception {
-        ContentInfo contentInfo = ContentInfo.getInstance(new ASN1InputStream(data).readObject());
+    Mobileprovision(byte[] bytes) throws Exception {
+        ContentInfo contentInfo = ContentInfo.getInstance(new ASN1InputStream(bytes).readObject());
         SignedData signedData = SignedData.getInstance(contentInfo.getContent());
         byte[] plist = ((ASN1OctetString)(signedData.getEncapContentInfo().getContent())).getOctets();
 
@@ -51,6 +53,7 @@ public class Mobileprovision {
 
         XPath xPath = XPathFactory.newInstance().newXPath();
 
+        this.bytes = bytes;
         this.name = xPath.evaluate(nameXPath, document);
         this.UUID = xPath.evaluate(uuidXPath, document);
         this.applicationIdentifier = xPath.evaluate(applicationIdentifierXPath, document);

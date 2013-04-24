@@ -3,9 +3,9 @@ package org.jenkinsci.plugins.iosbuilder.signing;
 import sun.misc.BASE64Decoder;
 
 public class MobileprovisionFactory {
-    public static Mobileprovision newInstance(byte[] data) {
+    public static Mobileprovision newInstance(byte[] bytes) {
         try {
-            return new Mobileprovision(data);
+            return new Mobileprovision(bytes);
         } catch (Exception e) {
             e.printStackTrace();
             return null;

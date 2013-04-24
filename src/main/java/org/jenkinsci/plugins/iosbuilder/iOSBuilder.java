@@ -1,10 +1,10 @@
 package org.jenkinsci.plugins.iosbuilder;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import hudson.Extension;
+import hudson.FilePath;
 import hudson.Launcher;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
@@ -15,7 +15,6 @@ import hudson.util.FormValidation;
 import hudson.util.ListBoxModel;
 import net.sf.json.JSONObject;
 import org.apache.commons.fileupload.FileItem;
-import org.jenkinsci.plugins.iosbuilder.signing.Identity;
 import org.jenkinsci.plugins.iosbuilder.signing.Mobileprovision;
 import org.jenkinsci.plugins.iosbuilder.signing.MobileprovisionFactory;
 import org.jenkinsci.plugins.iosbuilder.signing.PKCS12Archive;
@@ -28,14 +27,14 @@ import sun.misc.BASE64Encoder;
 public class iOSBuilder extends Builder {
     private final static Logger LOG = Logger.getLogger(PluginImpl.class.getName());
 
-    private final boolean usePods;
+    private final boolean installPods;
     private final String xcworkspacePath;
     private final String xcodeprojPath;
     private final String target;
     private final String scheme;
     private final String configuration;
-    private final String additionalParameters;
     private final String sdk;
+    private final String additionalParameters;
     private final boolean codeSign;
     private final String pkcs12ArchiveData;
     private final String pkcs12ArchivePassword;
@@ -43,15 +42,15 @@ public class iOSBuilder extends Builder {
     private final boolean buildIPA;
 
     @DataBoundConstructor
-    public iOSBuilder(boolean usePods, String xcworkspacePath, String xcodeprojPath, String target, String scheme, String configuration, String additionalParameters, String sdk, CodeSign codeSign) {
-        this.usePods = usePods;
+    public iOSBuilder(boolean installPods, String xcworkspacePath, String xcodeprojPath, String target, String scheme, String configuration, String sdk, String additionalParameters, CodeSign codeSign) {
+        this.installPods = installPods;
         this.xcworkspacePath = xcworkspacePath;
         this.xcodeprojPath = xcodeprojPath;
         this.target = target;
         this.scheme = scheme;
         this.configuration = configuration;
-        this.additionalParameters = additionalParameters;
         this.sdk = sdk;
+        this.additionalParameters = additionalParameters;
         this.codeSign = codeSign != null;
         this.pkcs12ArchiveData = this.codeSign ? codeSign.pkcs12ArchiveData : null;
         this.pkcs12ArchivePassword = this.codeSign ? codeSign.pkcs12ArchivePassword : null;
@@ -59,14 +58,14 @@ public class iOSBuilder extends Builder {
         this.buildIPA = this.codeSign ? codeSign.buildIPA : false;
     }
 
-    public boolean isUsePods() { return usePods; }
+    public boolean isInstallPods() { return installPods; }
     public String getXcworkspacePath() { return xcworkspacePath; }
     public String getXcodeprojPath() { return xcodeprojPath; }
     public String getTarget() { return target; }
     public String getScheme() { return scheme; }
     public String getConfiguration() { return configuration; }
-    public String getAdditionalParameters() { return additionalParameters; }
     public String getSdk() { return sdk; }
+    public String getAdditionalParameters() { return additionalParameters; }
     public boolean isCodeSign() { return codeSign; }
     public String getPkcs12ArchiveData() { return pkcs12ArchiveData; }
     public String getPkcs12ArchivePassword() { return pkcs12ArchivePassword; }
@@ -90,20 +89,29 @@ public class iOSBuilder extends Builder {
 
     @Override
     public boolean perform(AbstractBuild build, Launcher launcher, BuildListener listener) {
-        PKCS12Archive pkcs12Archive = PKCS12ArchiveFactory.newInstance(this.pkcs12ArchiveData, this.pkcs12ArchivePassword);
-        Mobileprovision mobileprovision = MobileprovisionFactory.newInstance(this.mobileprovisionData);
-        Identity identity = pkcs12Archive.chooseIdentity(mobileprovision.getCertificates());
-        if (identity != null) {
-            listener.getLogger().println(identity.getCommonName() + " / " + identity.getExpirationDate());
-            try {
-                identity.saveToFile("/tmp/identity.p12", "password".toCharArray());
+        try {
+            boolean result = true;
+            iOSBuilderExecutor executor = new iOSBuilderExecutor(build, launcher, listener, build.getWorkspace(), getDescriptor().getPodPath(), getDescriptor().getSecurityPath(), getDescriptor().getXcodebuildPath(), getDescriptor().getXcrunPath());
+            if (installPods) {
+                result = executor.installPods() == 0;
             }
-            catch (Exception e) {
-                e.printStackTrace();
+            if (result && codeSign) {
+                PKCS12Archive pkcs12Archive = PKCS12ArchiveFactory.newInstance(pkcs12ArchiveData, pkcs12ArchivePassword);
+                Mobileprovision mobileprovision = MobileprovisionFactory.newInstance(mobileprovisionData);
+                result = executor.installIdentity(pkcs12Archive, mobileprovision) == 0;
             }
+            if (result) {
+                result = executor.runXcodebuild(xcworkspacePath, xcodeprojPath, target, scheme, configuration, sdk, additionalParameters, codeSign) == 0;
+            }
+            if (result && buildIPA) {
+                result = executor.buildIpa() == 0;
+            }
+            return result;
         }
-
-        return true;
+        catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
@@ -147,13 +155,6 @@ public class iOSBuilder extends Builder {
         private FormValidation checkPath(@QueryParameter String path, String name) throws IOException, ServletException {
             if (path.length() == 0) {
                 return FormValidation.error("Please set " + name + " path");
-            }
-            File file = new File(path);
-            if (!file.isFile()) {
-                return FormValidation.error("Please set correct " + name + " path");
-            }
-            if (!file.canExecute()) {
-                return FormValidation.error("Please set executable path for " + name);
             }
             return FormValidation.ok();
         }
