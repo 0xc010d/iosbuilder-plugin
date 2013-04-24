@@ -5,7 +5,6 @@ import hudson.FilePath;
 import hudson.Launcher;
 import hudson.model.AbstractBuild;
 import hudson.model.BuildListener;
-import org.apache.commons.io.FilenameUtils;
 import org.jenkinsci.plugins.iosbuilder.signing.Identity;
 import org.jenkinsci.plugins.iosbuilder.signing.Mobileprovision;
 import org.jenkinsci.plugins.iosbuilder.signing.PKCS12Archive;
@@ -61,7 +60,6 @@ public class iOSBuilderExecutor {
         }
     }
 
-    //TODO: rewrite to allow using slaves
     int installIdentity(PKCS12Archive pkcs12Archive, Mobileprovision mobileprovision) {
         try {
             identity = pkcs12Archive.chooseIdentity(mobileprovision.getCertificates());

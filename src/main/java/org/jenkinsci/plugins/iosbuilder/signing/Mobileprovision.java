@@ -1,9 +1,9 @@
 package org.jenkinsci.plugins.iosbuilder.signing;
 
-import org.bouncycastle.asn1.ASN1InputStream;
-import org.bouncycastle.asn1.ASN1OctetString;
-import org.bouncycastle.asn1.cms.ContentInfo;
-import org.bouncycastle.asn1.cms.SignedData;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1InputStream;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.cms.ContentInfo;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.cms.SignedData;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.EntityResolver;
@@ -41,7 +41,6 @@ public class Mobileprovision {
         ContentInfo contentInfo = ContentInfo.getInstance(new ASN1InputStream(bytes).readObject());
         SignedData signedData = SignedData.getInstance(contentInfo.getContent());
         byte[] plist = ((ASN1OctetString)(signedData.getEncapContentInfo().getContent())).getOctets();
-
         DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         //Ignore DTD
         builder.setEntityResolver(new EntityResolver() {
