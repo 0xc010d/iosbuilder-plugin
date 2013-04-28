@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import hudson.Extension;
-import hudson.FilePath;
 import hudson.Launcher;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
@@ -27,7 +26,7 @@ import sun.misc.BASE64Encoder;
 public class iOSBuilder extends Builder {
     private final static Logger LOG = Logger.getLogger(PluginImpl.class.getName());
 
-    private final boolean installPods;
+    private final boolean doInstallPods;
     private final String xcworkspacePath;
     private final String xcodeprojPath;
     private final String target;
@@ -35,15 +34,15 @@ public class iOSBuilder extends Builder {
     private final String configuration;
     private final String sdk;
     private final String additionalParameters;
-    private final boolean codeSign;
+    private final boolean doSign;
     private final String pkcs12ArchiveData;
     private final String pkcs12ArchivePassword;
     private final String mobileprovisionData;
-    private final boolean buildIPA;
+    private final boolean doBuildIPA;
 
     @DataBoundConstructor
-    public iOSBuilder(boolean installPods, String xcworkspacePath, String xcodeprojPath, String target, String scheme, String configuration, String sdk, String additionalParameters, CodeSign codeSign) {
-        this.installPods = installPods;
+    public iOSBuilder(boolean doInstallPods, String xcworkspacePath, String xcodeprojPath, String target, String scheme, String configuration, String sdk, String additionalParameters, CodeSign codeSign) {
+        this.doInstallPods = doInstallPods;
         this.xcworkspacePath = xcworkspacePath;
         this.xcodeprojPath = xcodeprojPath;
         this.target = target;
@@ -51,14 +50,14 @@ public class iOSBuilder extends Builder {
         this.configuration = configuration;
         this.sdk = sdk;
         this.additionalParameters = additionalParameters;
-        this.codeSign = codeSign != null;
-        this.pkcs12ArchiveData = this.codeSign ? codeSign.pkcs12ArchiveData : null;
-        this.pkcs12ArchivePassword = this.codeSign ? codeSign.pkcs12ArchivePassword : null;
-        this.mobileprovisionData = this.codeSign ? codeSign.mobileprovisionData : null;
-        this.buildIPA = this.codeSign ? codeSign.buildIPA : false;
+        this.doSign = codeSign != null;
+        this.pkcs12ArchiveData = this.doSign ? codeSign.pkcs12ArchiveData : null;
+        this.pkcs12ArchivePassword = this.doSign ? codeSign.pkcs12ArchivePassword : null;
+        this.mobileprovisionData = this.doSign ? codeSign.mobileprovisionData : null;
+        this.doBuildIPA = this.doSign && codeSign.doBuildIPA;
     }
 
-    public boolean isInstallPods() { return installPods; }
+    public boolean isDoInstallPods() { return doInstallPods; }
     public String getXcworkspacePath() { return xcworkspacePath; }
     public String getXcodeprojPath() { return xcodeprojPath; }
     public String getTarget() { return target; }
@@ -66,24 +65,24 @@ public class iOSBuilder extends Builder {
     public String getConfiguration() { return configuration; }
     public String getSdk() { return sdk; }
     public String getAdditionalParameters() { return additionalParameters; }
-    public boolean isCodeSign() { return codeSign; }
+    public boolean isDoSign() { return doSign; }
     public String getPkcs12ArchiveData() { return pkcs12ArchiveData; }
     public String getPkcs12ArchivePassword() { return pkcs12ArchivePassword; }
     public String getMobileprovisionData() { return mobileprovisionData; }
-    public boolean isBuildIPA() { return buildIPA; }
+    public boolean isDoBuildIPA() { return doBuildIPA; }
 
     public static final class CodeSign {
         private final String pkcs12ArchiveData;
         private final String pkcs12ArchivePassword;
         private final String mobileprovisionData;
-        private final boolean buildIPA;
+        private final boolean doBuildIPA;
 
         @DataBoundConstructor
-        public CodeSign(String pkcs12ArchiveData, String pkcs12ArchivePassword, String mobileprovisionData, boolean buildIPA) {
+        public CodeSign(String pkcs12ArchiveFile, String mobileprovisionFile, String pkcs12ArchiveData, String pkcs12ArchivePassword, String mobileprovisionData, boolean doBuildIPA) {
             this.pkcs12ArchiveData = pkcs12ArchiveData;
             this.pkcs12ArchivePassword = pkcs12ArchivePassword;
             this.mobileprovisionData = mobileprovisionData;
-            this.buildIPA = buildIPA;
+            this.doBuildIPA = doBuildIPA;
         }
     }
 
@@ -92,18 +91,18 @@ public class iOSBuilder extends Builder {
         try {
             boolean result = true;
             iOSBuilderExecutor executor = new iOSBuilderExecutor(build, launcher, listener, build.getWorkspace(), getDescriptor().getPodPath(), getDescriptor().getSecurityPath(), getDescriptor().getXcodebuildPath(), getDescriptor().getXcrunPath());
-            if (installPods) {
+            if (doInstallPods) {
                 result = executor.installPods() == 0;
             }
-            if (result && codeSign) {
+            if (result && doSign) {
                 PKCS12Archive pkcs12Archive = PKCS12ArchiveFactory.newInstance(pkcs12ArchiveData, pkcs12ArchivePassword);
                 Mobileprovision mobileprovision = MobileprovisionFactory.newInstance(mobileprovisionData);
                 result = executor.installIdentity(pkcs12Archive, mobileprovision) == 0;
             }
             if (result) {
-                result = executor.runXcodebuild(xcworkspacePath, xcodeprojPath, target, scheme, configuration, sdk, additionalParameters, codeSign) == 0;
+                result = executor.runXcodebuild(xcworkspacePath, xcodeprojPath, target, scheme, configuration, sdk, additionalParameters, doSign) == 0;
             }
-            if (result && buildIPA) {
+            if (result && doBuildIPA) {
                 result = executor.buildIpa() == 0;
             }
             return result;
