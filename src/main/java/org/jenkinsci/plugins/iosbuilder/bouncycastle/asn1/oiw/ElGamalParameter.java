@@ -5,15 +5,15 @@ import java.util.Enumeration;
 
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Integer;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 
 public class ElGamalParameter
     extends ASN1Object
 {
-    ASN1Integer      p, g;
+    ASN1Integer p, g;
 
     public ElGamalParameter(
         BigInteger  p,
@@ -44,7 +44,7 @@ public class ElGamalParameter
 
     public ASN1Primitive toASN1Primitive()
     {
-        ASN1EncodableVector  v = new ASN1EncodableVector();
+        ASN1EncodableVector v = new ASN1EncodableVector();
 
         v.add(p);
         v.add(g);

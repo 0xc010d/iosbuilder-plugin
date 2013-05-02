@@ -1,9 +1,13 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509;
 
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERIA5String;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 
 /**
  * Policy qualifiers, used in the X509V3 CertificatePolicies
@@ -29,7 +33,7 @@ public class PolicyQualifierInfo
     */
    public PolicyQualifierInfo(
        ASN1ObjectIdentifier policyQualifierId,
-       ASN1Encodable qualifier)
+       ASN1Encodable qualifier) 
    {
       this.policyQualifierId = policyQualifierId;
       this.qualifier = qualifier;

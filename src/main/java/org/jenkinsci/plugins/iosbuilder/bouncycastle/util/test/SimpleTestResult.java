@@ -22,21 +22,21 @@ public class SimpleTestResult implements TestResult
     }
 
     public static TestResult successful(
-        Test test,
+        Test test, 
         String message)
     {
         return new SimpleTestResult(true, test.getName() + ": " + message);
     }
 
     public static TestResult failed(
-        Test test,
+        Test test, 
         String message)
     {
         return new SimpleTestResult(false, test.getName() + ": " + message);
     }
     
     public static TestResult failed(
-        Test test,
+        Test test, 
         String message, 
         Throwable t)
     {
@@ -44,7 +44,7 @@ public class SimpleTestResult implements TestResult
     }
     
     public static TestResult failed(
-        Test test,
+        Test test, 
         String message, 
         Object expected, 
         Object found)

@@ -7,6 +7,9 @@ import java.util.Date;
 import java.util.SimpleTimeZone;
 import java.util.TimeZone;
 
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.util.Arrays;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.util.Strings;
+
 /**
  * Generalized time object.
  */
@@ -85,7 +88,7 @@ public class DERGeneralizedTime
     public DERGeneralizedTime(
         String  time)
     {
-        this.time = org.jenkinsci.plugins.iosbuilder.bouncycastle.util.Strings.toByteArray(time);
+        this.time = Strings.toByteArray(time);
         try
         {
             this.getDate();
@@ -106,7 +109,7 @@ public class DERGeneralizedTime
 
         dateF.setTimeZone(new SimpleTimeZone(0,"Z"));
 
-        this.time = org.jenkinsci.plugins.iosbuilder.bouncycastle.util.Strings.toByteArray(dateF.format(time));
+        this.time = Strings.toByteArray(dateF.format(time));
     }
 
     DERGeneralizedTime(
@@ -121,7 +124,7 @@ public class DERGeneralizedTime
      */
     public String getTimeString()
     {
-        return org.jenkinsci.plugins.iosbuilder.bouncycastle.util.Strings.fromByteArray(time);
+        return Strings.fromByteArray(time);
     }
     
     /**
@@ -138,7 +141,7 @@ public class DERGeneralizedTime
      */
     public String getTime()
     {
-        String stime = org.jenkinsci.plugins.iosbuilder.bouncycastle.util.Strings.fromByteArray(time);
+        String stime = Strings.fromByteArray(time);
 
         //
         // standardise the format.
@@ -217,7 +220,7 @@ public class DERGeneralizedTime
         throws ParseException
     {
         SimpleDateFormat dateF;
-        String stime = org.jenkinsci.plugins.iosbuilder.bouncycastle.util.Strings.fromByteArray(time);
+        String stime = Strings.fromByteArray(time);
         String d = stime;
 
         if (stime.endsWith("Z"))
@@ -337,11 +340,11 @@ public class DERGeneralizedTime
             return false;
         }
 
-        return org.jenkinsci.plugins.iosbuilder.bouncycastle.util.Arrays.areEqual(time, ((DERGeneralizedTime) o).time);
+        return Arrays.areEqual(time, ((DERGeneralizedTime)o).time);
     }
     
     public int hashCode()
     {
-        return org.jenkinsci.plugins.iosbuilder.bouncycastle.util.Arrays.hashCode(time);
+        return Arrays.hashCode(time);
     }
 }

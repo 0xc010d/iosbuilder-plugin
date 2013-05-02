@@ -1,11 +1,11 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.smime;
 
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSet;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERTaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.cms.Attribute;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.cms.IssuerAndSerialNumber;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.cms.RecipientKeyIdentifier;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
 
 /**
  * The SMIMEEncryptionKeyPreference object.
@@ -31,7 +31,7 @@ public class SMIMEEncryptionKeyPreferenceAttribute
         RecipientKeyIdentifier rKeyId)
     {
 
-        super(SMIMEAttributes.encrypKeyPref,
+        super(SMIMEAttributes.encrypKeyPref, 
                     new DERSet(new DERTaggedObject(false, 1, rKeyId)));
     }
     

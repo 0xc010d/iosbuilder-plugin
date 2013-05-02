@@ -1,19 +1,19 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.cms;
 
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Choice;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Integer;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERTaggedObject;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
 
 public class RecipientInfo
     extends ASN1Object
     implements ASN1Choice
 {
-    ASN1Encodable info;
+    ASN1Encodable    info;
 
     public RecipientInfo(
         KeyTransRecipientInfo info)
@@ -46,7 +46,7 @@ public class RecipientInfo
     }
 
     public RecipientInfo(
-        ASN1Primitive info)
+        ASN1Primitive   info)
     {
         this.info = info;
     }

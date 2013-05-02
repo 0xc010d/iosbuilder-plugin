@@ -1,8 +1,15 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
-
 import java.util.Enumeration;
+
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DEROctetString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 
 /**
  * The DigestInfo object.
@@ -49,7 +56,7 @@ public class DigestInfo
     }
 
     public DigestInfo(
-        ASN1Sequence obj)
+        ASN1Sequence  obj)
     {
         Enumeration             e = obj.getObjects();
 
@@ -69,7 +76,7 @@ public class DigestInfo
 
     public ASN1Primitive toASN1Primitive()
     {
-        ASN1EncodableVector v = new ASN1EncodableVector();
+        ASN1EncodableVector  v = new ASN1EncodableVector();
 
         v.add(algId);
         v.add(new DEROctetString(digest));

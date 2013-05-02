@@ -1,6 +1,11 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.qualified;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Choice;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Integer;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
 
 /**
  * The TypeOfBiometricData object.
@@ -21,7 +26,7 @@ public class TypeOfBiometricData
     public static final int PICTURE                     = 0;
     public static final int HANDWRITTEN_SIGNATURE       = 1;
 
-    ASN1Encodable obj;
+    ASN1Encodable      obj;
 
     public static TypeOfBiometricData getInstance(Object obj)
     {

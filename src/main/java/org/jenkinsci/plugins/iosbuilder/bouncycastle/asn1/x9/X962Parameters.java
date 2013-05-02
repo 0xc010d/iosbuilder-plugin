@@ -2,16 +2,16 @@ package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x9;
 
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Choice;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Null;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
 
 public class X962Parameters
     extends ASN1Object
     implements ASN1Choice
 {
-    private ASN1Primitive params = null;
+    private ASN1Primitive           params = null;
 
     public static X962Parameters getInstance(
         Object obj)
@@ -37,13 +37,13 @@ public class X962Parameters
     }
     
     public X962Parameters(
-        X9ECParameters ecParameters)
+        X9ECParameters      ecParameters)
     {
         this.params = ecParameters.toASN1Primitive();
     }
 
     public X962Parameters(
-        ASN1ObjectIdentifier namedCurve)
+        ASN1ObjectIdentifier  namedCurve)
     {
         this.params = namedCurve;
     }

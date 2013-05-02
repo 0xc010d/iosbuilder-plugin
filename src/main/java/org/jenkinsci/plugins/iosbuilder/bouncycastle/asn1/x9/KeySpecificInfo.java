@@ -5,10 +5,10 @@ import java.util.Enumeration;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
 
 /**
  * ASN.1 def for Diffie-Hellman key exchange KeySpecificInfo structure. See
@@ -18,11 +18,11 @@ public class KeySpecificInfo
     extends ASN1Object
 {
     private ASN1ObjectIdentifier algorithm;
-    private ASN1OctetString counter;
+    private ASN1OctetString      counter;
 
     public KeySpecificInfo(
         ASN1ObjectIdentifier algorithm,
-        ASN1OctetString counter)
+        ASN1OctetString      counter)
     {
         this.algorithm = algorithm;
         this.counter = counter;

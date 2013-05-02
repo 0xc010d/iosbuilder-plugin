@@ -1,10 +1,10 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x500;
 
+import java.util.Vector;
+
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x500.style.BCStyle;
-
-import java.util.Vector;
 
 public class X500NameBuilder
 {

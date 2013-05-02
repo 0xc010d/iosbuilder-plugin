@@ -3,7 +3,11 @@ package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 
 /**
  * This extension may contain further X.500 attributes of the subject. See also

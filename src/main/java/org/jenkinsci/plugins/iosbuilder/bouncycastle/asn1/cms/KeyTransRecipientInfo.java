@@ -2,10 +2,13 @@ package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.cms;
 
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Integer;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.AlgorithmIdentifier;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
 
 public class KeyTransRecipientInfo
     extends ASN1Object
@@ -13,12 +16,12 @@ public class KeyTransRecipientInfo
     private ASN1Integer          version;
     private RecipientIdentifier rid;
     private AlgorithmIdentifier keyEncryptionAlgorithm;
-    private ASN1OctetString encryptedKey;
+    private ASN1OctetString     encryptedKey;
 
     public KeyTransRecipientInfo(
         RecipientIdentifier rid,
         AlgorithmIdentifier keyEncryptionAlgorithm,
-        ASN1OctetString encryptedKey)
+        ASN1OctetString     encryptedKey)
     {
         if (rid.toASN1Primitive() instanceof ASN1TaggedObject)
         {
@@ -99,7 +102,7 @@ public class KeyTransRecipientInfo
      */
     public ASN1Primitive toASN1Primitive()
     {
-        ASN1EncodableVector v = new ASN1EncodableVector();
+        ASN1EncodableVector  v = new ASN1EncodableVector();
 
         v.add(version);
         v.add(rid);

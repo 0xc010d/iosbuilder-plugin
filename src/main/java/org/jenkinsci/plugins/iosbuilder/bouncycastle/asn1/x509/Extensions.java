@@ -4,8 +4,16 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
 
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Boolean;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 
 public class Extensions
     extends ASN1Object
@@ -47,7 +55,7 @@ public class Extensions
 
         while (e.hasMoreElements())
         {
-            ASN1Sequence s = ASN1Sequence.getInstance(e.nextElement());
+            ASN1Sequence            s = ASN1Sequence.getInstance(e.nextElement());
 
             if (s.size() == 3)
             {
@@ -150,7 +158,7 @@ public class Extensions
 
         while (e.hasMoreElements())
         {
-            ASN1ObjectIdentifier oid = (ASN1ObjectIdentifier)e.nextElement();
+            ASN1ObjectIdentifier     oid = (ASN1ObjectIdentifier)e.nextElement();
             Extension ext = (Extension)extensions.get(oid);
             ASN1EncodableVector v = new ASN1EncodableVector();
 

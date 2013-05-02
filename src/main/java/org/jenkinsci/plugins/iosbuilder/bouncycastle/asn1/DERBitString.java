@@ -210,7 +210,7 @@ public class DERBitString
     }
 
     void encode(
-        ASN1OutputStream out)
+        ASN1OutputStream  out)
         throws IOException
     {
         byte[]  bytes = new byte[getBytes().length + 1];
@@ -227,7 +227,7 @@ public class DERBitString
     }
 
     protected boolean asn1Equals(
-        ASN1Primitive o)
+        ASN1Primitive  o)
     {
         if (!(o instanceof DERBitString))
         {
@@ -244,7 +244,7 @@ public class DERBitString
     {
         StringBuffer          buf = new StringBuffer("#");
         ByteArrayOutputStream bOut = new ByteArrayOutputStream();
-        ASN1OutputStream aOut = new ASN1OutputStream(bOut);
+        ASN1OutputStream      aOut = new ASN1OutputStream(bOut);
         
         try
         {

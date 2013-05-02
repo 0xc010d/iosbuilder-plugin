@@ -6,15 +6,15 @@ import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERBitString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.AlgorithmIdentifier;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
 
 
 public class OriginatorPublicKey
     extends ASN1Object
 {
     private AlgorithmIdentifier algorithm;
-    private DERBitString publicKey;
+    private DERBitString        publicKey;
     
     public OriginatorPublicKey(
         AlgorithmIdentifier algorithm,
@@ -90,7 +90,7 @@ public class OriginatorPublicKey
      */
     public ASN1Primitive toASN1Primitive()
     {
-        ASN1EncodableVector v = new ASN1EncodableVector();
+        ASN1EncodableVector  v = new ASN1EncodableVector();
 
         v.add(algorithm);
         v.add(publicKey);

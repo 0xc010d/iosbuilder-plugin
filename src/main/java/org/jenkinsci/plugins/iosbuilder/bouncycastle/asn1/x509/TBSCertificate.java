@@ -34,16 +34,16 @@ public class TBSCertificate
 {
     ASN1Sequence seq;
 
-    ASN1Integer             version;
+    ASN1Integer version;
     ASN1Integer             serialNumber;
-    AlgorithmIdentifier signature;
+    AlgorithmIdentifier     signature;
     X500Name issuer;
-    Time startDate, endDate;
+    Time                    startDate, endDate;
     X500Name                subject;
-    SubjectPublicKeyInfo subjectPublicKeyInfo;
+    SubjectPublicKeyInfo    subjectPublicKeyInfo;
     DERBitString issuerUniqueId;
     DERBitString            subjectUniqueId;
-    Extensions extensions;
+    Extensions              extensions;
 
     public static TBSCertificate getInstance(
         ASN1TaggedObject obj,

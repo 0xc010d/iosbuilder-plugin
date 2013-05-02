@@ -38,14 +38,14 @@ public class TBSCertificateStructure
 
     ASN1Integer             version;
     ASN1Integer             serialNumber;
-    AlgorithmIdentifier signature;
+    AlgorithmIdentifier     signature;
     X500Name issuer;
-    Time startDate, endDate;
+    Time                    startDate, endDate;
     X500Name                subject;
-    SubjectPublicKeyInfo subjectPublicKeyInfo;
-    DERBitString issuerUniqueId;
+    SubjectPublicKeyInfo    subjectPublicKeyInfo;
+    DERBitString            issuerUniqueId;
     DERBitString            subjectUniqueId;
-    X509Extensions extensions;
+    X509Extensions          extensions;
 
     public static TBSCertificateStructure getInstance(
         ASN1TaggedObject obj,

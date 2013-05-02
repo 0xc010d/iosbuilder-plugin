@@ -6,13 +6,16 @@ import java.util.Enumeration;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Integer;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Set;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.BERApplicationSpecific;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.BERConstructedOctetString;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.BEROctetString;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.BERSequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.BERSet;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.BERTaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.BERTags;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERApplicationSpecific;
@@ -23,13 +26,14 @@ import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DEREnumerated;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERExternal;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERGeneralizedTime;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERIA5String;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERNull;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERPrintableString;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERT61String;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERUTCTime;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERUTF8String;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERVisibleString;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.util.encoders.Hex;
 
 public class ASN1Dump
 {
@@ -302,7 +306,7 @@ public class ASN1Dump
             return buf.toString();
         }
 
-        return indent + type + " ApplicationSpecific[" + app.getApplicationTag() + "] (" + new String(org.jenkinsci.plugins.iosbuilder.bouncycastle.util.encoders.Hex.encode(app.getContents())) + ")" + nl;
+        return indent + type + " ApplicationSpecific[" + app.getApplicationTag() + "] (" + new String(Hex.encode(app.getContents())) + ")" + nl;
     }
 
     /**
@@ -359,7 +363,7 @@ public class ASN1Dump
             if (bytes.length - i > SAMPLE_SIZE)
             {
                 buf.append(indent);
-                buf.append(new String(org.jenkinsci.plugins.iosbuilder.bouncycastle.util.encoders.Hex.encode(bytes, i, SAMPLE_SIZE)));
+                buf.append(new String(Hex.encode(bytes, i, SAMPLE_SIZE)));
                 buf.append(TAB);
                 buf.append(calculateAscString(bytes, i, SAMPLE_SIZE));
                 buf.append(nl);
@@ -367,7 +371,7 @@ public class ASN1Dump
             else
             {
                 buf.append(indent);
-                buf.append(new String(org.jenkinsci.plugins.iosbuilder.bouncycastle.util.encoders.Hex.encode(bytes, i, bytes.length - i)));
+                buf.append(new String(Hex.encode(bytes, i, bytes.length - i)));
                 for (int j = bytes.length - i; j != SAMPLE_SIZE; j++)
                 {
                     buf.append("  ");

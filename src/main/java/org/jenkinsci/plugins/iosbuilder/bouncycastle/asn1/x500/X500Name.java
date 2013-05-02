@@ -2,7 +2,14 @@ package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x500;
 
 import java.util.Enumeration;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Choice;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x500.style.BCStyle;
 
 /**
@@ -89,14 +96,14 @@ public class X500Name
      * the principal will be a list of constructed sets, each containing an (OID, String) pair.
      */
     private X500Name(
-        ASN1Sequence seq)
+        ASN1Sequence  seq)
     {
         this(defaultStyle, seq);
     }
 
     private X500Name(
         X500NameStyle style,
-        ASN1Sequence seq)
+        ASN1Sequence  seq)
     {
         this.style = style;
         this.rdns = new RDN[seq.size()];
@@ -279,7 +286,7 @@ public class X500Name
 
         try
         {
-            return style.areEqual(this, new X500Name(ASN1Sequence.getInstance(((ASN1Encodable) obj).toASN1Primitive())));
+            return style.areEqual(this, new X500Name(ASN1Sequence.getInstance(((ASN1Encodable)obj).toASN1Primitive())));
         }
         catch (Exception e)
         {

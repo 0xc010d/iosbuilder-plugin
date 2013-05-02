@@ -1,6 +1,13 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.crmf;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Choice;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Integer;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERBitString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERTaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.cms.EnvelopedData;
 
 public class POPOPrivKey

@@ -1,6 +1,11 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 
 public class GeneralNames
     extends ASN1Object
@@ -41,7 +46,7 @@ public class GeneralNames
      * @param name the name to be contained.
      */
     public GeneralNames(
-        GeneralName name)
+        GeneralName  name)
     {
         this.names = new GeneralName[] { name };
     }
@@ -54,7 +59,7 @@ public class GeneralNames
     }
 
     private GeneralNames(
-        ASN1Sequence seq)
+        ASN1Sequence  seq)
     {
         this.names = new GeneralName[seq.size()];
 

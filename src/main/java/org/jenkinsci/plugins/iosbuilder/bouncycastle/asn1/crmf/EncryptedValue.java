@@ -1,20 +1,26 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.crmf;
 
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERBitString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERTaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.AlgorithmIdentifier;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
 
 public class EncryptedValue
     extends ASN1Object
 {
     private AlgorithmIdentifier intendedAlg;
     private AlgorithmIdentifier symmAlg;
-    private DERBitString encSymmKey;
+    private DERBitString        encSymmKey;
     private AlgorithmIdentifier keyAlg;
-    private ASN1OctetString valueHint;
-    private DERBitString encValue;
+    private ASN1OctetString     valueHint;
+    private DERBitString        encValue;
 
     private EncryptedValue(ASN1Sequence seq)
     {

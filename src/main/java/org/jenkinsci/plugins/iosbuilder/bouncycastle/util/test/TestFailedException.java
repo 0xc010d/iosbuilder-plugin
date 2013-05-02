@@ -1,6 +1,6 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.util.test;
 
-public class TestFailedException
+public class TestFailedException 
     extends RuntimeException
 {
     private TestResult _result;

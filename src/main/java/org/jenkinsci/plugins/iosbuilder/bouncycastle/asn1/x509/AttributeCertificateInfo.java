@@ -1,25 +1,27 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509;
 
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Integer;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERBitString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 
 public class AttributeCertificateInfo
     extends ASN1Object
 {
-    private ASN1Integer version;
-    private Holder holder;
-    private AttCertIssuer issuer;
-    private AlgorithmIdentifier signature;
+    private ASN1Integer              version;
+    private Holder                  holder;
+    private AttCertIssuer           issuer;
+    private AlgorithmIdentifier     signature;
     private ASN1Integer              serialNumber;
-    private AttCertValidityPeriod attrCertValidityPeriod;
-    private ASN1Sequence attributes;
-    private DERBitString issuerUniqueID;
-    private Extensions extensions;
+    private AttCertValidityPeriod   attrCertValidityPeriod;
+    private ASN1Sequence            attributes;
+    private DERBitString            issuerUniqueID;
+    private Extensions              extensions;
 
     public static AttributeCertificateInfo getInstance(
         ASN1TaggedObject obj,
@@ -61,7 +63,7 @@ public class AttributeCertificateInfo
         
         for (int i = 7; i < seq.size(); i++)
         {
-            ASN1Encodable obj = (ASN1Encodable)seq.getObjectAt(i);
+            ASN1Encodable    obj = (ASN1Encodable)seq.getObjectAt(i);
 
             if (obj instanceof DERBitString)
             {

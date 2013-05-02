@@ -1,11 +1,11 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x9;
 
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DEROctetString;
-import org.bouncycastle.math.ec.ECCurve;
-import org.bouncycastle.math.ec.ECPoint;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.math.ec.ECCurve;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.math.ec.ECPoint;
 
 /**
  * class for describing an ECPoint as a DER object.
@@ -23,7 +23,7 @@ public class X9ECPoint
 
     public X9ECPoint(
         ECCurve          c,
-        ASN1OctetString s)
+        ASN1OctetString  s)
     {
         this.p = c.decodePoint(s.getOctets());
     }

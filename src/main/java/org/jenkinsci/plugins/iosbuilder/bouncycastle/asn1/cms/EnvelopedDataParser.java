@@ -2,12 +2,12 @@ package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.cms;
 
 import java.io.IOException;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Integer;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1SetParser;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.BERTags;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Integer;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1SequenceParser;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1SetParser;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObjectParser;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.BERTags;
 
 /** 
  * <pre>
@@ -23,8 +23,8 @@ import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObjectParser
 public class EnvelopedDataParser
 {
     private ASN1SequenceParser _seq;
-    private ASN1Integer        _version;
-    private ASN1Encodable _nextObject;
+    private ASN1Integer _version;
+    private ASN1Encodable      _nextObject;
     private boolean            _originatorInfoCalled;
     
     public EnvelopedDataParser(
@@ -40,7 +40,7 @@ public class EnvelopedDataParser
         return _version;
     }
 
-    public OriginatorInfo getOriginatorInfo()
+    public OriginatorInfo getOriginatorInfo() 
         throws IOException
     {
         _originatorInfoCalled = true; 

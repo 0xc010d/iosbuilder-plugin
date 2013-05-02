@@ -48,7 +48,7 @@
                 Select another:<br />
             </j:if>
             <input type="hidden" name="pkcs12ArchiveData" value="${instance.pkcs12ArchiveData}" />
-            <input type="file" name="pkcs12ArchiveFile" />
+            <input type="file" name="pkcs12ArchiveFile" jsonAware="yes" />
         </f:entry>
         <f:entry title=".p12 key password" field="pkcs12ArchivePassword">
             <f:password />
@@ -73,7 +73,7 @@
                 </dl>
             </j:if>
             <input type="hidden" name="mobileprovisionData" value="${instance.mobileprovisionData}" />
-            <input type="file" name="mobileprovisionFile" />
+            <input type="file" name="mobileprovisionFile" jsonAware="yes" />
         </f:entry>
         <f:entry title="Build .ipa" field="doBuildIPA">
             <f:checkbox />

@@ -67,7 +67,7 @@ public abstract class ASN1Sequence
      *          be converted.
      */
     public static ASN1Sequence getInstance(
-        ASN1TaggedObject obj,
+        ASN1TaggedObject    obj,
         boolean             explicit)
     {
         if (explicit)

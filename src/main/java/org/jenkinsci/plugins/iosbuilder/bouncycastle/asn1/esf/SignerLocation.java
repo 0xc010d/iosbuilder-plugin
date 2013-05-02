@@ -2,8 +2,14 @@ package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.esf;
 
 import java.util.Enumeration;
 
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERTaggedObject;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERUTF8String;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x500.DirectoryString;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
 
 /**
  * Signer-Location attribute (RFC3126).
@@ -21,7 +27,7 @@ public class SignerLocation
     extends ASN1Object
 {
     private DERUTF8String countryName;
-    private DERUTF8String localityName;
+    private DERUTF8String   localityName;
     private ASN1Sequence postalAddress;
     
     private SignerLocation(
@@ -64,9 +70,9 @@ public class SignerLocation
     }
 
     public SignerLocation(
-        DERUTF8String countryName,
-        DERUTF8String localityName,
-        ASN1Sequence postalAddress)
+        DERUTF8String   countryName,
+        DERUTF8String   localityName,
+        ASN1Sequence    postalAddress)
     {
         if (postalAddress != null && postalAddress.size() > 6)
         {
@@ -134,7 +140,7 @@ public class SignerLocation
      */
     public ASN1Primitive toASN1Primitive()
     {
-        ASN1EncodableVector v = new ASN1EncodableVector();
+        ASN1EncodableVector  v = new ASN1EncodableVector();
 
         if (countryName != null)
         {

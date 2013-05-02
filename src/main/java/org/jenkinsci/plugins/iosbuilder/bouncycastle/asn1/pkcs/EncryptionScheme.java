@@ -1,11 +1,12 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.pkcs;
 
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.AlgorithmIdentifier;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
 
 public class EncryptionScheme
     extends AlgorithmIdentifier
@@ -44,7 +45,7 @@ public class EncryptionScheme
 
     public ASN1Primitive getASN1Primitive()
     {
-        ASN1EncodableVector v = new ASN1EncodableVector();
+        ASN1EncodableVector  v = new ASN1EncodableVector();
 
         v.add(getObjectId());
         v.add(getParameters());

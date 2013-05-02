@@ -2,9 +2,14 @@ package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.cms;
 
 import java.io.IOException;
 
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Integer;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1SequenceParser;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1SetParser;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObjectParser;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.BERTags;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.AlgorithmIdentifier;
 
 /**
@@ -114,7 +119,7 @@ public class AuthenticatedDataParser
 
         if (nextObject instanceof ASN1TaggedObjectParser)
         {
-            AlgorithmIdentifier obj = AlgorithmIdentifier.getInstance((ASN1TaggedObject) nextObject.toASN1Primitive(), false);
+            AlgorithmIdentifier obj = AlgorithmIdentifier.getInstance((ASN1TaggedObject)nextObject.toASN1Primitive(), false);
             nextObject = null;
             return obj;
         }

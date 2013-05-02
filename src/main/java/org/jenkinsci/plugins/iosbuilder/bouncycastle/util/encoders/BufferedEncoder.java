@@ -10,14 +10,14 @@ public class BufferedEncoder
     protected byte[]        buf;
     protected int           bufOff;
 
-    protected Translator translator;
+    protected Translator    translator;
 
     /**
      * @param translator the translator to use.
      * @param bufSize amount of input to buffer for each chunk.
      */
     public BufferedEncoder(
-        Translator translator,
+        Translator  translator,
         int         bufSize)
     {
         this.translator = translator;

@@ -4,15 +4,27 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Enumeration;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encoding;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Integer;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Set;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DEROctetString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERTaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.AlgorithmIdentifier;
 
 public class PrivateKeyInfo
     extends ASN1Object
 {
-    private ASN1OctetString privKey;
+    private ASN1OctetString         privKey;
     private AlgorithmIdentifier algId;
-    private ASN1Set attributes;
+    private ASN1Set                 attributes;
 
     public static PrivateKeyInfo getInstance(
         ASN1TaggedObject obj,
@@ -38,7 +50,7 @@ public class PrivateKeyInfo
         
     public PrivateKeyInfo(
         AlgorithmIdentifier algId,
-        ASN1Encodable privateKey)
+        ASN1Encodable       privateKey)
         throws IOException
     {
         this(algId, privateKey, null);
@@ -46,8 +58,8 @@ public class PrivateKeyInfo
 
     public PrivateKeyInfo(
         AlgorithmIdentifier algId,
-        ASN1Encodable privateKey,
-        ASN1Set attributes)
+        ASN1Encodable       privateKey,
+        ASN1Set             attributes)
         throws IOException
     {
         this.privKey = new DEROctetString(privateKey.toASN1Primitive().getEncoded(ASN1Encoding.DER));
@@ -56,7 +68,7 @@ public class PrivateKeyInfo
     }
 
     public PrivateKeyInfo(
-        ASN1Sequence seq)
+        ASN1Sequence  seq)
     {
         Enumeration e = seq.getObjects();
 
@@ -71,7 +83,7 @@ public class PrivateKeyInfo
         
         if (e.hasMoreElements())
         {
-           attributes = ASN1Set.getInstance((ASN1TaggedObject) e.nextElement(), false);
+           attributes = ASN1Set.getInstance((ASN1TaggedObject)e.nextElement(), false);
         }
     }
 

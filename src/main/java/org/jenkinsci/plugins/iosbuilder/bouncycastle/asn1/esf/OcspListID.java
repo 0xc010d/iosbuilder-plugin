@@ -2,8 +2,8 @@ package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.esf;
 
 import java.util.Enumeration;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 
@@ -60,7 +60,7 @@ public class OcspListID
         for (int idx = 0; idx < result.length; idx++)
         {
             result[idx] = OcspResponsesID.getInstance(this.ocspResponses
-                    .getObjectAt(idx));
+                .getObjectAt(idx));
         }
         return result;
     }

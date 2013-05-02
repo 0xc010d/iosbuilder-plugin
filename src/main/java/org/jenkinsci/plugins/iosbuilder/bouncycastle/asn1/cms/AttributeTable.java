@@ -4,12 +4,12 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
 
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Set;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERObjectIdentifier;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSet;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
 
 public class AttributeTable
 {
@@ -26,7 +26,7 @@ public class AttributeTable
     {
         for (int i = 0; i != v.size(); i++)
         {
-            Attribute a = Attribute.getInstance(v.get(i));
+            Attribute   a = Attribute.getInstance(v.get(i));
 
             addAttribute(a.getAttrType(), a);
         }
@@ -37,14 +37,14 @@ public class AttributeTable
     {
         for (int i = 0; i != s.size(); i++)
         {
-            Attribute a = Attribute.getInstance(s.getObjectAt(i));
+            Attribute   a = Attribute.getInstance(s.getObjectAt(i));
 
             addAttribute(a.getAttrType(), a);
         }
     }
 
     public AttributeTable(
-        Attribute attr)
+        Attribute    attr)
     {
         addAttribute(attr.getAttrType(), attr);
     }
@@ -57,7 +57,7 @@ public class AttributeTable
 
     private void addAttribute(
         ASN1ObjectIdentifier oid,
-        Attribute a)
+        Attribute           a)
     {
         Object value = attributes.get(oid);
         

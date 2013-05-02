@@ -1,8 +1,14 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.icao;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
-
 import java.util.Enumeration;
+
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Integer;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 
 /**
  * The DataGroupHash object.
@@ -34,8 +40,8 @@ import java.util.Enumeration;
 public class DataGroupHash 
     extends ASN1Object
 {
-    ASN1Integer dataGroupNumber;
-    ASN1OctetString dataGroupHashValue;
+    ASN1Integer dataGroupNumber;    
+    ASN1OctetString    dataGroupHashValue;
     
     public static DataGroupHash getInstance(
         Object obj)
@@ -59,12 +65,12 @@ public class DataGroupHash
         // dataGroupNumber
         dataGroupNumber = ASN1Integer.getInstance(e.nextElement());
         // dataGroupHashValue
-        dataGroupHashValue = ASN1OctetString.getInstance(e.nextElement());
+        dataGroupHashValue = ASN1OctetString.getInstance(e.nextElement());   
     }
     
     public DataGroupHash(
         int dataGroupNumber,        
-        ASN1OctetString dataGroupHashValue)
+        ASN1OctetString     dataGroupHashValue)
     {
         this.dataGroupNumber = new ASN1Integer(dataGroupNumber);
         this.dataGroupHashValue = dataGroupHashValue; 

@@ -3,13 +3,13 @@ package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.cms;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Integer;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Set;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.BERSequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERTaggedObject;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
 
 public class AuthEnvelopedData
     extends ASN1Object
@@ -64,7 +64,7 @@ public class AuthEnvelopedData
         tmp = seq.getObjectAt(index++).toASN1Primitive();
         if (tmp instanceof ASN1TaggedObject)
         {
-            originatorInfo = OriginatorInfo.getInstance((ASN1TaggedObject) tmp, false);
+            originatorInfo = OriginatorInfo.getInstance((ASN1TaggedObject)tmp, false);
             tmp = seq.getObjectAt(index++).toASN1Primitive();
         }
 

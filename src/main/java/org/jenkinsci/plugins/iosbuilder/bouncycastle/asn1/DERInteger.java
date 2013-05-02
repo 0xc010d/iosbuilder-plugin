@@ -129,7 +129,7 @@ public class DERInteger
     }
 
     boolean asn1Equals(
-        ASN1Primitive o)
+        ASN1Primitive  o)
     {
         if (!(o instanceof DERInteger))
         {

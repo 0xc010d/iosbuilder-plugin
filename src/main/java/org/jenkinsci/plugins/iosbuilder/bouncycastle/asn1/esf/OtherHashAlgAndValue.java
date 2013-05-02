@@ -1,13 +1,18 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.esf;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.AlgorithmIdentifier;
 
 public class OtherHashAlgAndValue
     extends ASN1Object
 {
     private AlgorithmIdentifier hashAlgorithm;
-    private ASN1OctetString hashValue;
+    private ASN1OctetString     hashValue;
 
 
     public static OtherHashAlgAndValue getInstance(
@@ -39,7 +44,7 @@ public class OtherHashAlgAndValue
 
     public OtherHashAlgAndValue(
         AlgorithmIdentifier hashAlgorithm,
-        ASN1OctetString hashValue)
+        ASN1OctetString     hashValue)
     {
         this.hashAlgorithm = hashAlgorithm;
         this.hashValue = hashValue;

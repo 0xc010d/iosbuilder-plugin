@@ -1,6 +1,13 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.cms;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Set;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERTaggedObject;
 
 public class OriginatorInfo
     extends ASN1Object
@@ -38,8 +45,8 @@ public class OriginatorInfo
             }
             break;
         case 2:
-            certs = ASN1Set.getInstance((ASN1TaggedObject) seq.getObjectAt(0), false);
-            crls  = ASN1Set.getInstance((ASN1TaggedObject) seq.getObjectAt(1), false);
+            certs = ASN1Set.getInstance((ASN1TaggedObject)seq.getObjectAt(0), false);
+            crls  = ASN1Set.getInstance((ASN1TaggedObject)seq.getObjectAt(1), false);
             break;
         default:
             throw new IllegalArgumentException("OriginatorInfo too big");
@@ -104,7 +111,7 @@ public class OriginatorInfo
      */
     public ASN1Primitive toASN1Primitive()
     {
-        ASN1EncodableVector v = new ASN1EncodableVector();
+        ASN1EncodableVector  v = new ASN1EncodableVector();
 
         if (certs != null)
         {

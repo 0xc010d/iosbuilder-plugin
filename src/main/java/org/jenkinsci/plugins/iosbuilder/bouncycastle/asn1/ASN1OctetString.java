@@ -23,7 +23,7 @@ public abstract class ASN1OctetString
      *              be converted.
      */
     public static ASN1OctetString getInstance(
-        ASN1TaggedObject obj,
+        ASN1TaggedObject    obj,
         boolean             explicit)
     {
         ASN1Primitive o = obj.getObject();
@@ -55,7 +55,7 @@ public abstract class ASN1OctetString
         {
             try
             {
-                return ASN1OctetString.getInstance(ASN1Primitive.fromByteArray((byte[]) obj));
+                return ASN1OctetString.getInstance(ASN1Primitive.fromByteArray((byte[])obj));
             }
             catch (IOException e)
             {

@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Vector;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encoding;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DEROctetString;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encoding;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DEROctetString;
 
 /**
  * Generator for X.509 extensions

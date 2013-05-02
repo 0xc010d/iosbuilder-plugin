@@ -2,24 +2,30 @@ package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.cms;
 
 import java.util.Enumeration;
 
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Integer;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Set;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.BERSequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERTaggedObject;
 
 public class EnvelopedData
     extends ASN1Object
 {
     private ASN1Integer              version;
-    private OriginatorInfo originatorInfo;
-    private ASN1Set recipientInfos;
-    private EncryptedContentInfo encryptedContentInfo;
-    private ASN1Set unprotectedAttrs;
+    private OriginatorInfo          originatorInfo;
+    private ASN1Set                 recipientInfos;
+    private EncryptedContentInfo    encryptedContentInfo;
+    private ASN1Set                 unprotectedAttrs;
 
     public EnvelopedData(
-        OriginatorInfo originatorInfo,
-        ASN1Set recipientInfos,
-        EncryptedContentInfo encryptedContentInfo,
-        ASN1Set unprotectedAttrs)
+        OriginatorInfo          originatorInfo,
+        ASN1Set                 recipientInfos,
+        EncryptedContentInfo    encryptedContentInfo,
+        ASN1Set                 unprotectedAttrs)
     {
         version = new ASN1Integer(calculateVersion(originatorInfo, recipientInfos, unprotectedAttrs));
 
@@ -40,7 +46,7 @@ public class EnvelopedData
 
         if (tmp instanceof ASN1TaggedObject)
         {
-            originatorInfo = OriginatorInfo.getInstance((ASN1TaggedObject) tmp, false);
+            originatorInfo = OriginatorInfo.getInstance((ASN1TaggedObject)tmp, false);
             tmp = seq.getObjectAt(index++);
         }
 
@@ -50,7 +56,7 @@ public class EnvelopedData
         
         if(seq.size() > index)
         {
-            unprotectedAttrs = ASN1Set.getInstance((ASN1TaggedObject) seq.getObjectAt(index), false);
+            unprotectedAttrs = ASN1Set.getInstance((ASN1TaggedObject)seq.getObjectAt(index), false);
         }
     }
     
@@ -131,7 +137,7 @@ public class EnvelopedData
      */
     public ASN1Primitive toASN1Primitive()
     {
-        ASN1EncodableVector v = new ASN1EncodableVector();
+        ASN1EncodableVector  v = new ASN1EncodableVector();
         
         v.add(version);
 

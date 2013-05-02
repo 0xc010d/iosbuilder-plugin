@@ -2,14 +2,21 @@ package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.cmp;
 
 import java.math.BigInteger;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Integer;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERBitString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 
 public class PKIStatusInfo
     extends ASN1Object
 {
-    ASN1Integer status;
+    ASN1Integer      status;
     PKIFreeText     statusString;
-    DERBitString failInfo;
+    DERBitString    failInfo;
 
     public static PKIStatusInfo getInstance(
         ASN1TaggedObject obj,
@@ -139,7 +146,7 @@ public class PKIStatusInfo
      */
     public ASN1Primitive toASN1Primitive()
     {
-        ASN1EncodableVector v = new ASN1EncodableVector();
+        ASN1EncodableVector  v = new ASN1EncodableVector();
 
         v.add(status);
 

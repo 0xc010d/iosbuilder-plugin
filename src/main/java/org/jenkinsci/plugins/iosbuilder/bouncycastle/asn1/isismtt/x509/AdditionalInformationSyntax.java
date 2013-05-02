@@ -1,8 +1,8 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.isismtt.x509;
 
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x500.DirectoryString;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
 
 /**
  * Some other information of non-restrictive nature regarding the usage of this

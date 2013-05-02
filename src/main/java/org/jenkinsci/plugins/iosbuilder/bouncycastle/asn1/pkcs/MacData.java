@@ -2,7 +2,14 @@ package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.pkcs;
 
 import java.math.BigInteger;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Integer;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DEROctetString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.DigestInfo;
 
 public class MacData
@@ -10,7 +17,7 @@ public class MacData
 {
     private static final BigInteger ONE = BigInteger.valueOf(1);
 
-    DigestInfo                  digInfo;
+    DigestInfo digInfo;
     byte[]                      salt;
     BigInteger                  iterationCount;
 
@@ -84,7 +91,7 @@ public class MacData
      */
     public ASN1Primitive toASN1Primitive()
     {
-        ASN1EncodableVector v = new ASN1EncodableVector();
+        ASN1EncodableVector  v = new ASN1EncodableVector();
 
         v.add(digInfo);
         v.add(new DEROctetString(salt));

@@ -1,6 +1,12 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ess;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.AlgorithmIdentifier;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.DigestInfo;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.IssuerSerial;
@@ -53,7 +59,7 @@ public class OtherCertID
     }
 
     public OtherCertID(
-        AlgorithmIdentifier  algId,
+        AlgorithmIdentifier algId,
         byte[]               digest)
     {
         this.otherCertHash = new DigestInfo(algId, digest);

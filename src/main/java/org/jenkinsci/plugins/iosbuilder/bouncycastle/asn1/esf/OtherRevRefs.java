@@ -1,8 +1,15 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.esf;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
-
 import java.io.IOException;
+
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encoding;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 
 /**
  * <pre>
@@ -46,7 +53,7 @@ public class OtherRevRefs
         try
         {
             this.otherRevRefs = ASN1Primitive.fromByteArray(seq.getObjectAt(1)
-                    .toASN1Primitive().getEncoded(ASN1Encoding.DER));
+                .toASN1Primitive().getEncoded(ASN1Encoding.DER));
         }
         catch (IOException e)
         {

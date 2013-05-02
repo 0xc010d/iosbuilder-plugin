@@ -1,9 +1,15 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.cryptopro;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
-
 import java.math.BigInteger;
 import java.util.Enumeration;
+
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Integer;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 
 public class GOST3410ParamSetParameters
     extends ASN1Object
@@ -47,7 +53,7 @@ public class GOST3410ParamSetParameters
     }
 
     public GOST3410ParamSetParameters(
-        ASN1Sequence seq)
+        ASN1Sequence  seq)
     {
         Enumeration     e = seq.getObjects();
 
@@ -87,7 +93,7 @@ public class GOST3410ParamSetParameters
 
     public ASN1Primitive toASN1Primitive()
     {
-        ASN1EncodableVector v = new ASN1EncodableVector();
+        ASN1EncodableVector  v = new ASN1EncodableVector();
 
         v.add(new ASN1Integer(keySize));
         v.add(p);

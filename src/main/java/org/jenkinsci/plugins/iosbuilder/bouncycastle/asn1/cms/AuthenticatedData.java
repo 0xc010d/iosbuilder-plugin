@@ -4,10 +4,15 @@ import java.util.Enumeration;
 
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Integer;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Set;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.BERSequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERTaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.AlgorithmIdentifier;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
 
 public class AuthenticatedData
     extends ASN1Object
@@ -63,7 +68,7 @@ public class AuthenticatedData
 
         if (tmp instanceof ASN1TaggedObject)
         {
-            originatorInfo = OriginatorInfo.getInstance((ASN1TaggedObject) tmp, false);
+            originatorInfo = OriginatorInfo.getInstance((ASN1TaggedObject)tmp, false);
             tmp = seq.getObjectAt(index++);
         }
 
@@ -84,7 +89,7 @@ public class AuthenticatedData
 
         if (tmp instanceof ASN1TaggedObject)
         {
-            authAttrs = ASN1Set.getInstance((ASN1TaggedObject) tmp, false);
+            authAttrs = ASN1Set.getInstance((ASN1TaggedObject)tmp, false);
             tmp = seq.getObjectAt(index++);
         }
 
@@ -92,7 +97,7 @@ public class AuthenticatedData
         
         if (seq.size() > index)
         {
-            unauthAttrs = ASN1Set.getInstance((ASN1TaggedObject) seq.getObjectAt(index), false);
+            unauthAttrs = ASN1Set.getInstance((ASN1TaggedObject)seq.getObjectAt(index), false);
         }
     }
 

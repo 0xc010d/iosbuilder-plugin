@@ -1,9 +1,9 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.smime;
 
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Integer;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 
 /**
@@ -11,7 +11,7 @@ import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
  */
 public class SMIMECapabilityVector
 {
-    private ASN1EncodableVector capabilities = new ASN1EncodableVector();
+    private ASN1EncodableVector    capabilities = new ASN1EncodableVector();
 
     public void addCapability(
         ASN1ObjectIdentifier capability)

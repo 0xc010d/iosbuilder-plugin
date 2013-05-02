@@ -1,10 +1,10 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ua;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DEROctetString;
-import org.bouncycastle.math.ec.ECPoint;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DEROctetString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.math.ec.ECPoint;
 
 public class DSTU4145PublicKey
     extends ASN1Object

@@ -1,10 +1,14 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
-
 import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Vector;
+
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encoding;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERObjectIdentifier;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DEROctetString;
 
 /**
  * Generator for X.509 extensions
@@ -30,7 +34,7 @@ public class X509ExtensionsGenerator
     public void addExtension(
         DERObjectIdentifier oid,
         boolean             critical,
-        ASN1Encodable value)
+        ASN1Encodable       value)
     {
         addExtension(new ASN1ObjectIdentifier(oid.getId()), critical, value);
     }
@@ -57,7 +61,7 @@ public class X509ExtensionsGenerator
     public void addExtension(
         ASN1ObjectIdentifier oid,
         boolean             critical,
-        ASN1Encodable value)
+        ASN1Encodable       value)
     {
         try
         {

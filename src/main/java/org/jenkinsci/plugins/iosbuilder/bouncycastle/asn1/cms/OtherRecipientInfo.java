@@ -1,21 +1,23 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.cms;
 
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 
 public class OtherRecipientInfo
     extends ASN1Object
 {
-    private ASN1ObjectIdentifier oriType;
-    private ASN1Encodable oriValue;
+    private ASN1ObjectIdentifier    oriType;
+    private ASN1Encodable           oriValue;
 
     public OtherRecipientInfo(
         ASN1ObjectIdentifier     oriType,
-        ASN1Encodable oriValue)
+        ASN1Encodable            oriValue)
     {
         this.oriType = oriType;
         this.oriValue = oriValue;

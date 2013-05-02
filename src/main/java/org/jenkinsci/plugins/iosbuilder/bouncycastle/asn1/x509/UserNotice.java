@@ -33,7 +33,7 @@ public class UserNotice
      * @param explicitText a <code>DisplayText</code> value
      */
     public UserNotice(
-        NoticeReference noticeRef,
+        NoticeReference noticeRef, 
         DisplayText explicitText) 
     {
         this.noticeRef = noticeRef;
@@ -47,7 +47,7 @@ public class UserNotice
      * @param str the explicitText field as a String. 
      */
     public UserNotice(
-        NoticeReference noticeRef,
+        NoticeReference noticeRef, 
         String str) 
     {
         this(noticeRef, new DisplayText(str));

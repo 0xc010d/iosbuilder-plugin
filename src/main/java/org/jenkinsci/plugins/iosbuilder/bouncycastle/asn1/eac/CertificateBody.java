@@ -1,8 +1,14 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.eac;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
-
 import java.io.IOException;
+
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1InputStream;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.BERTags;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERApplicationSpecific;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DEROctetString;
 
 
 /**

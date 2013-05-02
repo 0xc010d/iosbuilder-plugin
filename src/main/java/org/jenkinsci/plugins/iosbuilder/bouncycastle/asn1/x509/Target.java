@@ -1,9 +1,9 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509;
 
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Choice;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERTaggedObject;
 
 /**

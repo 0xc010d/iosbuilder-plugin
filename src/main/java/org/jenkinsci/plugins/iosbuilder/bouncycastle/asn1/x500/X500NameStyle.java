@@ -1,7 +1,7 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x500;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
 
 /**
  * It turns out that the number of standard ways the fields in a DN should be 

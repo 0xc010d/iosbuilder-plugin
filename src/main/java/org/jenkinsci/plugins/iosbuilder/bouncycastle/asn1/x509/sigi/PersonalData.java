@@ -3,10 +3,17 @@ package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.sigi;
 import java.math.BigInteger;
 import java.util.Enumeration;
 
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1GeneralizedTime;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Integer;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERPrintableString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERTaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x500.DirectoryString;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
 
 /**
  * Contains personal data for the otherName field in the subjectAltNames

@@ -32,7 +32,7 @@ abstract public class ASN1Set
         {
             try
             {
-                return ASN1Set.getInstance(ASN1Primitive.fromByteArray((byte[]) obj));
+                return ASN1Set.getInstance(ASN1Primitive.fromByteArray((byte[])obj));
             }
             catch (IOException e)
             {
@@ -69,7 +69,7 @@ abstract public class ASN1Set
      *          be converted.
      */
     public static ASN1Set getInstance(
-        ASN1TaggedObject obj,
+        ASN1TaggedObject    obj,
         boolean             explicit)
     {
         if (explicit)
@@ -385,7 +385,7 @@ abstract public class ASN1Set
         ASN1Encodable obj)
     {
         ByteArrayOutputStream   bOut = new ByteArrayOutputStream();
-        ASN1OutputStream aOut = new ASN1OutputStream(bOut);
+        ASN1OutputStream        aOut = new ASN1OutputStream(bOut);
 
         try
         {

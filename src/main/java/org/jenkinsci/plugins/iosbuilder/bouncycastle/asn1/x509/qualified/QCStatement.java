@@ -1,8 +1,14 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.qualified;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
-
 import java.util.Enumeration;
+
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 
 /**
  * The QCStatement object.
@@ -18,7 +24,7 @@ public class QCStatement
     implements ETSIQCObjectIdentifiers, RFC3739QCObjectIdentifiers
 {
     ASN1ObjectIdentifier qcStatementId;
-    ASN1Encodable qcStatementInfo;
+    ASN1Encodable        qcStatementInfo;
 
     public static QCStatement getInstance(
         Object obj)
@@ -29,7 +35,7 @@ public class QCStatement
         }
         if (obj != null)
         {
-            return new QCStatement(ASN1Sequence.getInstance(obj));
+            return new QCStatement(ASN1Sequence.getInstance(obj));            
         }
         
         return null;
@@ -58,7 +64,7 @@ public class QCStatement
     
     public QCStatement(
         ASN1ObjectIdentifier qcStatementId,
-        ASN1Encodable qcStatementInfo)
+        ASN1Encodable       qcStatementInfo)
     {
         this.qcStatementId = qcStatementId;
         this.qcStatementInfo = qcStatementInfo;

@@ -2,8 +2,8 @@ package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509;
 
 import java.util.Enumeration;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 
@@ -24,7 +24,7 @@ public class TargetInformation
     /**
      * Creates an instance of a TargetInformation from the given object.
      * <p>
-     * <code>obj</code> can be a TargetInformation or a {@link org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence}
+     * <code>obj</code> can be a TargetInformation or a {@link ASN1Sequence}
      * 
      * @param obj The object.
      * @return A TargetInformation instance.

@@ -96,7 +96,7 @@ public class DERApplicationSpecific
         {
             try
             {
-                return DERApplicationSpecific.getInstance(ASN1Primitive.fromByteArray((byte[]) obj));
+                return DERApplicationSpecific.getInstance(fromByteArray((byte[])obj));
             }
             catch (IOException e)
             {

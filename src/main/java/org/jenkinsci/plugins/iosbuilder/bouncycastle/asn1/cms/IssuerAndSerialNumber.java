@@ -2,10 +2,14 @@ package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.cms;
 
 import java.math.BigInteger;
 
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Integer;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.Certificate;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x500.X500Name;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.Certificate;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.X509CertificateStructure;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.X509Name;
 
@@ -13,7 +17,7 @@ public class IssuerAndSerialNumber
     extends ASN1Object
 {
     private X500Name name;
-    private ASN1Integer serialNumber;
+    private ASN1Integer  serialNumber;
 
     public static IssuerAndSerialNumber getInstance(
         Object  obj)
@@ -31,7 +35,7 @@ public class IssuerAndSerialNumber
     }
 
     public IssuerAndSerialNumber(
-        ASN1Sequence seq)
+        ASN1Sequence    seq)
     {
         this.name = X500Name.getInstance(seq.getObjectAt(0));
         this.serialNumber = (ASN1Integer)seq.getObjectAt(1);
@@ -63,7 +67,7 @@ public class IssuerAndSerialNumber
      * @deprecated use X500Name constructor
      */
     public IssuerAndSerialNumber(
-        X509Name name,
+        X509Name    name,
         BigInteger  serialNumber)
     {
         this.name = X500Name.getInstance(name);
@@ -74,7 +78,7 @@ public class IssuerAndSerialNumber
      * @deprecated use X500Name constructor
      */
     public IssuerAndSerialNumber(
-        X509Name name,
+        X509Name    name,
         ASN1Integer  serialNumber)
     {
         this.name = X500Name.getInstance(name);
@@ -93,7 +97,7 @@ public class IssuerAndSerialNumber
 
     public ASN1Primitive toASN1Primitive()
     {
-        ASN1EncodableVector v = new ASN1EncodableVector();
+        ASN1EncodableVector    v = new ASN1EncodableVector();
 
         v.add(name);
         v.add(serialNumber);

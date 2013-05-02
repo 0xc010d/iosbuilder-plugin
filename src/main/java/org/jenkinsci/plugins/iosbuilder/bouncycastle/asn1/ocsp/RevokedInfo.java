@@ -1,8 +1,14 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ocsp;
 
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1GeneralizedTime;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DEREnumerated;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERTaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.CRLReason;
 
 public class RevokedInfo
@@ -12,8 +18,8 @@ public class RevokedInfo
     private CRLReason revocationReason;
 
     public RevokedInfo(
-        ASN1GeneralizedTime revocationTime,
-        CRLReason revocationReason)
+        ASN1GeneralizedTime  revocationTime,
+        CRLReason           revocationReason)
     {
         this.revocationTime = revocationTime;
         this.revocationReason = revocationReason;

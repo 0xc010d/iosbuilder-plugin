@@ -2,9 +2,15 @@ package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x9;
 
 import java.math.BigInteger;
 
-import org.bouncycastle.math.ec.ECCurve;
-import org.bouncycastle.math.ec.ECPoint;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Integer;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.math.ec.ECCurve;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.math.ec.ECPoint;
 
 /**
  * ASN.1 def for Elliptic-Curve ECParameters structure. See
@@ -24,7 +30,7 @@ public class X9ECParameters
     private byte[]              seed;
 
     private X9ECParameters(
-        ASN1Sequence seq)
+        ASN1Sequence  seq)
     {
         if (!(seq.getObjectAt(0) instanceof ASN1Integer)
            || !((ASN1Integer)seq.getObjectAt(0)).getValue().equals(ONE))

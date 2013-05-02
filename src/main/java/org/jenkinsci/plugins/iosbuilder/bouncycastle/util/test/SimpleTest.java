@@ -5,11 +5,11 @@ import java.io.PrintStream;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.util.Arrays;
 
 public abstract class SimpleTest
-    implements org.jenkinsci.plugins.iosbuilder.bouncycastle.util.test.Test
+    implements Test
 {
     public abstract String getName();
 
-    private org.jenkinsci.plugins.iosbuilder.bouncycastle.util.test.TestResult success()
+    private TestResult success()
     {
         return SimpleTestResult.successful(this, "Okay");
     }
@@ -42,7 +42,7 @@ public abstract class SimpleTest
         return Arrays.areEqual(a, b);
     }
     
-    public org.jenkinsci.plugins.iosbuilder.bouncycastle.util.test.TestResult perform()
+    public TestResult perform()
     {
         try
         {
@@ -56,21 +56,21 @@ public abstract class SimpleTest
         }
         catch (Exception e)
         {
-            return SimpleTestResult.failed(this, "Exception: " + e, e);
+            return SimpleTestResult.failed(this, "Exception: " +  e, e);
         }
     }
     
     protected static void runTest(
-        org.jenkinsci.plugins.iosbuilder.bouncycastle.util.test.Test test)
+        Test        test)
     {
         runTest(test, System.out);
     }
     
     protected static void runTest(
-        org.jenkinsci.plugins.iosbuilder.bouncycastle.util.test.Test test,
+        Test        test,
         PrintStream out)
     {
-        org.jenkinsci.plugins.iosbuilder.bouncycastle.util.test.TestResult result = test.perform();
+        TestResult      result = test.perform();
 
         out.println(result.toString());
         if (result.getException() != null)

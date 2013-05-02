@@ -1,13 +1,19 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.cryptopro;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 
 public class GOST3410PublicKeyAlgParameters
     extends ASN1Object
 {
-    private ASN1ObjectIdentifier publicKeyParamSet;
-    private ASN1ObjectIdentifier digestParamSet;
-    private ASN1ObjectIdentifier encryptionParamSet;
+    private ASN1ObjectIdentifier  publicKeyParamSet;
+    private ASN1ObjectIdentifier  digestParamSet;
+    private ASN1ObjectIdentifier  encryptionParamSet;
     
     public static GOST3410PublicKeyAlgParameters getInstance(
         ASN1TaggedObject obj,
@@ -33,8 +39,8 @@ public class GOST3410PublicKeyAlgParameters
     }
     
     public GOST3410PublicKeyAlgParameters(
-        ASN1ObjectIdentifier publicKeyParamSet,
-        ASN1ObjectIdentifier digestParamSet)
+        ASN1ObjectIdentifier  publicKeyParamSet,
+        ASN1ObjectIdentifier  digestParamSet)
     {
         this.publicKeyParamSet = publicKeyParamSet;
         this.digestParamSet = digestParamSet;
@@ -42,9 +48,9 @@ public class GOST3410PublicKeyAlgParameters
     }
 
     public GOST3410PublicKeyAlgParameters(
-        ASN1ObjectIdentifier publicKeyParamSet,
-        ASN1ObjectIdentifier digestParamSet,
-        ASN1ObjectIdentifier encryptionParamSet)
+        ASN1ObjectIdentifier  publicKeyParamSet,
+        ASN1ObjectIdentifier  digestParamSet,
+        ASN1ObjectIdentifier  encryptionParamSet)
     {
         this.publicKeyParamSet = publicKeyParamSet;
         this.digestParamSet = digestParamSet;
@@ -52,7 +58,7 @@ public class GOST3410PublicKeyAlgParameters
     }
 
     public GOST3410PublicKeyAlgParameters(
-        ASN1Sequence seq)
+        ASN1Sequence  seq)
     {
         this.publicKeyParamSet = (ASN1ObjectIdentifier)seq.getObjectAt(0);
         this.digestParamSet = (ASN1ObjectIdentifier)seq.getObjectAt(1);
@@ -80,7 +86,7 @@ public class GOST3410PublicKeyAlgParameters
 
     public ASN1Primitive toASN1Primitive()
     {
-        ASN1EncodableVector v = new ASN1EncodableVector();
+        ASN1EncodableVector  v = new ASN1EncodableVector();
 
         v.add(publicKeyParamSet);
         v.add(digestParamSet);

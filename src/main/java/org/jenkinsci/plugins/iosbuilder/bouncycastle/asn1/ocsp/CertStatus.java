@@ -1,8 +1,11 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ocsp;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Choice;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERNull;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERTaggedObject;
 
 public class CertStatus
@@ -10,7 +13,7 @@ public class CertStatus
     implements ASN1Choice
 {
     private int             tagNo;
-    private ASN1Encodable value;
+    private ASN1Encodable    value;
 
     /**
      * create a CertStatus object with a tag of zero.
@@ -30,7 +33,7 @@ public class CertStatus
 
     public CertStatus(
         int tagNo,
-        ASN1Encodable value)
+        ASN1Encodable    value)
     {
         this.tagNo = tagNo;
         this.value = value;

@@ -1,5 +1,6 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.pkcs;
 
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
@@ -9,14 +10,13 @@ import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Set;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DLSequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DLTaggedObject;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
 
 public class SafeBag
     extends ASN1Object
 {
     private ASN1ObjectIdentifier bagId;
     private ASN1Encodable bagValue;
-    private ASN1Set bagAttributes;
+    private ASN1Set                     bagAttributes;
 
     public SafeBag(
         ASN1ObjectIdentifier oid,

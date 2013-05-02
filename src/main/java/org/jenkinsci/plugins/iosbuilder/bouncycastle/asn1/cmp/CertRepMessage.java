@@ -1,7 +1,12 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.cmp;
 
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERTaggedObject;
 
 public class CertRepMessage
     extends ASN1Object
@@ -15,7 +20,7 @@ public class CertRepMessage
 
         if (seq.size() > 1)
         {
-            caPubs = ASN1Sequence.getInstance((ASN1TaggedObject) seq.getObjectAt(index++), true);
+            caPubs = ASN1Sequence.getInstance((ASN1TaggedObject)seq.getObjectAt(index++), true);
         }
 
         response = ASN1Sequence.getInstance(seq.getObjectAt(index));

@@ -3,6 +3,7 @@ package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x500.style;
 import java.io.IOException;
 import java.util.Hashtable;
 
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERIA5String;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERPrintableString;
@@ -11,7 +12,6 @@ import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x500.AttributeTypeAndV
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x500.RDN;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x500.X500Name;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x500.X500NameStyle;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
 
 public class RFC4519Style
     implements X500NameStyle

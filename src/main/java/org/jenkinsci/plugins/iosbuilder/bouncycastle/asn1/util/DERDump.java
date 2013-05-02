@@ -1,7 +1,7 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.util;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
 
 /**
  * @deprecated use ASN1Dump.

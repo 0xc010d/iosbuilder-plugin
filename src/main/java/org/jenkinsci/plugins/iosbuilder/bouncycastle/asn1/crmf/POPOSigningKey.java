@@ -1,6 +1,13 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.crmf;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERBitString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERTaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.AlgorithmIdentifier;
 
 public class POPOSigningKey
@@ -8,7 +15,7 @@ public class POPOSigningKey
 {
     private POPOSigningKeyInput poposkInput;
     private AlgorithmIdentifier algorithmIdentifier;
-    private DERBitString signature;
+    private DERBitString        signature;
 
     private POPOSigningKey(ASN1Sequence seq)
     {

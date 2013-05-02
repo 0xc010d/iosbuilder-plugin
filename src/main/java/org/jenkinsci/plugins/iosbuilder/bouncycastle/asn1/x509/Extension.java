@@ -3,11 +3,11 @@ package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509;
 import java.io.IOException;
 
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Boolean;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DEROctetString;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DEROctetString;
 
 /**
  * an object for the elements in the X.509 V3 extension block.
@@ -172,7 +172,7 @@ public class Extension
     private ASN1ObjectIdentifier extnId;
 
     boolean             critical;
-    ASN1OctetString value;
+    ASN1OctetString      value;
 
     public Extension(
         ASN1ObjectIdentifier extnId,

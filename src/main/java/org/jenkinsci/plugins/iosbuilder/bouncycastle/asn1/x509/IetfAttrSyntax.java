@@ -7,6 +7,7 @@ import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
@@ -14,7 +15,6 @@ import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DEROctetString;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERTaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERUTF8String;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
 
 /**
  * Implementation of <code>IetfAttrSyntax</code> as specified by RFC3281.
@@ -25,7 +25,7 @@ public class IetfAttrSyntax
     public static final int VALUE_OCTETS    = 1;
     public static final int VALUE_OID       = 2;
     public static final int VALUE_UTF8      = 3;
-    GeneralNames policyAuthority = null;
+    GeneralNames            policyAuthority = null;
     Vector                  values          = new Vector();
     int                     valueChoice     = -1;
 
@@ -52,7 +52,7 @@ public class IetfAttrSyntax
 
         if (seq.getObjectAt(0) instanceof ASN1TaggedObject)
         {
-            policyAuthority = GeneralNames.getInstance(((ASN1TaggedObject) seq.getObjectAt(0)), false);
+            policyAuthority = GeneralNames.getInstance(((ASN1TaggedObject)seq.getObjectAt(0)), false);
             i++;
         }
         else if (seq.size() == 2)

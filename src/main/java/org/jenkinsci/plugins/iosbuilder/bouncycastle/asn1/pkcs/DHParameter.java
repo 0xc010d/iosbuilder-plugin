@@ -13,7 +13,7 @@ import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 public class DHParameter
     extends ASN1Object
 {
-    ASN1Integer      p, g, l;
+    ASN1Integer p, g, l;
 
     public DHParameter(
         BigInteger  p,

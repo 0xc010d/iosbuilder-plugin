@@ -3,6 +3,7 @@ package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1;
 import java.io.IOException;
 
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.util.Arrays;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.util.Strings;
 
 /**
  * DER VisibleString object.
@@ -81,12 +82,12 @@ public class DERVisibleString
     public DERVisibleString(
         String   string)
     {
-        this.string = org.jenkinsci.plugins.iosbuilder.bouncycastle.util.Strings.toByteArray(string);
+        this.string = Strings.toByteArray(string);
     }
 
     public String getString()
     {
-        return org.jenkinsci.plugins.iosbuilder.bouncycastle.util.Strings.fromByteArray(string);
+        return Strings.fromByteArray(string);
     }
 
     public String toString()

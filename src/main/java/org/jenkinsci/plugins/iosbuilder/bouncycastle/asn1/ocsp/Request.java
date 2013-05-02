@@ -1,13 +1,19 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ocsp;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERTaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.Extensions;
 
 public class Request
     extends ASN1Object
 {
     CertID            reqCert;
-    Extensions singleRequestExtensions;
+    Extensions    singleRequestExtensions;
 
     public Request(
         CertID          reqCert,
@@ -18,14 +24,14 @@ public class Request
     }
 
     private Request(
-        ASN1Sequence seq)
+        ASN1Sequence    seq)
     {
         reqCert = CertID.getInstance(seq.getObjectAt(0));
 
         if (seq.size() == 2)
         {
             singleRequestExtensions = Extensions.getInstance(
-                    (ASN1TaggedObject) seq.getObjectAt(1), true);
+                                (ASN1TaggedObject)seq.getObjectAt(1), true);
         }
     }
 
@@ -71,7 +77,7 @@ public class Request
      */
     public ASN1Primitive toASN1Primitive()
     {
-        ASN1EncodableVector v = new ASN1EncodableVector();
+        ASN1EncodableVector    v = new ASN1EncodableVector();
 
         v.add(reqCert);
 

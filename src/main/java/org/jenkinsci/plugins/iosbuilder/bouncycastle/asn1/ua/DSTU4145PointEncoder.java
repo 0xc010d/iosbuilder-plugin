@@ -4,10 +4,10 @@ import java.math.BigInteger;
 import java.util.Random;
 
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x9.X9IntegerConverter;
-import org.bouncycastle.math.ec.ECConstants;
-import org.bouncycastle.math.ec.ECCurve;
-import org.bouncycastle.math.ec.ECFieldElement;
-import org.bouncycastle.math.ec.ECPoint;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.math.ec.ECConstants;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.math.ec.ECCurve;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.math.ec.ECFieldElement;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.math.ec.ECPoint;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.util.Arrays;
 
 /**

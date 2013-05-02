@@ -2,18 +2,19 @@ package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.cms;
 
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Boolean;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERIA5String;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERUTF8String;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
 
 public class MetaData
     extends ASN1Object
 {
     private ASN1Boolean hashProtected;
     private DERUTF8String fileName;
-    private DERIA5String mediaType;
+    private DERIA5String  mediaType;
     private Attributes otherMetaData;
 
     public MetaData(

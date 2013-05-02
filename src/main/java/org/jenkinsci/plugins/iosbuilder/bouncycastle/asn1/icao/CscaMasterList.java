@@ -6,9 +6,9 @@ import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Set;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSet;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.Certificate;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
 
 /**
  * The CscaMasterList object. This object can be wrapped in a
@@ -105,7 +105,7 @@ public class CscaMasterList
         {
             certSet.add(certList[i]);
         }            
-        seq.add(new DERSet(certSet));                   
+        seq.add(new DERSet(certSet));
 
         return new DERSequence(seq);
     }          

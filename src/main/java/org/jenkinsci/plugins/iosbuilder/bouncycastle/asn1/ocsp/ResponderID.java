@@ -1,20 +1,23 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ocsp;
 
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Choice;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DEROctetString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERTaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x500.X500Name;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
 
 public class ResponderID
     extends ASN1Object
     implements ASN1Choice
 {
-    private ASN1Encodable value;
+    private ASN1Encodable    value;
 
     public ResponderID(
-        ASN1OctetString value)
+        ASN1OctetString    value)
     {
         this.value = value;
     }

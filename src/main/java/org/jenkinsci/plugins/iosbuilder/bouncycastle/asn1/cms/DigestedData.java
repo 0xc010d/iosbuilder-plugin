@@ -1,6 +1,14 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.cms;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Integer;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.BERSequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DEROctetString;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.AlgorithmIdentifier;
 
 /** 
@@ -16,7 +24,7 @@ import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.AlgorithmIdentifi
 public class DigestedData
     extends ASN1Object
 {
-    private ASN1Integer           version;
+    private ASN1Integer version;
     private AlgorithmIdentifier digestAlgorithm;
     private ContentInfo          encapContentInfo;
     private ASN1OctetString digest;

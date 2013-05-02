@@ -1,20 +1,27 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.cms;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Integer;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.AlgorithmIdentifier;
 
 public class KEKRecipientInfo
     extends ASN1Object
 {
-    private ASN1Integer          version;
+    private ASN1Integer version;
     private KEKIdentifier       kekid;
     private AlgorithmIdentifier keyEncryptionAlgorithm;
-    private ASN1OctetString encryptedKey;
+    private ASN1OctetString     encryptedKey;
 
     public KEKRecipientInfo(
         KEKIdentifier       kekid,
         AlgorithmIdentifier keyEncryptionAlgorithm,
-        ASN1OctetString encryptedKey)
+        ASN1OctetString     encryptedKey)
     {
         this.version = new ASN1Integer(4);
         this.kekid = kekid;
@@ -102,7 +109,7 @@ public class KEKRecipientInfo
      */
     public ASN1Primitive toASN1Primitive()
     {
-        ASN1EncodableVector v = new ASN1EncodableVector();
+        ASN1EncodableVector  v = new ASN1EncodableVector();
 
         v.add(version);
         v.add(kekid);

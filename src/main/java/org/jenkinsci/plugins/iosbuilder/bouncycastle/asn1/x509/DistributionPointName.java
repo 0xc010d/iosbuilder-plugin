@@ -1,6 +1,12 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Choice;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Set;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERTaggedObject;
 
 /**
  * The DistributionPointName object.
@@ -15,7 +21,7 @@ public class DistributionPointName
     extends ASN1Object
     implements ASN1Choice
 {
-    ASN1Encodable name;
+    ASN1Encodable        name;
     int                 type;
 
     public static final int FULL_NAME = 0;
@@ -45,7 +51,7 @@ public class DistributionPointName
 
     public DistributionPointName(
         int             type,
-        ASN1Encodable name)
+        ASN1Encodable   name)
     {
         this.type = type;
         this.name = name;

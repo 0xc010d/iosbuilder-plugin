@@ -1,23 +1,30 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ocsp;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 
 public class ResponseBytes
     extends ASN1Object
 {
     ASN1ObjectIdentifier    responseType;
-    ASN1OctetString response;
+    ASN1OctetString        response;
 
     public ResponseBytes(
         ASN1ObjectIdentifier responseType,
-        ASN1OctetString response)
+        ASN1OctetString     response)
     {
         this.responseType = responseType;
         this.response = response;
     }
 
     public ResponseBytes(
-        ASN1Sequence    seq)
+        ASN1Sequence seq)
     {
         responseType = (ASN1ObjectIdentifier)seq.getObjectAt(0);
         response = (ASN1OctetString)seq.getObjectAt(1);

@@ -6,7 +6,7 @@ import java.io.OutputStream;
 
 public class Base64
 {
-    private static final Encoder encoder = new org.jenkinsci.plugins.iosbuilder.bouncycastle.util.encoders.Base64Encoder();
+    private static final Encoder encoder = new Base64Encoder();
     
     /**
      * encode the input data producing a base 64 encoded byte array.
@@ -25,7 +25,7 @@ public class Base64
         }
         catch (Exception e)
         {
-            throw new org.jenkinsci.plugins.iosbuilder.bouncycastle.util.encoders.EncoderException("exception encoding base64 string: " + e.getMessage(), e);
+            throw new EncoderException("exception encoding base64 string: " + e.getMessage(), e);
         }
         
         return bOut.toByteArray();

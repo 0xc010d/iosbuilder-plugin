@@ -54,7 +54,7 @@ public class PemObject
     }
 
     public PemObject generate()
-        throws org.jenkinsci.plugins.iosbuilder.bouncycastle.util.io.pem.PemGenerationException
+        throws PemGenerationException
     {
         return this;
     }

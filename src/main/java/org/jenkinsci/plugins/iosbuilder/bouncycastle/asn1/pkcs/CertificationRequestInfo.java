@@ -1,6 +1,13 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.pkcs;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Integer;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Set;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERTaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x500.X500Name;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.X509Name;
@@ -26,9 +33,9 @@ import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.X509Name;
 public class CertificationRequestInfo
     extends ASN1Object
 {
-    ASN1Integer              version = new ASN1Integer(0);
+    ASN1Integer version = new ASN1Integer(0);
     X500Name subject;
-    SubjectPublicKeyInfo    subjectPKInfo;
+    SubjectPublicKeyInfo subjectPKInfo;
     ASN1Set attributes = null;
 
     public static CertificationRequestInfo getInstance(
@@ -49,7 +56,7 @@ public class CertificationRequestInfo
     public CertificationRequestInfo(
         X500Name subject,
         SubjectPublicKeyInfo    pkInfo,
-        ASN1Set attributes)
+        ASN1Set                 attributes)
     {
         this.subject = subject;
         this.subjectPKInfo = pkInfo;
@@ -67,7 +74,7 @@ public class CertificationRequestInfo
     public CertificationRequestInfo(
         X509Name subject,
         SubjectPublicKeyInfo    pkInfo,
-        ASN1Set attributes)
+        ASN1Set                 attributes)
     {
         this.subject = X500Name.getInstance(subject.toASN1Primitive());
         this.subjectPKInfo = pkInfo;
@@ -80,7 +87,7 @@ public class CertificationRequestInfo
     }
 
     public CertificationRequestInfo(
-        ASN1Sequence seq)
+        ASN1Sequence  seq)
     {
         version = (ASN1Integer)seq.getObjectAt(0);
 

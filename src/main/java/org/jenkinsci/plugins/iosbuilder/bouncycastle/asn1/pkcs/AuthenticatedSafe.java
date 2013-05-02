@@ -1,6 +1,11 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.pkcs;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.BERSequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DLSequence;
 
 public class AuthenticatedSafe
     extends ASN1Object

@@ -7,7 +7,7 @@ import java.util.Hashtable;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x9.X9ECParameters;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x9.X9ECParametersHolder;
-import org.bouncycastle.math.ec.ECCurve;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.math.ec.ECCurve;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.util.Strings;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.util.encoders.Hex;
 

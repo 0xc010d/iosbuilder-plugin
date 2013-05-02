@@ -6,10 +6,10 @@ import java.util.Date;
 import java.util.SimpleTimeZone;
 
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Choice;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERGeneralizedTime;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERGeneralizedTime;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERUTCTime;
 
 public class Time
@@ -26,7 +26,7 @@ public class Time
     }
 
     public Time(
-        ASN1Primitive time)
+        ASN1Primitive   time)
     {
         if (!(time instanceof DERUTCTime)
             && !(time instanceof DERGeneralizedTime))

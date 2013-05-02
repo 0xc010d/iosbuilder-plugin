@@ -4,9 +4,13 @@ import java.util.Enumeration;
 
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Integer;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Set;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.BERSequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERTaggedObject;
 
 /**
  * a PKCS#7 signed data object.
@@ -16,11 +20,11 @@ public class SignedData
     implements PKCSObjectIdentifiers
 {
     private ASN1Integer              version;
-    private ASN1Set digestAlgorithms;
-    private ContentInfo contentInfo;
-    private ASN1Set certificates;
-    private ASN1Set crls;
-    private ASN1Set signerInfos;
+    private ASN1Set                 digestAlgorithms;
+    private ContentInfo             contentInfo;
+    private ASN1Set                 certificates;
+    private ASN1Set                 crls;
+    private ASN1Set                 signerInfos;
 
     public static SignedData getInstance(
         Object  o)
@@ -39,11 +43,11 @@ public class SignedData
 
     public SignedData(
         ASN1Integer        _version,
-        ASN1Set _digestAlgorithms,
-        ContentInfo _contentInfo,
-        ASN1Set _certificates,
-        ASN1Set _crls,
-        ASN1Set _signerInfos)
+        ASN1Set           _digestAlgorithms,
+        ContentInfo       _contentInfo,
+        ASN1Set           _certificates,
+        ASN1Set           _crls,
+        ASN1Set           _signerInfos)
     {
         version          = _version;
         digestAlgorithms = _digestAlgorithms;

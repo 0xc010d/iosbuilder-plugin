@@ -2,7 +2,11 @@ package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.pkcs;
 
 import java.util.Enumeration;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.AlgorithmIdentifier;
 
 /**
@@ -28,7 +32,7 @@ public class PBES2Algorithms
 
         e = seq.getObjects();
 
-        ASN1Sequence funcSeq = (ASN1Sequence)e.nextElement();
+        ASN1Sequence  funcSeq = (ASN1Sequence)e.nextElement();
 
         if (funcSeq.getObjectAt(0).equals(id_PBKDF2))
         {

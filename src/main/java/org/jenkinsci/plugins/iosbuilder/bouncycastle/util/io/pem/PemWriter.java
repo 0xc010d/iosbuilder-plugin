@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Iterator;
 
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.util.encoders.Base64;
+
 /**
  * A generic PEM writer, based on RFC 1421
  */
@@ -97,7 +99,7 @@ public class PemWriter
     private void writeEncoded(byte[] bytes)
         throws IOException
     {
-        bytes = org.jenkinsci.plugins.iosbuilder.bouncycastle.util.encoders.Base64.encode(bytes);
+        bytes = Base64.encode(bytes);
 
         for (int i = 0; i < bytes.length; i += buf.length)
         {

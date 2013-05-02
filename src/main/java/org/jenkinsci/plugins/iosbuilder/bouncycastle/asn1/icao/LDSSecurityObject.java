@@ -4,9 +4,11 @@ import java.util.Enumeration;
 
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Integer;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.AlgorithmIdentifier;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
 
 /**
  * The LDSSecurityObject object (V1.8).
@@ -26,7 +28,7 @@ import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
 
 public class LDSSecurityObject 
     extends ASN1Object
-    implements ICAOObjectIdentifiers
+    implements ICAOObjectIdentifiers    
 {
     public static final int ub_DataGroups = 16;
     
@@ -95,7 +97,7 @@ public class LDSSecurityObject
     public LDSSecurityObject(
         AlgorithmIdentifier digestAlgorithmIdentifier,
         DataGroupHash[]     datagroupHash,
-        LDSVersionInfo versionInfo)
+        LDSVersionInfo      versionInfo)
     {
         this.version = new ASN1Integer(1);
         this.digestAlgorithmIdentifier = digestAlgorithmIdentifier;
@@ -145,7 +147,7 @@ public class LDSSecurityObject
         {
             seqname.add(datagroupHash[i]);
         }            
-        seq.add(new DERSequence(seqname));
+        seq.add(new DERSequence(seqname));                   
 
         if (versionInfo != null)
         {

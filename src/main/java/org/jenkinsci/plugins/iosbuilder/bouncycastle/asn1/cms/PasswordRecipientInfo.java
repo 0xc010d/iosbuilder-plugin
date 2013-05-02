@@ -1,6 +1,14 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.cms;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Integer;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERTaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.AlgorithmIdentifier;
 
 public class PasswordRecipientInfo
@@ -9,11 +17,11 @@ public class PasswordRecipientInfo
     private ASN1Integer          version;
     private AlgorithmIdentifier keyDerivationAlgorithm;
     private AlgorithmIdentifier keyEncryptionAlgorithm;
-    private ASN1OctetString encryptedKey;
+    private ASN1OctetString     encryptedKey;
 
     public PasswordRecipientInfo(
-        AlgorithmIdentifier keyEncryptionAlgorithm,
-        ASN1OctetString encryptedKey)
+        AlgorithmIdentifier     keyEncryptionAlgorithm,
+        ASN1OctetString         encryptedKey)
     {
         this.version = new ASN1Integer(0);
         this.keyEncryptionAlgorithm = keyEncryptionAlgorithm;
@@ -21,9 +29,9 @@ public class PasswordRecipientInfo
     }
     
     public PasswordRecipientInfo(
-        AlgorithmIdentifier keyDerivationAlgorithm,
-        AlgorithmIdentifier keyEncryptionAlgorithm,
-        ASN1OctetString encryptedKey)
+        AlgorithmIdentifier     keyDerivationAlgorithm,
+        AlgorithmIdentifier     keyEncryptionAlgorithm,
+        ASN1OctetString         encryptedKey)
     {
         this.version = new ASN1Integer(0);
         this.keyDerivationAlgorithm = keyDerivationAlgorithm;
@@ -37,7 +45,7 @@ public class PasswordRecipientInfo
         version = (ASN1Integer)seq.getObjectAt(0);
         if (seq.getObjectAt(1) instanceof ASN1TaggedObject)
         {
-            keyDerivationAlgorithm = AlgorithmIdentifier.getInstance((ASN1TaggedObject) seq.getObjectAt(1), false);
+            keyDerivationAlgorithm = AlgorithmIdentifier.getInstance((ASN1TaggedObject)seq.getObjectAt(1), false);
             keyEncryptionAlgorithm = AlgorithmIdentifier.getInstance(seq.getObjectAt(2));
             encryptedKey = (ASN1OctetString)seq.getObjectAt(3);
         }
@@ -119,7 +127,7 @@ public class PasswordRecipientInfo
      */
     public ASN1Primitive toASN1Primitive()
     {
-        ASN1EncodableVector v = new ASN1EncodableVector();
+        ASN1EncodableVector  v = new ASN1EncodableVector();
 
         v.add(version);
         

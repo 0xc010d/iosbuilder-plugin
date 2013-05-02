@@ -6,11 +6,11 @@ import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERTaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.Extensions;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.GeneralName;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.X509Extensions;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 
 public class TBSRequest
     extends ASN1Object

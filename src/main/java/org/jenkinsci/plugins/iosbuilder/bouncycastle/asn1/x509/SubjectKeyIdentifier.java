@@ -1,8 +1,12 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
-import org.bouncycastle.crypto.Digest;
-import org.bouncycastle.crypto.digests.SHA1Digest;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DEROctetString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.crypto.Digest;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.crypto.digests.SHA1Digest;
 
 /**
  * The SubjectKeyIdentifier object.
@@ -87,7 +91,7 @@ public class SubjectKeyIdentifier
      * </pre>
      * @param keyInfo the key info object containing the subjectPublicKey field.
      * @return the key identifier.
-     * @deprecated use org.bouncycastle.cert.X509ExtensionUtils.createSubjectKeyIdentifier
+     * @deprecated use X509ExtensionUtils.createSubjectKeyIdentifier
      */
     public static SubjectKeyIdentifier createSHA1KeyIdentifier(SubjectPublicKeyInfo keyInfo)
     {
@@ -103,7 +107,7 @@ public class SubjectKeyIdentifier
      * </pre>
      * @param keyInfo the key info object containing the subjectPublicKey field.
      * @return the key identifier.
-     * @deprecated use org.bouncycastle.cert.X509ExtensionUtils.createTruncatedSubjectKeyIdentifier
+     * @deprecated use X509ExtensionUtils.createTruncatedSubjectKeyIdentifier
      */
     public static SubjectKeyIdentifier createTruncatedSHA1KeyIdentifier(SubjectPublicKeyInfo keyInfo)
     {

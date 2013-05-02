@@ -3,7 +3,13 @@ package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.pkcs;
 import java.math.BigInteger;
 import java.util.Enumeration;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Integer;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 
 /**
  * @deprecated use RSAPrivateKey
@@ -66,7 +72,7 @@ public class RSAPrivateKeyStructure
     }
 
     public RSAPrivateKeyStructure(
-        ASN1Sequence seq)
+        ASN1Sequence  seq)
     {
         Enumeration e = seq.getObjects();
 
@@ -161,7 +167,7 @@ public class RSAPrivateKeyStructure
      */
     public ASN1Primitive toASN1Primitive()
     {
-        ASN1EncodableVector v = new ASN1EncodableVector();
+        ASN1EncodableVector  v = new ASN1EncodableVector();
 
         v.add(new ASN1Integer(version));                       // version
         v.add(new ASN1Integer(getModulus()));

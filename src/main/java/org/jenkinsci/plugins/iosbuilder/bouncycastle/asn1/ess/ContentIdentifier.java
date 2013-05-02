@@ -1,9 +1,9 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ess;
 
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DEROctetString;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
 
 public class ContentIdentifier
     extends ASN1Object

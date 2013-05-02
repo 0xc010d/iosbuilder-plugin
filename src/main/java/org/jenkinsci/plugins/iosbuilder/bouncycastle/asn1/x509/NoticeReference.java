@@ -4,7 +4,12 @@ import java.math.BigInteger;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Integer;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 
 /**
  * <code>NoticeReference</code> class, used in
@@ -106,7 +111,7 @@ public class NoticeReference
     * instance or from parsing it from a DER-encoded stream. 
     */
    private NoticeReference(
-       ASN1Sequence as)
+       ASN1Sequence as) 
    {
        if (as.size() != 2)
        {
@@ -160,6 +165,6 @@ public class NoticeReference
       ASN1EncodableVector av = new ASN1EncodableVector();
       av.add (organization);
       av.add (noticeNumbers);
-      return new DERSequence(av);
+      return new DERSequence (av);
    }
 }

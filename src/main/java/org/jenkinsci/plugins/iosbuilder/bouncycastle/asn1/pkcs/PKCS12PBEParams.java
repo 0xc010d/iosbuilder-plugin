@@ -5,16 +5,16 @@ import java.math.BigInteger;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Integer;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DEROctetString;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
 
 public class PKCS12PBEParams
     extends ASN1Object
 {
-    ASN1Integer      iterations;
+    ASN1Integer iterations;
     ASN1OctetString iv;
 
     public PKCS12PBEParams(
@@ -59,7 +59,7 @@ public class PKCS12PBEParams
 
     public ASN1Primitive toASN1Primitive()
     {
-        ASN1EncodableVector v = new ASN1EncodableVector();
+        ASN1EncodableVector  v = new ASN1EncodableVector();
 
         v.add(iv);
         v.add(iterations);

@@ -82,7 +82,7 @@ public class DERSequence
         ASN1OutputStream out)
         throws IOException
     {
-        ASN1OutputStream dOut = out.getDERSubStream();
+        ASN1OutputStream        dOut = out.getDERSubStream();
         int                     length = getBodyLength();
 
         out.write(BERTags.SEQUENCE | BERTags.CONSTRUCTED);

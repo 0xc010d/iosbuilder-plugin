@@ -2,13 +2,13 @@ package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.cms.ecc;
 
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERTaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.cms.OriginatorPublicKey;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
 
 public class MQVuserKeyingMaterial
     extends ASN1Object
@@ -37,7 +37,7 @@ public class MQVuserKeyingMaterial
         if (seq.size() > 1)
         {
             this.addedukm = ASN1OctetString.getInstance(
-                    (ASN1TaggedObject) seq.getObjectAt(1), true);
+                (ASN1TaggedObject)seq.getObjectAt(1), true);
         }
     }
 

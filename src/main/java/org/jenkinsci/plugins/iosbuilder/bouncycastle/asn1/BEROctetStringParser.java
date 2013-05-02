@@ -3,6 +3,8 @@ package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.util.io.Streams;
+
 public class BEROctetStringParser
     implements ASN1OctetStringParser
 {
@@ -22,7 +24,7 @@ public class BEROctetStringParser
     public ASN1Primitive getLoadedObject()
         throws IOException
     {
-        return new BEROctetString(org.jenkinsci.plugins.iosbuilder.bouncycastle.util.io.Streams.readAll(getOctetStream()));
+        return new BEROctetString(Streams.readAll(getOctetStream()));
     }
 
     public ASN1Primitive toASN1Primitive()

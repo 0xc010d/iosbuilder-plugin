@@ -4,10 +4,10 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.sec.SECNamedCurves;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.sec.SECObjectIdentifiers;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x9.X9ECParameters;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.util.Strings;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.sec.SECNamedCurves;
 
 /**
  * Utility class for fetching curves using their NIST names as published in FIPS-PUB 186-2
@@ -59,7 +59,7 @@ public class NISTNamedCurves
      * @param oid an object identifier representing a named curve, if present.
      */
     public static X9ECParameters getByOID(
-        ASN1ObjectIdentifier oid)
+        ASN1ObjectIdentifier  oid)
     {
         return SECNamedCurves.getByOID(oid);
     }
@@ -80,7 +80,7 @@ public class NISTNamedCurves
      * return the named curve name represented by the given object identifier.
      */
     public static String getName(
-        ASN1ObjectIdentifier oid)
+        ASN1ObjectIdentifier  oid)
     {
         return (String)names.get(oid);
     }

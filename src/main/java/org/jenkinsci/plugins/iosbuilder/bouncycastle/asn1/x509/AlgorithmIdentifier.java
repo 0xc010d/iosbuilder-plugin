@@ -1,16 +1,22 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509;
 
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1SequenceParser;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERNull;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERObjectIdentifier;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 
 public class AlgorithmIdentifier
     extends ASN1Object
 {
     private ASN1ObjectIdentifier objectId;
-    private ASN1Encodable parameters;
+    private ASN1Encodable       parameters;
     private boolean             parametersDefined = false;
 
     public static AlgorithmIdentifier getInstance(
@@ -47,7 +53,7 @@ public class AlgorithmIdentifier
     }
 
     public AlgorithmIdentifier(
-        ASN1ObjectIdentifier objectId)
+        ASN1ObjectIdentifier     objectId)
     {
         this.objectId = objectId;
     }
@@ -79,7 +85,7 @@ public class AlgorithmIdentifier
      */
     public AlgorithmIdentifier(
         DERObjectIdentifier objectId,
-        ASN1Encodable parameters)
+        ASN1Encodable           parameters)
     {
         parametersDefined = true;
         this.objectId = new ASN1ObjectIdentifier(objectId.getId());
@@ -87,8 +93,8 @@ public class AlgorithmIdentifier
     }
 
     public AlgorithmIdentifier(
-        ASN1ObjectIdentifier objectId,
-        ASN1Encodable parameters)
+        ASN1ObjectIdentifier     objectId,
+        ASN1Encodable           parameters)
     {
         parametersDefined = true;
         this.objectId = objectId;
@@ -96,7 +102,7 @@ public class AlgorithmIdentifier
     }
 
     public AlgorithmIdentifier(
-        ASN1Sequence seq)
+        ASN1Sequence   seq)
     {
         if (seq.size() < 1 || seq.size() > 2)
         {

@@ -4,13 +4,18 @@ import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Vector;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encoding;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1String;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERUniversalString;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x500.AttributeTypeAndValue;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x500.X500NameBuilder;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.util.Strings;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x500.X500NameStyle;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.util.encoders.Hex;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x500.RDN;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x500.X500NameBuilder;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x500.X500NameStyle;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.util.Strings;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.util.encoders.Hex;
 
 public class IETFUtils
 {
@@ -148,7 +153,7 @@ public class IETFUtils
 
     public static void appendRDN(
         StringBuffer          buf,
-        RDN rdn,
+        RDN                   rdn,
         Hashtable             oidSymbols)
     {
         if (rdn.isMultiValued())

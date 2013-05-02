@@ -1,7 +1,14 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.cms;
 
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.BERSequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.BERTaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.AlgorithmIdentifier;
 
 public class EncryptedContentInfo
@@ -12,9 +19,9 @@ public class EncryptedContentInfo
     private ASN1OctetString encryptedContent;
     
     public EncryptedContentInfo(
-        ASN1ObjectIdentifier contentType,
+        ASN1ObjectIdentifier contentType, 
         AlgorithmIdentifier contentEncryptionAlgorithm,
-        ASN1OctetString encryptedContent)
+        ASN1OctetString     encryptedContent)
     {
         this.contentType = contentType;
         this.contentEncryptionAlgorithm = contentEncryptionAlgorithm;
@@ -31,11 +38,11 @@ public class EncryptedContentInfo
 
         contentType = (ASN1ObjectIdentifier)seq.getObjectAt(0);
         contentEncryptionAlgorithm = AlgorithmIdentifier.getInstance(
-                seq.getObjectAt(1));
+                                                        seq.getObjectAt(1));
         if (seq.size() > 2)
         {
             encryptedContent = ASN1OctetString.getInstance(
-                    (ASN1TaggedObject) seq.getObjectAt(2), false);
+                                (ASN1TaggedObject)seq.getObjectAt(2), false);
         }
     }
 
@@ -87,7 +94,7 @@ public class EncryptedContentInfo
      */
     public ASN1Primitive toASN1Primitive()
     {
-        ASN1EncodableVector v = new ASN1EncodableVector();
+        ASN1EncodableVector  v = new ASN1EncodableVector();
         
         v.add(contentType);
         v.add(contentEncryptionAlgorithm);

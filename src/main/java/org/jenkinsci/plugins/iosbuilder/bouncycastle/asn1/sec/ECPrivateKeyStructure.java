@@ -7,6 +7,7 @@ import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Integer;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
@@ -15,7 +16,6 @@ import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DEROctetString;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERTaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.util.BigIntegers;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
 
 /**
  * the elliptic curve private key object from SEC 1
@@ -24,7 +24,7 @@ import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
 public class ECPrivateKeyStructure
     extends ASN1Object
 {
-    private ASN1Sequence  seq;
+    private ASN1Sequence seq;
 
     public ECPrivateKeyStructure(
         ASN1Sequence  seq)
@@ -79,7 +79,7 @@ public class ECPrivateKeyStructure
 
     public BigInteger getKey()
     {
-        ASN1OctetString octs = (ASN1OctetString)seq.getObjectAt(1);
+        ASN1OctetString  octs = (ASN1OctetString)seq.getObjectAt(1);
 
         return new BigInteger(1, octs.getOctets());
     }

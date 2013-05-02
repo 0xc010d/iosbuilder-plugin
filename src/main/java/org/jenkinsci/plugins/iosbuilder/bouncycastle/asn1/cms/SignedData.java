@@ -1,8 +1,19 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.cms;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
-
 import java.util.Enumeration;
+
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Integer;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Set;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.BERSequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.BERSet;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.BERTaggedObject;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERTaggedObject;
 
 /**
  * a signed data object.
@@ -13,9 +24,9 @@ public class SignedData
     private ASN1Integer version;
     private ASN1Set digestAlgorithms;
     private ContentInfo contentInfo;
-    private ASN1Set certificates;
-    private ASN1Set crls;
-    private ASN1Set signerInfos;
+    private ASN1Set     certificates;
+    private ASN1Set     crls;
+    private ASN1Set     signerInfos;
     private boolean certsBer;
     private boolean        crlsBer;
 
@@ -35,11 +46,11 @@ public class SignedData
     }
 
     public SignedData(
-        ASN1Set digestAlgorithms,
+        ASN1Set     digestAlgorithms,
         ContentInfo contentInfo,
-        ASN1Set certificates,
-        ASN1Set crls,
-        ASN1Set signerInfos)
+        ASN1Set     certificates,
+        ASN1Set     crls,
+        ASN1Set     signerInfos)
     {
         this.version = calculateVersion(contentInfo.getContentType(), certificates, crls, signerInfos);
         this.digestAlgorithms = digestAlgorithms;
@@ -254,7 +265,7 @@ public class SignedData
      */
     public ASN1Primitive toASN1Primitive()
     {
-        ASN1EncodableVector v = new ASN1EncodableVector();
+        ASN1EncodableVector  v = new ASN1EncodableVector();
 
         v.add(version);
         v.add(digestAlgorithms);

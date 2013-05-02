@@ -2,12 +2,20 @@ package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ua;
 
 import java.math.BigInteger;
 
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Integer;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
-import org.bouncycastle.crypto.params.ECDomainParameters;
-import org.bouncycastle.math.ec.ECCurve;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.util.Arrays;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DEROctetString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERTaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x9.X9IntegerConverter;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.crypto.params.ECDomainParameters;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.math.ec.ECCurve;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.util.Arrays;
 
 public class DSTU4145ECBinary
     extends ASN1Object

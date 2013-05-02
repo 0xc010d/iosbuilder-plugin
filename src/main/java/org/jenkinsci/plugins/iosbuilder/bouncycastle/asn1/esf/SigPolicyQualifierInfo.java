@@ -1,19 +1,22 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.esf;
 
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 
 public class SigPolicyQualifierInfo
     extends ASN1Object
 {
-    private ASN1ObjectIdentifier sigPolicyQualifierId;
-    private ASN1Encodable sigQualifier;
+    private ASN1ObjectIdentifier  sigPolicyQualifierId;
+    private ASN1Encodable         sigQualifier;
 
     public SigPolicyQualifierInfo(
         ASN1ObjectIdentifier   sigPolicyQualifierId,
-        ASN1Encodable sigQualifier)
+        ASN1Encodable          sigQualifier)
     {
         this.sigPolicyQualifierId = sigPolicyQualifierId;
         this.sigQualifier = sigQualifier;

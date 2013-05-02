@@ -1,21 +1,28 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ocsp;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERBitString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERTaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.AlgorithmIdentifier;
 
 public class BasicOCSPResponse
     extends ASN1Object
 {
-    private ResponseData tbsResponseData;
+    private ResponseData        tbsResponseData;
     private AlgorithmIdentifier signatureAlgorithm;
-    private DERBitString signature;
+    private DERBitString        signature;
     private ASN1Sequence certs;
 
     public BasicOCSPResponse(
-        ResponseData tbsResponseData,
+        ResponseData        tbsResponseData,
         AlgorithmIdentifier signatureAlgorithm,
-        DERBitString signature,
-        ASN1Sequence certs)
+        DERBitString        signature,
+        ASN1Sequence        certs)
     {
         this.tbsResponseData = tbsResponseData;
         this.signatureAlgorithm = signatureAlgorithm;
@@ -24,7 +31,7 @@ public class BasicOCSPResponse
     }
 
     private BasicOCSPResponse(
-        ASN1Sequence seq)
+        ASN1Sequence    seq)
     {
         this.tbsResponseData = ResponseData.getInstance(seq.getObjectAt(0));
         this.signatureAlgorithm = AlgorithmIdentifier.getInstance(seq.getObjectAt(1));
@@ -32,7 +39,7 @@ public class BasicOCSPResponse
 
         if (seq.size() > 3)
         {
-            this.certs = ASN1Sequence.getInstance((ASN1TaggedObject) seq.getObjectAt(3), true);
+            this.certs = ASN1Sequence.getInstance((ASN1TaggedObject)seq.getObjectAt(3), true);
         }
     }
 

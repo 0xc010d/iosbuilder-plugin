@@ -25,7 +25,7 @@ public class BERConstructedOctetString
         {
             try
             {
-                DEROctetString o = (DEROctetString)octs.elementAt(i);
+                DEROctetString  o = (DEROctetString)octs.elementAt(i);
 
                 bOut.write(o.getOctets());
             }
@@ -62,7 +62,7 @@ public class BERConstructedOctetString
     }
 
     public BERConstructedOctetString(
-        ASN1Primitive obj)
+        ASN1Primitive  obj)
     {
         super(toByteArray(obj));
     }
@@ -80,7 +80,7 @@ public class BERConstructedOctetString
     }
 
     public BERConstructedOctetString(
-        ASN1Encodable obj)
+        ASN1Encodable  obj)
     {
         this(obj.toASN1Primitive());
     }
@@ -123,7 +123,7 @@ public class BERConstructedOctetString
 
             System.arraycopy(string, i, nStr, 0, nStr.length); 
 
-            vec.addElement(new DEROctetString(nStr));
+            vec.addElement(new DEROctetString(nStr)); 
          } 
         
          return vec; 

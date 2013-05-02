@@ -37,7 +37,7 @@ public class Hex
         }
         catch (Exception e)
         {
-            throw new org.jenkinsci.plugins.iosbuilder.bouncycastle.util.encoders.EncoderException("exception encoding Hex string: " + e.getMessage(), e);
+            throw new EncoderException("exception encoding Hex string: " + e.getMessage(), e);
         }
         
         return bOut.toByteArray();

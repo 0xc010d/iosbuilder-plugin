@@ -2,10 +2,11 @@ package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509;
 
 import java.io.IOException;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERPrintableString;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1InputStream;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERPrintableString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.util.Strings;
 
 /**
  * It turns out that the number of standard ways the fields in a DN should be 
@@ -60,7 +61,7 @@ public abstract class X509NameEntryConverter
         int     off)
         throws IOException
     {
-        str = org.jenkinsci.plugins.iosbuilder.bouncycastle.util.Strings.toLowerCase(str);
+        str = Strings.toLowerCase(str);
         byte[] data = new byte[(str.length() - off) / 2];
         for (int index = 0; index != data.length; index++)
         {

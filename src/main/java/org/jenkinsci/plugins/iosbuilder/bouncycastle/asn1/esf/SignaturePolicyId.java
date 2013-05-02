@@ -1,17 +1,18 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.esf;
 
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 
 public class SignaturePolicyId
     extends ASN1Object
 {
-    private ASN1ObjectIdentifier sigPolicyId;
+    private ASN1ObjectIdentifier  sigPolicyId;
     private OtherHashAlgAndValue sigPolicyHash;
-    private SigPolicyQualifiers sigPolicyQualifiers;
+    private SigPolicyQualifiers  sigPolicyQualifiers;
 
 
     public static SignaturePolicyId getInstance(
@@ -48,15 +49,15 @@ public class SignaturePolicyId
 
     public SignaturePolicyId(
         ASN1ObjectIdentifier   sigPolicyIdentifier,
-        OtherHashAlgAndValue sigPolicyHash)
+        OtherHashAlgAndValue  sigPolicyHash)
     {
         this(sigPolicyIdentifier, sigPolicyHash, null);
     }
 
     public SignaturePolicyId(
         ASN1ObjectIdentifier   sigPolicyId,
-        OtherHashAlgAndValue sigPolicyHash,
-        SigPolicyQualifiers sigPolicyQualifiers)
+        OtherHashAlgAndValue  sigPolicyHash,
+        SigPolicyQualifiers   sigPolicyQualifiers)
     {
         this.sigPolicyId = sigPolicyId;
         this.sigPolicyHash = sigPolicyHash;
@@ -88,7 +89,7 @@ public class SignaturePolicyId
      */
     public ASN1Primitive toASN1Primitive()
     {
-        ASN1EncodableVector v = new ASN1EncodableVector();
+        ASN1EncodableVector  v = new ASN1EncodableVector();
 
         v.add(sigPolicyId);
         v.add(sigPolicyHash);

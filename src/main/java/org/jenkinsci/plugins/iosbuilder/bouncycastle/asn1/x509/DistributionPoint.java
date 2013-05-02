@@ -1,6 +1,13 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERBitString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERTaggedObject;
 
 /**
  * The DistributionPoint object.
@@ -15,9 +22,9 @@ import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
 public class DistributionPoint
     extends ASN1Object
 {
-    DistributionPointName distributionPoint;
-    ReasonFlags reasons;
-    GeneralNames cRLIssuer;
+    DistributionPointName       distributionPoint;
+    ReasonFlags                 reasons;
+    GeneralNames                cRLIssuer;
 
     public static DistributionPoint getInstance(
         ASN1TaggedObject obj,
@@ -64,8 +71,8 @@ public class DistributionPoint
     
     public DistributionPoint(
         DistributionPointName distributionPoint,
-        ReasonFlags reasons,
-        GeneralNames cRLIssuer)
+        ReasonFlags                 reasons,
+        GeneralNames            cRLIssuer)
     {
         this.distributionPoint = distributionPoint;
         this.reasons = reasons;

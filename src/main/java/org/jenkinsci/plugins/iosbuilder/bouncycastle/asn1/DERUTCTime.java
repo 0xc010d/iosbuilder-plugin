@@ -240,7 +240,7 @@ public class DERUTCTime
     }
 
     void encode(
-        ASN1OutputStream out)
+        ASN1OutputStream  out)
         throws IOException
     {
         out.write(BERTags.UTC_TIME);

@@ -1,6 +1,15 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ocsp;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1GeneralizedTime;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Integer;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERGeneralizedTime;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERTaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.Extensions;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.X509Extensions;
 
@@ -11,18 +20,18 @@ public class ResponseData
     
     private boolean             versionPresent;
     
-    private ASN1Integer version;
+    private ASN1Integer          version;
     private ResponderID         responderID;
-    private ASN1GeneralizedTime producedAt;
+    private ASN1GeneralizedTime  producedAt;
     private ASN1Sequence responses;
-    private Extensions responseExtensions;
+    private Extensions      responseExtensions;
 
     public ResponseData(
-        ASN1Integer version,
+        ASN1Integer          version,
         ResponderID         responderID,
-        ASN1GeneralizedTime producedAt,
-        ASN1Sequence responses,
-        Extensions responseExtensions)
+        ASN1GeneralizedTime  producedAt,
+        ASN1Sequence        responses,
+        Extensions      responseExtensions)
     {
         this.version = version;
         this.responderID = responderID;
@@ -41,7 +50,7 @@ public class ResponseData
     public ResponseData(
         ResponderID         responderID,
         DERGeneralizedTime producedAt,
-        ASN1Sequence responses,
+        ASN1Sequence        responses,
         X509Extensions responseExtensions)
     {
         this(V1, responderID, ASN1GeneralizedTime.getInstance(producedAt), responses, Extensions.getInstance(responseExtensions));
@@ -49,27 +58,27 @@ public class ResponseData
 
     public ResponseData(
         ResponderID         responderID,
-        ASN1GeneralizedTime producedAt,
-        ASN1Sequence responses,
-        Extensions responseExtensions)
+        ASN1GeneralizedTime  producedAt,
+        ASN1Sequence        responses,
+        Extensions      responseExtensions)
     {
         this(V1, responderID, producedAt, responses, responseExtensions);
     }
     
     private ResponseData(
-        ASN1Sequence seq)
+        ASN1Sequence    seq)
     {
         int index = 0;
 
         if (seq.getObjectAt(0) instanceof ASN1TaggedObject)
         {
-            ASN1TaggedObject o = (ASN1TaggedObject)seq.getObjectAt(0);
+            ASN1TaggedObject    o = (ASN1TaggedObject)seq.getObjectAt(0);
 
             if (o.getTagNo() == 0)
             {
                 this.versionPresent = true;
                 this.version = ASN1Integer.getInstance(
-                        (ASN1TaggedObject) seq.getObjectAt(0), true);
+                                (ASN1TaggedObject)seq.getObjectAt(0), true);
                 index++;
             }
             else
@@ -89,7 +98,7 @@ public class ResponseData
         if (seq.size() > index)
         {
             this.responseExtensions = Extensions.getInstance(
-                    (ASN1TaggedObject) seq.getObjectAt(index), true);
+                                (ASN1TaggedObject)seq.getObjectAt(index), true);
         }
     }
 

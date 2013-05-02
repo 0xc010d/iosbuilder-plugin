@@ -1,6 +1,11 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERBitString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 
 public class AttributeCertificate
     extends ASN1Object
@@ -30,7 +35,7 @@ public class AttributeCertificate
     public AttributeCertificate(
         AttributeCertificateInfo    acinfo,
         AlgorithmIdentifier         signatureAlgorithm,
-        DERBitString signatureValue)
+        DERBitString                signatureValue)
     {
         this.acinfo = acinfo;
         this.signatureAlgorithm = signatureAlgorithm;
@@ -38,7 +43,7 @@ public class AttributeCertificate
     }
     
     public AttributeCertificate(
-        ASN1Sequence seq)
+        ASN1Sequence    seq)
     {
         if (seq.size() != 3)
         {
@@ -78,7 +83,7 @@ public class AttributeCertificate
      */
     public ASN1Primitive toASN1Primitive()
     {
-        ASN1EncodableVector v = new ASN1EncodableVector();
+        ASN1EncodableVector  v = new ASN1EncodableVector();
 
         v.add(acinfo);
         v.add(signatureAlgorithm);

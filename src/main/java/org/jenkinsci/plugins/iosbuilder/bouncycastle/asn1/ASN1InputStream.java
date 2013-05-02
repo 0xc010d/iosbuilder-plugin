@@ -170,12 +170,12 @@ public class ASN1InputStream
                     }
                     else
                     {
-                        return DERFactory.createSequence(buildDEREncodableVector(defIn));
+                        return DERFactory.createSequence(buildDEREncodableVector(defIn));   
                     }
                 case SET:
                     return DERFactory.createSet(buildDEREncodableVector(defIn));
                 case EXTERNAL:
-                    return new DERExternal(buildDEREncodableVector(defIn));
+                    return new DERExternal(buildDEREncodableVector(defIn));                
                 default:
                     throw new IOException("unknown tag " + tagNo + " encountered");
             }

@@ -3,6 +3,7 @@ package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1;
 import java.io.IOException;
 
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.util.Arrays;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.util.Strings;
 
 /**
  * DER UTF8String object.
@@ -82,12 +83,12 @@ public class DERUTF8String
      */
     public DERUTF8String(String string)
     {
-        this.string = org.jenkinsci.plugins.iosbuilder.bouncycastle.util.Strings.toUTF8ByteArray(string);
+        this.string = Strings.toUTF8ByteArray(string);
     }
 
     public String getString()
     {
-        return org.jenkinsci.plugins.iosbuilder.bouncycastle.util.Strings.fromUTF8ByteArray(string);
+        return Strings.fromUTF8ByteArray(string);
     }
 
     public String toString()

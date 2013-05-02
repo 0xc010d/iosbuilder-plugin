@@ -52,7 +52,7 @@ public class KeyAgreeRecipientIdentifier
         if (obj instanceof ASN1TaggedObject && ((ASN1TaggedObject)obj).getTagNo() == 0)
         {
             return new KeyAgreeRecipientIdentifier(RecipientKeyIdentifier.getInstance(
-                    (ASN1TaggedObject) obj, false));
+                (ASN1TaggedObject)obj, false));
         }
         
         throw new IllegalArgumentException("Invalid KeyAgreeRecipientIdentifier: " + obj.getClass().getName());

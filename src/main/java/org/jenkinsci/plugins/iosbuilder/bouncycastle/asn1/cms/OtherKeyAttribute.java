@@ -1,12 +1,18 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.cms;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 
 public class OtherKeyAttribute
     extends ASN1Object
 {
     private ASN1ObjectIdentifier keyAttrId;
-    private ASN1Encodable keyAttr;
+    private ASN1Encodable        keyAttr;
 
     /**
      * return an OtherKeyAttribute object from the given object.
@@ -39,7 +45,7 @@ public class OtherKeyAttribute
 
     public OtherKeyAttribute(
         ASN1ObjectIdentifier keyAttrId,
-        ASN1Encodable keyAttr)
+        ASN1Encodable        keyAttr)
     {
         this.keyAttrId = keyAttrId;
         this.keyAttr = keyAttr;

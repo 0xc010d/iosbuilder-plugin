@@ -3,8 +3,15 @@ package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509;
 import java.io.IOException;
 import java.util.Enumeration;
 
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1InputStream;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERBitString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 
 /**
  * The object that contains the public key stored in a certficate.
@@ -42,7 +49,7 @@ public class SubjectPublicKeyInfo
 
     public SubjectPublicKeyInfo(
         AlgorithmIdentifier algId,
-        ASN1Encodable publicKey)
+        ASN1Encodable       publicKey)
         throws IOException
     {
         this.keyData = new DERBitString(publicKey);
@@ -58,7 +65,7 @@ public class SubjectPublicKeyInfo
     }
 
     public SubjectPublicKeyInfo(
-        ASN1Sequence seq)
+        ASN1Sequence  seq)
     {
         if (seq.size() != 2)
         {
@@ -97,7 +104,7 @@ public class SubjectPublicKeyInfo
     public ASN1Primitive parsePublicKey()
         throws IOException
     {
-        ASN1InputStream aIn = new ASN1InputStream(keyData.getBytes());
+        ASN1InputStream         aIn = new ASN1InputStream(keyData.getBytes());
 
         return aIn.readObject();
     }
@@ -114,7 +121,7 @@ public class SubjectPublicKeyInfo
     public ASN1Primitive getPublicKey()
         throws IOException
     {
-        ASN1InputStream aIn = new ASN1InputStream(keyData.getBytes());
+        ASN1InputStream         aIn = new ASN1InputStream(keyData.getBytes());
 
         return aIn.readObject();
     }
@@ -139,7 +146,7 @@ public class SubjectPublicKeyInfo
      */
     public ASN1Primitive toASN1Primitive()
     {
-        ASN1EncodableVector v = new ASN1EncodableVector();
+        ASN1EncodableVector  v = new ASN1EncodableVector();
 
         v.add(algId);
         v.add(keyData);

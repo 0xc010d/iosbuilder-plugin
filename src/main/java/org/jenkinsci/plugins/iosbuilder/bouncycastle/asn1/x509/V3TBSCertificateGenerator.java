@@ -31,12 +31,12 @@ public class V3TBSCertificateGenerator
     DERTaggedObject version = new DERTaggedObject(true, 0, new ASN1Integer(2));
 
     ASN1Integer              serialNumber;
-    AlgorithmIdentifier signature;
+    AlgorithmIdentifier     signature;
     X500Name issuer;
-    Time startDate, endDate;
+    Time                    startDate, endDate;
     X500Name                subject;
-    SubjectPublicKeyInfo subjectPublicKeyInfo;
-    Extensions extensions;
+    SubjectPublicKeyInfo    subjectPublicKeyInfo;
+    Extensions              extensions;
 
     private boolean altNamePresentAndCritical;
     private DERBitString issuerUniqueID;
@@ -53,7 +53,7 @@ public class V3TBSCertificateGenerator
     }
 
     public void setSignature(
-        AlgorithmIdentifier signature)
+        AlgorithmIdentifier    signature)
     {
         this.signature = signature;
     }
@@ -125,7 +125,7 @@ public class V3TBSCertificateGenerator
     }
 
     public void setSubjectPublicKeyInfo(
-        SubjectPublicKeyInfo pubKeyInfo)
+        SubjectPublicKeyInfo    pubKeyInfo)
     {
         this.subjectPublicKeyInfo = pubKeyInfo;
     }
@@ -135,13 +135,13 @@ public class V3TBSCertificateGenerator
      * @param extensions
      */
     public void setExtensions(
-        X509Extensions extensions)
+        X509Extensions    extensions)
     {
         setExtensions(Extensions.getInstance(extensions));
     }
 
     public void setExtensions(
-        Extensions extensions)
+        Extensions    extensions)
     {
         this.extensions = extensions;
         if (extensions != null)

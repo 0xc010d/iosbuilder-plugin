@@ -1,11 +1,16 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 
 public class PolicyInformation
     extends ASN1Object
 {
-    private ASN1ObjectIdentifier policyIdentifier;
+    private ASN1ObjectIdentifier   policyIdentifier;
     private ASN1Sequence policyQualifiers;
 
     private PolicyInformation(
@@ -33,7 +38,7 @@ public class PolicyInformation
 
     public PolicyInformation(
         ASN1ObjectIdentifier policyIdentifier,
-        ASN1Sequence policyQualifiers)
+        ASN1Sequence        policyQualifiers)
     {
         this.policyIdentifier = policyIdentifier;
         this.policyQualifiers = policyQualifiers;

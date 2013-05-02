@@ -3,8 +3,8 @@ package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.cms;
 import java.io.IOException;
 
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Integer;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.AlgorithmIdentifier;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1SequenceParser;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.AlgorithmIdentifier;
 
 /**
  * RFC 3274 - CMS Compressed Data.

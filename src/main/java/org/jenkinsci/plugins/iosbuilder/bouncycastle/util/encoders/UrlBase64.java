@@ -36,7 +36,7 @@ public class UrlBase64
         }
         catch (Exception e)
         {
-            throw new org.jenkinsci.plugins.iosbuilder.bouncycastle.util.encoders.EncoderException("exception encoding URL safe base64 data: " + e.getMessage(), e);
+            throw new EncoderException("exception encoding URL safe base64 data: " + e.getMessage(), e);
         }
         
         return bOut.toByteArray();

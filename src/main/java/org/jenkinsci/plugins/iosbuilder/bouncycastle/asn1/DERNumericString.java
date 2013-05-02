@@ -3,6 +3,7 @@ package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1;
 import java.io.IOException;
 
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.util.Arrays;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.util.Strings;
 
 /**
  * DER NumericString object - this is an ascii string of characters {0,1,2,3,4,5,6,7,8,9, }.
@@ -101,12 +102,12 @@ public class DERNumericString
             throw new IllegalArgumentException("string contains illegal characters");
         }
 
-        this.string = org.jenkinsci.plugins.iosbuilder.bouncycastle.util.Strings.toByteArray(string);
+        this.string = Strings.toByteArray(string);
     }
 
     public String getString()
     {
-        return org.jenkinsci.plugins.iosbuilder.bouncycastle.util.Strings.fromByteArray(string);
+        return Strings.fromByteArray(string);
     }
 
     public String toString()

@@ -10,13 +10,13 @@ import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERBoolean;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 
 public class BasicConstraints
     extends ASN1Object
 {
     ASN1Boolean cA = ASN1Boolean.getInstance(false);
-    ASN1Integer pathLenConstraint = null;
+    ASN1Integer  pathLenConstraint = null;
 
     public static BasicConstraints getInstance(
         ASN1TaggedObject obj,
@@ -34,7 +34,7 @@ public class BasicConstraints
         }
         if (obj instanceof X509Extension)
         {
-            return getInstance(X509Extension.convertValueToObject((X509Extension) obj));
+            return getInstance(X509Extension.convertValueToObject((X509Extension)obj));
         }
         if (obj != null)
         {

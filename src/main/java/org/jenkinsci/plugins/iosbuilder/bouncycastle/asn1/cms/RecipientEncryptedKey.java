@@ -1,6 +1,12 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.cms;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 
 
 public class RecipientEncryptedKey
@@ -56,7 +62,7 @@ public class RecipientEncryptedKey
 
     public RecipientEncryptedKey(
         KeyAgreeRecipientIdentifier id,
-        ASN1OctetString encryptedKey)
+        ASN1OctetString             encryptedKey)
     {
         this.identifier = id;
         this.encryptedKey = encryptedKey;

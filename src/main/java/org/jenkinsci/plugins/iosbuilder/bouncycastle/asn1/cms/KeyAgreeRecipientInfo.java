@@ -1,6 +1,14 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.cms;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Integer;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERTaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.AlgorithmIdentifier;
 
 public class KeyAgreeRecipientInfo
@@ -14,9 +22,9 @@ public class KeyAgreeRecipientInfo
     
     public KeyAgreeRecipientInfo(
         OriginatorIdentifierOrKey   originator,
-        ASN1OctetString ukm,
-        AlgorithmIdentifier keyEncryptionAlgorithm,
-        ASN1Sequence recipientEncryptedKeys)
+        ASN1OctetString             ukm,
+        AlgorithmIdentifier         keyEncryptionAlgorithm,
+        ASN1Sequence                recipientEncryptedKeys)
     {
         this.version = new ASN1Integer(3);
         this.originator = originator;
@@ -37,11 +45,11 @@ public class KeyAgreeRecipientInfo
         if (seq.getObjectAt(index) instanceof ASN1TaggedObject)
         {
             ukm = ASN1OctetString.getInstance(
-                    (ASN1TaggedObject) seq.getObjectAt(index++), true);
+                            (ASN1TaggedObject)seq.getObjectAt(index++), true);
         }
 
         keyEncryptionAlgorithm = AlgorithmIdentifier.getInstance(
-                seq.getObjectAt(index++));
+                                                seq.getObjectAt(index++));
 
         recipientEncryptedKeys = (ASN1Sequence)seq.getObjectAt(index++);
     }
@@ -56,7 +64,7 @@ public class KeyAgreeRecipientInfo
      *          tagged object cannot be converted.
      */
     public static KeyAgreeRecipientInfo getInstance(
-        ASN1TaggedObject obj,
+        ASN1TaggedObject    obj,
         boolean             explicit)
     {
         return getInstance(ASN1Sequence.getInstance(obj, explicit));
@@ -127,7 +135,7 @@ public class KeyAgreeRecipientInfo
      */
     public ASN1Primitive toASN1Primitive()
     {
-        ASN1EncodableVector v = new ASN1EncodableVector();
+        ASN1EncodableVector  v = new ASN1EncodableVector();
 
         v.add(version);
         v.add(new DERTaggedObject(true, 0, originator));

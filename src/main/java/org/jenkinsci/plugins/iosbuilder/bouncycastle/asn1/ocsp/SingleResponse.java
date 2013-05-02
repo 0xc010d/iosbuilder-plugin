@@ -7,19 +7,19 @@ import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERGeneralizedTime;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERTaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.Extensions;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.X509Extensions;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
 
 public class SingleResponse
     extends ASN1Object
 {
-    private CertID certID;
+    private CertID              certID;
     private CertStatus          certStatus;
-    private ASN1GeneralizedTime thisUpdate;
+    private ASN1GeneralizedTime  thisUpdate;
     private ASN1GeneralizedTime  nextUpdate;
-    private Extensions singleExtensions;
+    private Extensions      singleExtensions;
 
     /**
      * @deprecated use method taking ASN1GeneralizedTime and Extensions
@@ -30,9 +30,9 @@ public class SingleResponse
      * @param singleExtensions
      */
     public SingleResponse(
-        CertID certID,
+        CertID              certID,
         CertStatus          certStatus,
-        DERGeneralizedTime thisUpdate,
+        DERGeneralizedTime  thisUpdate,
         DERGeneralizedTime  nextUpdate,
         X509Extensions singleExtensions)
     {
@@ -48,7 +48,7 @@ public class SingleResponse
      * @param singleExtensions
      */
     public SingleResponse(
-        CertID certID,
+        CertID              certID,
         CertStatus          certStatus,
         DERGeneralizedTime thisUpdate,
         DERGeneralizedTime nextUpdate,
@@ -58,7 +58,7 @@ public class SingleResponse
     }
 
     public SingleResponse(
-        CertID certID,
+        CertID              certID,
         CertStatus          certStatus,
         ASN1GeneralizedTime thisUpdate,
         ASN1GeneralizedTime nextUpdate,
@@ -72,7 +72,7 @@ public class SingleResponse
     }
 
     private SingleResponse(
-        ASN1Sequence seq)
+        ASN1Sequence    seq)
     {
         this.certID = CertID.getInstance(seq.getObjectAt(0));
         this.certStatus = CertStatus.getInstance(seq.getObjectAt(1));

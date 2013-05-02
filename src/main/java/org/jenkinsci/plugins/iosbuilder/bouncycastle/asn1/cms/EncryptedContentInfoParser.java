@@ -19,12 +19,12 @@ import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.AlgorithmIdentifi
  */
 public class EncryptedContentInfoParser
 {
-    private ASN1ObjectIdentifier _contentType;
-    private AlgorithmIdentifier     _contentEncryptionAlgorithm;
+    private ASN1ObjectIdentifier    _contentType;
+    private AlgorithmIdentifier _contentEncryptionAlgorithm;
     private ASN1TaggedObjectParser _encryptedContent;
 
     public EncryptedContentInfoParser(
-        ASN1SequenceParser seq)
+        ASN1SequenceParser  seq) 
         throws IOException
     {
         _contentType = (ASN1ObjectIdentifier)seq.readObject();

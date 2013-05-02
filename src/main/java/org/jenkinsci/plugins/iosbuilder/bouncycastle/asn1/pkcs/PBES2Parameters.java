@@ -2,16 +2,18 @@ package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.pkcs;
 
 import java.util.Enumeration;
 
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 
 public class PBES2Parameters
     extends ASN1Object
     implements PKCSObjectIdentifiers
 {
-    private KeyDerivationFunc func;
+    private KeyDerivationFunc   func;
     private EncryptionScheme    scheme;
 
     public static PBES2Parameters getInstance(
@@ -60,7 +62,7 @@ public class PBES2Parameters
 
     public ASN1Primitive toASN1Primitive()
     {
-        ASN1EncodableVector v = new ASN1EncodableVector();
+        ASN1EncodableVector  v = new ASN1EncodableVector();
 
         v.add(func);
         v.add(scheme);

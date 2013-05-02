@@ -2,11 +2,11 @@ package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509;
 
 import java.io.IOException;
 
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERBoolean;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
 
 /**
  * an object for the elements in the X.509 V3 extension block.
@@ -169,11 +169,11 @@ public class X509Extension
     public static final ASN1ObjectIdentifier targetInformation = new ASN1ObjectIdentifier("2.5.29.55");
         
     boolean             critical;
-    ASN1OctetString value;
+    ASN1OctetString     value;
 
     public X509Extension(
         DERBoolean              critical,
-        ASN1OctetString value)
+        ASN1OctetString         value)
     {
         this.critical = critical.isTrue();
         this.value = value;
@@ -181,7 +181,7 @@ public class X509Extension
 
     public X509Extension(
         boolean                 critical,
-        ASN1OctetString value)
+        ASN1OctetString         value)
     {
         this.critical = critical;
         this.value = value;

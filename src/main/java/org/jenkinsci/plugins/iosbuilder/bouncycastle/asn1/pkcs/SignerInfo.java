@@ -2,10 +2,17 @@ package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.pkcs;
 
 import java.util.Enumeration;
 
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Integer;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Set;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DEROctetString;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERTaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.AlgorithmIdentifier;
 
 /**
@@ -16,11 +23,11 @@ public class SignerInfo
 {
     private ASN1Integer              version;
     private IssuerAndSerialNumber   issuerAndSerialNumber;
-    private AlgorithmIdentifier digAlgorithm;
-    private ASN1Set authenticatedAttributes;
-    private AlgorithmIdentifier digEncryptionAlgorithm;
-    private ASN1OctetString encryptedDigest;
-    private ASN1Set unauthenticatedAttributes;
+    private AlgorithmIdentifier     digAlgorithm;
+    private ASN1Set                 authenticatedAttributes;
+    private AlgorithmIdentifier     digEncryptionAlgorithm;
+    private ASN1OctetString         encryptedDigest;
+    private ASN1Set                 unauthenticatedAttributes;
 
     public static SignerInfo getInstance(
         Object  o)
@@ -40,11 +47,11 @@ public class SignerInfo
     public SignerInfo(
         ASN1Integer              version,
         IssuerAndSerialNumber   issuerAndSerialNumber,
-        AlgorithmIdentifier digAlgorithm,
-        ASN1Set authenticatedAttributes,
-        AlgorithmIdentifier digEncryptionAlgorithm,
-        ASN1OctetString encryptedDigest,
-        ASN1Set unauthenticatedAttributes)
+        AlgorithmIdentifier     digAlgorithm,
+        ASN1Set                 authenticatedAttributes,
+        AlgorithmIdentifier     digEncryptionAlgorithm,
+        ASN1OctetString         encryptedDigest,
+        ASN1Set                 unauthenticatedAttributes)
     {
         this.version = version;
         this.issuerAndSerialNumber = issuerAndSerialNumber;
@@ -68,7 +75,7 @@ public class SignerInfo
 
         if (obj instanceof ASN1TaggedObject)
         {
-            authenticatedAttributes = ASN1Set.getInstance((ASN1TaggedObject) obj, false);
+            authenticatedAttributes = ASN1Set.getInstance((ASN1TaggedObject)obj, false);
 
             digEncryptionAlgorithm = AlgorithmIdentifier.getInstance(e.nextElement());
         }
@@ -82,7 +89,7 @@ public class SignerInfo
 
         if (e.hasMoreElements())
         {
-            unauthenticatedAttributes = ASN1Set.getInstance((ASN1TaggedObject) e.nextElement(), false);
+            unauthenticatedAttributes = ASN1Set.getInstance((ASN1TaggedObject)e.nextElement(), false);
         }
         else
         {

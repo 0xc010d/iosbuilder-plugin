@@ -2,7 +2,13 @@ package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x9;
 
 import java.math.BigInteger;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Integer;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 
 /**
  * ASN.1 def for Elliptic-Curve Field ID structure. See
@@ -66,7 +72,7 @@ public class X9FieldID
     }
 
     public X9FieldID(
-        ASN1Sequence  seq)
+        ASN1Sequence seq)
     {
         this.id = (ASN1ObjectIdentifier)seq.getObjectAt(0);
         this.parameters = (ASN1Primitive)seq.getObjectAt(1);

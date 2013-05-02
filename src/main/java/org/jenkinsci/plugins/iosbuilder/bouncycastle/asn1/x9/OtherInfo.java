@@ -3,8 +3,12 @@ package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x9;
 import java.util.Enumeration;
 
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERTaggedObject;
 
 /**
  * ANS.1 def for Diffie-Hellman key exchange OtherInfo structure. See
@@ -15,12 +19,12 @@ public class OtherInfo
 {
     private KeySpecificInfo     keyInfo;
     private ASN1OctetString partyAInfo;
-    private ASN1OctetString suppPubInfo;
+    private ASN1OctetString     suppPubInfo;
 
     public OtherInfo(
         KeySpecificInfo     keyInfo,
-        ASN1OctetString partyAInfo,
-        ASN1OctetString suppPubInfo)
+        ASN1OctetString     partyAInfo,
+        ASN1OctetString     suppPubInfo)
     {
         this.keyInfo = keyInfo;
         this.partyAInfo = partyAInfo;

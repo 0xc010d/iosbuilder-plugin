@@ -3,11 +3,11 @@ package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.cms;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1GeneralizedTime;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DEROctetString;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 
 public class KEKIdentifier
@@ -15,12 +15,12 @@ public class KEKIdentifier
 {
     private ASN1OctetString keyIdentifier;
     private ASN1GeneralizedTime date;
-    private OtherKeyAttribute other;
+    private OtherKeyAttribute  other;
     
     public KEKIdentifier(
         byte[]              keyIdentifier,
         ASN1GeneralizedTime  date,
-        OtherKeyAttribute other)
+        OtherKeyAttribute   other)
     {
         this.keyIdentifier = new DEROctetString(keyIdentifier);
         this.date = date;

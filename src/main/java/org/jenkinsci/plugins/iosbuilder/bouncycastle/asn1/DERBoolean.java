@@ -2,6 +2,8 @@ package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1;
 
 import java.io.IOException;
 
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.util.Arrays;
+
 public class DERBoolean
     extends ASN1Primitive
 {
@@ -96,7 +98,7 @@ public class DERBoolean
         }
         else
         {
-            this.value = org.jenkinsci.plugins.iosbuilder.bouncycastle.util.Arrays.clone(value);
+            this.value = Arrays.clone(value);
         }
     }
 

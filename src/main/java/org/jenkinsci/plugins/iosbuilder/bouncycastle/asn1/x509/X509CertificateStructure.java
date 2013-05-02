@@ -1,13 +1,13 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509;
 
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Integer;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERBitString;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.pkcs.PKCSObjectIdentifiers;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x500.X500Name;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERBitString;
 
 /**
  * an X509Certificate structure.
@@ -26,7 +26,7 @@ public class X509CertificateStructure
 {
     ASN1Sequence seq;
     TBSCertificateStructure tbsCert;
-    AlgorithmIdentifier sigAlgId;
+    AlgorithmIdentifier     sigAlgId;
     DERBitString sig;
 
     public static X509CertificateStructure getInstance(
@@ -52,7 +52,7 @@ public class X509CertificateStructure
     }
 
     public X509CertificateStructure(
-        ASN1Sequence seq)
+        ASN1Sequence  seq)
     {
         this.seq = seq;
 

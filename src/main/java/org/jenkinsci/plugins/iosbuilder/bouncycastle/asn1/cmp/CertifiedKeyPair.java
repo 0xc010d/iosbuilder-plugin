@@ -1,6 +1,12 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.cmp;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERTaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.crmf.EncryptedValue;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.crmf.PKIPublicationInfo;
 
@@ -9,7 +15,7 @@ public class CertifiedKeyPair
 {
     private CertOrEncCert certOrEncCert;
     private EncryptedValue privateKey;
-    private PKIPublicationInfo publicationInfo;
+    private PKIPublicationInfo  publicationInfo;
 
     private CertifiedKeyPair(ASN1Sequence seq)
     {
@@ -61,7 +67,7 @@ public class CertifiedKeyPair
     public CertifiedKeyPair(
         CertOrEncCert certOrEncCert,
         EncryptedValue privateKey,
-        PKIPublicationInfo publicationInfo
+        PKIPublicationInfo  publicationInfo
         )
     {
         if (certOrEncCert == null)

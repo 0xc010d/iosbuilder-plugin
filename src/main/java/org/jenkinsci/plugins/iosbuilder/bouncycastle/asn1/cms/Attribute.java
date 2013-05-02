@@ -1,13 +1,20 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.cms;
 
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Set;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERObjectIdentifier;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 
 public class Attribute
     extends ASN1Object
 {
     private ASN1ObjectIdentifier attrType;
-    private ASN1Set attrValues;
+    private ASN1Set             attrValues;
 
     /**
      * return an Attribute object from the given object.
@@ -43,7 +50,7 @@ public class Attribute
      */
     public Attribute(
         DERObjectIdentifier attrType,
-        ASN1Set attrValues)
+        ASN1Set             attrValues)
     {
         this.attrType = new ASN1ObjectIdentifier(attrType.getId());
         this.attrValues = attrValues;
@@ -51,7 +58,7 @@ public class Attribute
 
     public Attribute(
         ASN1ObjectIdentifier attrType,
-        ASN1Set attrValues)
+        ASN1Set             attrValues)
     {
         this.attrType = attrType;
         this.attrValues = attrValues;

@@ -3,9 +3,19 @@ package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509;
 import java.io.IOException;
 import java.util.StringTokenizer;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.util.IPAddress;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Choice;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERIA5String;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DEROctetString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERTaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x500.X500Name;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.util.IPAddress;
 
 /**
  * The GeneralName object.
@@ -61,7 +71,7 @@ public class GeneralName
     }
 
     public GeneralName(
-        X500Name dirName)
+        X500Name  dirName)
     {
         this.obj = dirName;
         this.tag = 4;
@@ -171,7 +181,7 @@ public class GeneralName
 
         if (obj instanceof ASN1TaggedObject)
         {
-            ASN1TaggedObject tagObj = (ASN1TaggedObject)obj;
+            ASN1TaggedObject    tagObj = (ASN1TaggedObject)obj;
             int                 tag = tagObj.getTagNo();
 
             switch (tag)
@@ -201,7 +211,7 @@ public class GeneralName
         {
             try
             {
-                return getInstance(ASN1Primitive.fromByteArray((byte[]) obj));
+                return getInstance(ASN1Primitive.fromByteArray((byte[])obj));
             }
             catch (IOException e)
             {

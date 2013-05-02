@@ -16,7 +16,7 @@ public abstract class ASN1Object
         throws IOException
     {
         ByteArrayOutputStream bOut = new ByteArrayOutputStream();
-        ASN1OutputStream aOut = new ASN1OutputStream(bOut);
+        ASN1OutputStream      aOut = new ASN1OutputStream(bOut);
 
         aOut.writeObject(this);
 
@@ -37,7 +37,7 @@ public abstract class ASN1Object
         if (encoding.equals(ASN1Encoding.DER))
         {
             ByteArrayOutputStream   bOut = new ByteArrayOutputStream();
-            DEROutputStream dOut = new DEROutputStream(bOut);
+            DEROutputStream         dOut = new DEROutputStream(bOut);
 
             dOut.writeObject(this);
 
@@ -46,7 +46,7 @@ public abstract class ASN1Object
         else if (encoding.equals(ASN1Encoding.DL))
         {
             ByteArrayOutputStream   bOut = new ByteArrayOutputStream();
-            DLOutputStream dOut = new DLOutputStream(bOut);
+            DLOutputStream          dOut = new DLOutputStream(bOut);
 
             dOut.writeObject(this);
 

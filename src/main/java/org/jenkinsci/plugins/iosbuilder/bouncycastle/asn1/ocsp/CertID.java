@@ -2,26 +2,26 @@ package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ocsp;
 
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Integer;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.AlgorithmIdentifier;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.AlgorithmIdentifier;
 
 public class CertID
     extends ASN1Object
 {
     AlgorithmIdentifier    hashAlgorithm;
-    ASN1OctetString issuerNameHash;
-    ASN1OctetString issuerKeyHash;
+    ASN1OctetString        issuerNameHash;
+    ASN1OctetString        issuerKeyHash;
     ASN1Integer             serialNumber;
 
     public CertID(
         AlgorithmIdentifier hashAlgorithm,
-        ASN1OctetString issuerNameHash,
-        ASN1OctetString issuerKeyHash,
+        ASN1OctetString     issuerNameHash,
+        ASN1OctetString     issuerKeyHash,
         ASN1Integer         serialNumber)
     {
         this.hashAlgorithm = hashAlgorithm;

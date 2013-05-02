@@ -2,18 +2,24 @@ package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ocsp;
 
 import java.util.Enumeration;
 
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1GeneralizedTime;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Integer;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERGeneralizedTime;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERIA5String;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERTaggedObject;
 
 public class CrlID
     extends ASN1Object
 {
-    private DERIA5String         crlUrl;
-    private ASN1Integer          crlNum;
-    private ASN1GeneralizedTime crlTime;
+    private DERIA5String crlUrl;
+    private ASN1Integer crlNum;
+    private ASN1GeneralizedTime  crlTime;
 
     private CrlID(
         ASN1Sequence seq)
@@ -83,7 +89,7 @@ public class CrlID
      */
     public ASN1Primitive toASN1Primitive()
     {
-        ASN1EncodableVector v = new ASN1EncodableVector();
+        ASN1EncodableVector    v = new ASN1EncodableVector();
 
         if (crlUrl != null)
         {

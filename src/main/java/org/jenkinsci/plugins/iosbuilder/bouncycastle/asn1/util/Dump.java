@@ -1,8 +1,8 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.util;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1InputStream;
-
 import java.io.FileInputStream;
+
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1InputStream;
 
 public class Dump
 {

@@ -3,9 +3,9 @@ package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ua;
 import java.math.BigInteger;
 
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
-import org.bouncycastle.crypto.params.ECDomainParameters;
-import org.bouncycastle.math.ec.ECCurve;
-import org.bouncycastle.math.ec.ECPoint;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.crypto.params.ECDomainParameters;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.math.ec.ECCurve;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.math.ec.ECPoint;
 
 public class DSTU4145NamedCurves
 {

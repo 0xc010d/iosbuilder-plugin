@@ -2,7 +2,14 @@ package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.cryptopro;
 
 import java.util.Enumeration;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 
 public class GOST28147Parameters
     extends ASN1Object
@@ -34,7 +41,7 @@ public class GOST28147Parameters
     }
 
     public GOST28147Parameters(
-        ASN1Sequence seq)
+        ASN1Sequence  seq)
     {
         Enumeration     e = seq.getObjects();
 

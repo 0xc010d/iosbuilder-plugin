@@ -1,10 +1,14 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.smime;
 
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.nist.NISTObjectIdentifiers;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.pkcs.PKCSObjectIdentifiers;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
 
 public class SMIMECapability
     extends ASN1Object
@@ -42,7 +46,7 @@ public class SMIMECapability
 
     public SMIMECapability(
         ASN1ObjectIdentifier capabilityID,
-        ASN1Encodable parameters)
+        ASN1Encodable        parameters)
     {
         this.capabilityID = capabilityID;
         this.parameters = parameters;

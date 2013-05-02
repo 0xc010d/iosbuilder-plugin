@@ -7,7 +7,7 @@ public interface ICAOObjectIdentifiers
     //
     // base id
     //
-    static final ASN1ObjectIdentifier id_icao                   = new ASN1ObjectIdentifier("2.23.136");
+    static final ASN1ObjectIdentifier    id_icao                   = new ASN1ObjectIdentifier("2.23.136");
 
     static final ASN1ObjectIdentifier    id_icao_mrtd              = id_icao.branch("1");
     static final ASN1ObjectIdentifier    id_icao_mrtd_security     = id_icao_mrtd.branch("1");

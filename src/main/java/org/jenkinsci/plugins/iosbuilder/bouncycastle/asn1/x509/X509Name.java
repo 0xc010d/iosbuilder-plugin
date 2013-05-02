@@ -347,12 +347,12 @@ public class X509Name
         DefaultLookUp.put("name", NAME);
     }
 
-    private X509NameEntryConverter converter = null;
+    private X509NameEntryConverter  converter = null;
     private Vector                  ordering = new Vector();
     private Vector                  values = new Vector();
     private Vector                  added = new Vector();
 
-    private ASN1Sequence            seq;
+    private ASN1Sequence seq;
 
     private boolean                 isHashCodeCalculated;
     private int                     hashCodeValue;
@@ -408,7 +408,7 @@ public class X509Name
 
         while (e.hasMoreElements())
         {
-            ASN1Set         set = ASN1Set.getInstance(((ASN1Encodable)e.nextElement()).toASN1Primitive());
+            ASN1Set set = ASN1Set.getInstance(((ASN1Encodable)e.nextElement()).toASN1Primitive());
 
             for (int i = 0; i < set.size(); i++) 
             {
@@ -497,7 +497,7 @@ public class X509Name
     public X509Name(
         Vector                   ordering,
         Hashtable                attributes,
-        X509NameEntryConverter converter)
+        X509NameEntryConverter   converter)
     {
         this.converter = converter;
 
@@ -552,7 +552,7 @@ public class X509Name
     public X509Name(
         Vector                  oids,
         Vector                  values,
-        X509NameEntryConverter converter)
+        X509NameEntryConverter  converter)
     {
         this.converter = converter;
 
@@ -597,7 +597,7 @@ public class X509Name
      */
     public X509Name(
         String                  dirName,
-        X509NameEntryConverter converter)
+        X509NameEntryConverter  converter)
     {
         this(DefaultReverse, DefaultLookUp, dirName, converter);
     }
@@ -625,7 +625,7 @@ public class X509Name
     public X509Name(
         boolean                 reverse,
         String                  dirName,
-        X509NameEntryConverter converter)
+        X509NameEntryConverter  converter)
     {
         this(reverse, DefaultLookUp, dirName, converter);
     }
@@ -690,10 +690,10 @@ public class X509Name
         boolean                 reverse,
         Hashtable               lookUp,
         String                  dirName,
-        X509NameEntryConverter converter)
+        X509NameEntryConverter  converter)
     {
         this.converter = converter;
-        X509NameTokenizer nTok = new X509NameTokenizer(dirName);
+        X509NameTokenizer   nTok = new X509NameTokenizer(dirName);
 
         while (nTok.hasMoreTokens())
         {
@@ -711,7 +711,7 @@ public class X509Name
 
             if (value.indexOf('+') > 0)
             {
-                X509NameTokenizer vTok = new X509NameTokenizer(value, '+');
+                X509NameTokenizer   vTok = new X509NameTokenizer(value, '+');
                 String  v = vTok.nextToken();
 
                 this.ordering.addElement(oid);

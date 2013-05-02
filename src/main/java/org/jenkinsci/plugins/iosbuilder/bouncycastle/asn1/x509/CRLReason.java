@@ -3,9 +3,10 @@ package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509;
 import java.math.BigInteger;
 import java.util.Hashtable;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Enumerated;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.util.Integers;
 
 /**
  * The CRLReason enumeration.
@@ -138,7 +139,7 @@ public class CRLReason
 
     public static CRLReason lookup(int value)
     {
-        Integer idx = org.jenkinsci.plugins.iosbuilder.bouncycastle.util.Integers.valueOf(value);
+        Integer idx = Integers.valueOf(value);
 
         if (!table.containsKey(idx))
         {

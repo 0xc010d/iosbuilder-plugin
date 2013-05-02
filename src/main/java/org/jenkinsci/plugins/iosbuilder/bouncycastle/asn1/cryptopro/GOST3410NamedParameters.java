@@ -62,11 +62,11 @@ public class GOST3410NamedParameters
     
     static
     {      
-        params.put(CryptoProObjectIdentifiers.gostR3410_94_CryptoPro_A, cryptoProA);
-        params.put(CryptoProObjectIdentifiers.gostR3410_94_CryptoPro_B, cryptoProB);
+        params.put(CryptoProObjectIdentifiers.gostR3410_94_CryptoPro_A, cryptoProA);       
+        params.put(CryptoProObjectIdentifiers.gostR3410_94_CryptoPro_B, cryptoProB);       
 //        params.put(CryptoProObjectIdentifiers.gostR3410_94_CryptoPro_C, cryptoProC);       
 //        params.put(CryptoProObjectIdentifiers.gostR3410_94_CryptoPro_D, cryptoProD);       
-        params.put(CryptoProObjectIdentifiers.gostR3410_94_CryptoPro_XchA, cryptoProXchA);
+        params.put(CryptoProObjectIdentifiers.gostR3410_94_CryptoPro_XchA, cryptoProXchA);       
 //        params.put(CryptoProObjectIdentifiers.gostR3410_94_CryptoPro_XchB, cryptoProXchA);   
 //        params.put(CryptoProObjectIdentifiers.gostR3410_94_CryptoPro_XchC, cryptoProXchA);
         
@@ -82,7 +82,7 @@ public class GOST3410NamedParameters
      * @param oid an object identifier representing a named parameters, if present.
      */
     public static GOST3410ParamSetParameters getByOID(
-        ASN1ObjectIdentifier oid)
+        ASN1ObjectIdentifier  oid)
     {
         return (GOST3410ParamSetParameters)params.get(oid);
     }

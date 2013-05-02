@@ -9,10 +9,10 @@ import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERGeneralizedTime;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERTaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERUTCTime;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x500.X500Name;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
 
 /**
  * PKIX RFC-2459 - TBSCertList object.
@@ -43,7 +43,7 @@ public class TBSCertList
     {
         ASN1Sequence seq;
 
-        Extensions crlEntryExtensions;
+        Extensions    crlEntryExtensions;
 
         private CRLEntry(
             ASN1Sequence  seq)
@@ -137,12 +137,12 @@ public class TBSCertList
     }
 
     ASN1Integer             version;
-    AlgorithmIdentifier signature;
+    AlgorithmIdentifier     signature;
     X500Name issuer;
-    Time thisUpdate;
-    Time nextUpdate;
+    Time                    thisUpdate;
+    Time                    nextUpdate;
     ASN1Sequence            revokedCertificates;
-    Extensions crlExtensions;
+    Extensions              crlExtensions;
 
     public static TBSCertList getInstance(
         ASN1TaggedObject obj,
@@ -206,7 +206,7 @@ public class TBSCertList
         if (seqPos < seq.size()
             && seq.getObjectAt(seqPos) instanceof DERTaggedObject)
         {
-            crlExtensions = Extensions.getInstance(ASN1Sequence.getInstance((ASN1TaggedObject) seq.getObjectAt(seqPos), true));
+            crlExtensions = Extensions.getInstance(ASN1Sequence.getInstance((ASN1TaggedObject)seq.getObjectAt(seqPos), true));
         }
     }
 

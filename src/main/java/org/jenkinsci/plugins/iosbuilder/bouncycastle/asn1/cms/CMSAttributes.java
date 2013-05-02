@@ -5,7 +5,7 @@ import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.pkcs.PKCSObjectIdentif
 
 public interface CMSAttributes
 {
-    public static final ASN1ObjectIdentifier contentType = PKCSObjectIdentifiers.pkcs_9_at_contentType;
+    public static final ASN1ObjectIdentifier  contentType = PKCSObjectIdentifiers.pkcs_9_at_contentType;
     public static final ASN1ObjectIdentifier  messageDigest = PKCSObjectIdentifiers.pkcs_9_at_messageDigest;
     public static final ASN1ObjectIdentifier  signingTime = PKCSObjectIdentifiers.pkcs_9_at_signingTime;
     public static final ASN1ObjectIdentifier  counterSignature = PKCSObjectIdentifiers.pkcs_9_at_counterSignature;

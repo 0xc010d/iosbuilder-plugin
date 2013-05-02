@@ -2,11 +2,16 @@ package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.pkcs;
 
 import java.util.Enumeration;
 
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.BERSequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.BERTaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DLSequence;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
 
 public class ContentInfo
     extends ASN1Object
@@ -33,7 +38,7 @@ public class ContentInfo
     }
 
     private ContentInfo(
-        ASN1Sequence seq)
+        ASN1Sequence  seq)
     {
         Enumeration   e = seq.getObjects();
 

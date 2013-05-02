@@ -4,7 +4,16 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERBoolean;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERObjectIdentifier;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 
 /**
  * @deprecated use Extensions
@@ -240,13 +249,13 @@ public class X509Extensions
      * the extensions are a list of constructed sequences, either with (OID, OctetString) or (OID, Boolean, OctetString)
      */
     public X509Extensions(
-        ASN1Sequence seq)
+        ASN1Sequence  seq)
     {
         Enumeration e = seq.getObjects();
 
         while (e.hasMoreElements())
         {
-            ASN1Sequence s = ASN1Sequence.getInstance(e.nextElement());
+            ASN1Sequence            s = ASN1Sequence.getInstance(e.nextElement());
 
             if (s.size() == 3)
             {
@@ -306,7 +315,7 @@ public class X509Extensions
 
         while (e.hasMoreElements())
         {
-            ASN1ObjectIdentifier oid = ASN1ObjectIdentifier.getInstance(e.nextElement());
+            ASN1ObjectIdentifier     oid = ASN1ObjectIdentifier.getInstance(e.nextElement());
             X509Extension           ext = (X509Extension)extensions.get(oid);
 
             this.extensions.put(oid, ext);
@@ -337,7 +346,7 @@ public class X509Extensions
 
         while (e.hasMoreElements())
         {
-            ASN1ObjectIdentifier oid = (ASN1ObjectIdentifier)e.nextElement();
+            ASN1ObjectIdentifier     oid = (ASN1ObjectIdentifier)e.nextElement();
             X509Extension           ext = (X509Extension)values.elementAt(count);
 
             this.extensions.put(oid, ext);
@@ -393,7 +402,7 @@ public class X509Extensions
 
         while (e.hasMoreElements())
         {
-            ASN1ObjectIdentifier oid = (ASN1ObjectIdentifier)e.nextElement();
+            ASN1ObjectIdentifier    oid = (ASN1ObjectIdentifier)e.nextElement();
             X509Extension           ext = (X509Extension)extensions.get(oid);
             ASN1EncodableVector     v = new ASN1EncodableVector();
 

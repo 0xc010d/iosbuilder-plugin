@@ -1,10 +1,12 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.cms;
 
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Choice;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERTaggedObject;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
 
 public class RecipientIdentifier
     extends ASN1Object
@@ -72,7 +74,7 @@ public class RecipientIdentifier
     {
         if (id instanceof ASN1TaggedObject)
         {
-            return ASN1OctetString.getInstance((ASN1TaggedObject) id, false);
+            return ASN1OctetString.getInstance((ASN1TaggedObject)id, false);
         }
 
         return IssuerAndSerialNumber.getInstance(id);

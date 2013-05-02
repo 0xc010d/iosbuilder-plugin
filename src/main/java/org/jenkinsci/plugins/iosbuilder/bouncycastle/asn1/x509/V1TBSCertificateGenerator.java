@@ -1,6 +1,10 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Integer;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1UTCTime;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERTaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x500.X500Name;
 
 /**
@@ -26,8 +30,8 @@ public class V1TBSCertificateGenerator
     AlgorithmIdentifier     signature;
     X500Name issuer;
     Time                    startDate, endDate;
-    X500Name subject;
-    SubjectPublicKeyInfo subjectPublicKeyInfo;
+    X500Name                subject;
+    SubjectPublicKeyInfo    subjectPublicKeyInfo;
 
     public V1TBSCertificateGenerator()
     {
@@ -100,7 +104,7 @@ public class V1TBSCertificateGenerator
     }
 
     public void setSubjectPublicKeyInfo(
-        SubjectPublicKeyInfo pubKeyInfo)
+        SubjectPublicKeyInfo    pubKeyInfo)
     {
         this.subjectPublicKeyInfo = pubKeyInfo;
     }
@@ -114,7 +118,7 @@ public class V1TBSCertificateGenerator
             throw new IllegalStateException("not all mandatory fields set in V1 TBScertificate generator");
         }
 
-        ASN1EncodableVector seq = new ASN1EncodableVector();
+        ASN1EncodableVector  seq = new ASN1EncodableVector();
 
         // seq.add(version); - not required as default value.
         seq.add(serialNumber);
@@ -124,7 +128,7 @@ public class V1TBSCertificateGenerator
         //
         // before and after dates
         //
-        ASN1EncodableVector validity = new ASN1EncodableVector();
+        ASN1EncodableVector  validity = new ASN1EncodableVector();
 
         validity.add(startDate);
         validity.add(endDate);

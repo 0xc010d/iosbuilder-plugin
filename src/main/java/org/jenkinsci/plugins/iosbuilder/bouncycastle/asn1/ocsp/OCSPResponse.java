@@ -12,11 +12,11 @@ public class OCSPResponse
     extends ASN1Object
 {
     OCSPResponseStatus    responseStatus;
-    ResponseBytes responseBytes;
+    ResponseBytes        responseBytes;
 
     public OCSPResponse(
         OCSPResponseStatus  responseStatus,
-        ResponseBytes responseBytes)
+        ResponseBytes       responseBytes)
     {
         this.responseStatus = responseStatus;
         this.responseBytes = responseBytes;
@@ -30,7 +30,7 @@ public class OCSPResponse
         if (seq.size() == 2)
         {
             responseBytes = ResponseBytes.getInstance(
-                    (ASN1TaggedObject) seq.getObjectAt(1), true);
+                                (ASN1TaggedObject)seq.getObjectAt(1), true);
         }
     }
 

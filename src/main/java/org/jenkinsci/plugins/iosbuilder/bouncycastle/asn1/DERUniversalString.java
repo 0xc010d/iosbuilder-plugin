@@ -81,7 +81,7 @@ public class DERUniversalString
     {
         StringBuffer    buf = new StringBuffer("#");
         ByteArrayOutputStream    bOut = new ByteArrayOutputStream();
-        ASN1OutputStream aOut = new ASN1OutputStream(bOut);
+        ASN1OutputStream            aOut = new ASN1OutputStream(bOut);
         
         try
         {

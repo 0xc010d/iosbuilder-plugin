@@ -1,10 +1,16 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.esf;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import java.util.Enumeration;
+
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1String;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.DisplayText;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.NoticeReference;
-
-import java.util.Enumeration;
 
 public class SPUserNotice
     extends ASN1Object
@@ -51,7 +57,7 @@ public class SPUserNotice
 
     public SPUserNotice(
         NoticeReference noticeRef,
-        DisplayText explicitText)
+        DisplayText     explicitText)
     {
         this.noticeRef = noticeRef;
         this.explicitText = explicitText;
@@ -76,7 +82,7 @@ public class SPUserNotice
      */
     public ASN1Primitive toASN1Primitive()
     {
-        ASN1EncodableVector v = new ASN1EncodableVector();
+        ASN1EncodableVector  v = new ASN1EncodableVector();
 
         if (noticeRef != null)
         {

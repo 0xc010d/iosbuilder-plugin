@@ -1,12 +1,17 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1GeneralizedTime;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 
 public class AttCertValidityPeriod
     extends ASN1Object
 {
-    ASN1GeneralizedTime notBeforeTime;
-    ASN1GeneralizedTime notAfterTime;
+    ASN1GeneralizedTime  notBeforeTime;
+    ASN1GeneralizedTime  notAfterTime;
 
     public static AttCertValidityPeriod getInstance(
             Object  obj)
@@ -24,7 +29,7 @@ public class AttCertValidityPeriod
     }
     
     private AttCertValidityPeriod(
-        ASN1Sequence seq)
+        ASN1Sequence    seq)
     {
         if (seq.size() != 2)
         {
@@ -69,7 +74,7 @@ public class AttCertValidityPeriod
      */
     public ASN1Primitive toASN1Primitive()
     {
-        ASN1EncodableVector v = new ASN1EncodableVector();
+        ASN1EncodableVector  v = new ASN1EncodableVector();
 
         v.add(notBeforeTime);
         v.add(notAfterTime);

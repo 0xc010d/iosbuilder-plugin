@@ -1,10 +1,13 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509;
 
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1GeneralizedTime;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Integer;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERBitString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSet;
 
 /**
  * Generator for Version 2 AttributeCertificateInfo
@@ -36,7 +39,7 @@ public class V2AttributeCertificateInfoGenerator
 
     // Note: validity period start/end dates stored directly
     //private AttCertValidityPeriod attrCertValidityPeriod;
-    private ASN1GeneralizedTime startDate, endDate;
+    private ASN1GeneralizedTime startDate, endDate; 
 
     public V2AttributeCertificateInfoGenerator()
     {
@@ -49,7 +52,7 @@ public class V2AttributeCertificateInfoGenerator
         this.holder = holder;
     }
     
-    public void addAttribute(String oid, ASN1Encodable value)
+    public void addAttribute(String oid, ASN1Encodable value) 
     {
         attributes.add(new Attribute(new ASN1ObjectIdentifier(oid), new DERSet(value)));
     }
@@ -69,13 +72,13 @@ public class V2AttributeCertificateInfoGenerator
     }
 
     public void setSignature(
-        AlgorithmIdentifier signature)
+        AlgorithmIdentifier    signature)
     {
         this.signature = signature;
     }
 
     public void setIssuer(
-        AttCertIssuer issuer)
+        AttCertIssuer    issuer)
     {
         this.issuer = issuer;
     }
@@ -93,7 +96,7 @@ public class V2AttributeCertificateInfoGenerator
     }
 
     public void setIssuerUniqueID(
-        DERBitString issuerUniqueID)
+        DERBitString    issuerUniqueID)
     {
         this.issuerUniqueID = issuerUniqueID;
     }
@@ -103,13 +106,13 @@ public class V2AttributeCertificateInfoGenerator
      * @param extensions
      */
     public void setExtensions(
-        X509Extensions extensions)
+        X509Extensions    extensions)
     {
         this.extensions = Extensions.getInstance(extensions.toASN1Primitive());
     }
 
     public void setExtensions(
-        Extensions extensions)
+        Extensions    extensions)
     {
         this.extensions = extensions;
     }

@@ -1,12 +1,18 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Choice;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Encodable;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERTaggedObject;
 
 public class AttCertIssuer
     extends ASN1Object
     implements ASN1Choice
 {
-    ASN1Encodable obj;
+    ASN1Encodable   obj;
     ASN1Primitive choiceObj;
     
     public static AttCertIssuer getInstance(
@@ -26,7 +32,7 @@ public class AttCertIssuer
         }
         else if (obj instanceof ASN1TaggedObject)
         {
-            return new AttCertIssuer(V2Form.getInstance((ASN1TaggedObject) obj, false));
+            return new AttCertIssuer(V2Form.getInstance((ASN1TaggedObject)obj, false));
         }
         else if (obj instanceof ASN1Sequence)
         {
@@ -57,7 +63,7 @@ public class AttCertIssuer
     }
     
     public AttCertIssuer(
-        V2Form v2Form)
+        V2Form  v2Form)
     {
         obj = v2Form;
         choiceObj = new DERTaggedObject(false, 0, obj);

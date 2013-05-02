@@ -1,21 +1,26 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.cms;
 
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERGeneralizedTime;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DEROctetString;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 
 public class RecipientKeyIdentifier
     extends ASN1Object
 {
     private ASN1OctetString subjectKeyIdentifier;
-    private DERGeneralizedTime   date;
-    private OtherKeyAttribute other;
+    private DERGeneralizedTime date;
+    private OtherKeyAttribute    other;
 
     public RecipientKeyIdentifier(
-        ASN1OctetString subjectKeyIdentifier,
+        ASN1OctetString         subjectKeyIdentifier,
         DERGeneralizedTime      date,
-        OtherKeyAttribute other)
+        OtherKeyAttribute       other)
     {
         this.subjectKeyIdentifier = subjectKeyIdentifier;
         this.date = date;
@@ -25,7 +30,7 @@ public class RecipientKeyIdentifier
     public RecipientKeyIdentifier(
         byte[]                  subjectKeyIdentifier,
         DERGeneralizedTime      date,
-        OtherKeyAttribute other)
+        OtherKeyAttribute       other)
     {
         this.subjectKeyIdentifier = new DEROctetString(subjectKeyIdentifier);
         this.date = date;
@@ -42,7 +47,7 @@ public class RecipientKeyIdentifier
         ASN1Sequence seq)
     {
         subjectKeyIdentifier = ASN1OctetString.getInstance(
-                seq.getObjectAt(0));
+                                                    seq.getObjectAt(0));
         
         switch(seq.size())
         {
@@ -132,7 +137,7 @@ public class RecipientKeyIdentifier
      */
     public ASN1Primitive toASN1Primitive()
     {
-        ASN1EncodableVector v = new ASN1EncodableVector();
+        ASN1EncodableVector  v = new ASN1EncodableVector();
 
         v.add(subjectKeyIdentifier);
         

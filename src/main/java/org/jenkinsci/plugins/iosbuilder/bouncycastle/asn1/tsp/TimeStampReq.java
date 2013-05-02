@@ -8,9 +8,9 @@ import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERTaggedObject;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.Extensions;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 
 public class TimeStampReq
     extends ASN1Object
@@ -87,7 +87,7 @@ public class TimeStampReq
     }
 
     public TimeStampReq(
-        MessageImprint messageImprint,
+        MessageImprint      messageImprint,
         ASN1ObjectIdentifier tsaPolicy,
         ASN1Integer          nonce,
         ASN1Boolean          certReq,

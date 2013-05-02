@@ -1,8 +1,10 @@
 package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509;
 
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1TaggedObject;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 
 public class CertificatePolicies
     extends ASN1Object
@@ -38,7 +40,7 @@ public class CertificatePolicies
      * @param name the name to be contained.
      */
     public CertificatePolicies(
-        PolicyInformation name)
+        PolicyInformation  name)
     {
         this.policyInformation = new PolicyInformation[] { name };
     }
@@ -50,7 +52,7 @@ public class CertificatePolicies
     }
 
     private CertificatePolicies(
-        ASN1Sequence seq)
+        ASN1Sequence  seq)
     {
         this.policyInformation = new PolicyInformation[seq.size()];
 

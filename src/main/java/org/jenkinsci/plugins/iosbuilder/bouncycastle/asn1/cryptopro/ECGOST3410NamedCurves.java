@@ -4,11 +4,11 @@ import java.math.BigInteger;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
-import org.bouncycastle.crypto.params.ECDomainParameters;
-import org.bouncycastle.math.ec.ECCurve;
-import org.bouncycastle.math.ec.ECFieldElement;
-import org.bouncycastle.math.ec.ECPoint;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.crypto.params.ECDomainParameters;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.math.ec.ECCurve;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.math.ec.ECFieldElement;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.math.ec.ECPoint;
 
 /**
  * table of the available named parameters for GOST 3410-2001.
@@ -156,7 +156,7 @@ public class ECGOST3410NamedCurves
      * return the named curve name represented by the given object identifier.
      */
     public static String getName(
-        ASN1ObjectIdentifier oid)
+        ASN1ObjectIdentifier  oid)
     {
         return (String)names.get(oid);
     }

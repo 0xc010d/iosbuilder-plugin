@@ -2,7 +2,13 @@ package org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.qualified;
 
 import java.util.Enumeration;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.*;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1EncodableVector;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Object;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Primitive;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1Sequence;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERIA5String;
+import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.DERSequence;
 import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.x509.AlgorithmIdentifier;
 
 /**
@@ -20,8 +26,8 @@ public class BiometricData
 {
     private TypeOfBiometricData typeOfBiometricData;
     private AlgorithmIdentifier hashAlgorithm;
-    private ASN1OctetString biometricDataHash;
-    private DERIA5String        sourceDataUri;
+    private ASN1OctetString     biometricDataHash;
+    private DERIA5String sourceDataUri;
     
     public static BiometricData getInstance(
         Object obj)
@@ -59,7 +65,7 @@ public class BiometricData
     public BiometricData(
         TypeOfBiometricData typeOfBiometricData,
         AlgorithmIdentifier hashAlgorithm,
-        ASN1OctetString biometricDataHash,
+        ASN1OctetString     biometricDataHash,
         DERIA5String        sourceDataUri)
     {
         this.typeOfBiometricData = typeOfBiometricData;
@@ -71,7 +77,7 @@ public class BiometricData
     public BiometricData(
         TypeOfBiometricData typeOfBiometricData,
         AlgorithmIdentifier hashAlgorithm,
-        ASN1OctetString biometricDataHash)
+        ASN1OctetString     biometricDataHash)
     {
         this.typeOfBiometricData = typeOfBiometricData;
         this.hashAlgorithm = hashAlgorithm;
