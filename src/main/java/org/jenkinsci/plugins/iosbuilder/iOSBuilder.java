@@ -18,9 +18,7 @@ import org.jenkinsci.plugins.iosbuilder.signing.Mobileprovision;
 import org.jenkinsci.plugins.iosbuilder.signing.MobileprovisionFactory;
 import org.jenkinsci.plugins.iosbuilder.signing.PKCS12Archive;
 import org.jenkinsci.plugins.iosbuilder.signing.PKCS12ArchiveFactory;
-import org.kohsuke.stapler.DataBoundConstructor;
-import org.kohsuke.stapler.StaplerRequest;
-import org.kohsuke.stapler.QueryParameter;
+import org.kohsuke.stapler.*;
 import sun.misc.BASE64Encoder;
 
 public class iOSBuilder extends Builder {
@@ -130,32 +128,24 @@ public class iOSBuilder extends Builder {
         private String xcrunPath;
         private String podPath;
 
-        private void processFile(StaplerRequest req, JSONObject formData, String fileKey, String valueKey) throws FormException {
-            try {
-                FileItem file = req.getFileItem((String)formData.get(fileKey));
-                if (file.getSize() != 0) {
-                    formData.put(valueKey, new BASE64Encoder().encode(file.get()));
-                }
-            }
-            catch (Exception e) {}
-        }
-
-        @Override
-        public iOSBuilder newInstance(StaplerRequest req, JSONObject formData) throws FormException {
-            JSONObject codeSign = (JSONObject)formData.get("codeSign");
-            if (codeSign != null) {
-                processFile(req, codeSign, "pkcs12ArchiveFile", "pkcs12ArchiveData");
-                processFile(req, codeSign, "mobileprovisionFile", "mobileprovisionData");
-                formData.put("codeSign", codeSign);
-            }
-            return (iOSBuilder)super.newInstance(req, formData);
-        }
-
         private FormValidation checkPath(@QueryParameter String path, String name) throws IOException, ServletException {
             if (path.length() == 0) {
                 return FormValidation.error("Please set " + name + " path");
             }
             return FormValidation.ok();
+        }
+
+        public void doUploadForm(StaplerRequest req, StaplerResponse rsp) throws IOException, ServletException {
+            rsp.setContentType("text/html");
+            req.getView(iOSBuilder.class, "uploadForm.jelly").forward(req, rsp);
+        }
+
+        public void doUpload(StaplerRequest req, StaplerResponse rsp, @QueryParameter String job, @QueryParameter String name) throws IOException, ServletException {
+            FileItem fileItem = req.getFileItem("file");
+            if (fileItem == null) {
+                throw new ServletException("File was not uploaded");
+            }
+            doUploadForm(req, rsp);
         }
 
         public FormValidation doCheckXcodebuildPath(@QueryParameter String value) throws IOException, ServletException {

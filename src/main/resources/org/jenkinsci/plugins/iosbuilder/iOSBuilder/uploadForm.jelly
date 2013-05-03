@@ -1,0 +1,43 @@
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+    <head>
+        <j:invoke on="${request}" method="getFileItem" var="fileItem" exceptionVar="exception" >
+            <j:arg type="java.lang.String" value="file"></j:arg>
+        </j:invoke>
+        <script>
+            if (window.top &amp;&amp; window.top.location.href != document.location.href) {
+                var linkrels = window.top.document.getElementsByTagName('link');
+                var small_head = document.getElementsByTagName('head').item(0);
+                for (var i = 0, max = linkrels.length; max > i; i++) {
+                    if (linkrels[i].rel &amp;&amp; linkrels[i].rel == 'stylesheet') {
+                        var thestyle = document.createElement('link');
+                        var attrib = linkrels[i].attributes;
+                        for (var j = 0, attribmax = attrib.length; attribmax > j; j++) {
+                            thestyle.setAttribute(attrib[j].nodeName, attrib[j].nodeValue);
+                        }
+                        small_head.appendChild(thestyle);
+                    }
+                }
+            }
+
+            function onLoad() {
+                <j:if test="${fileItem != null}">
+                    <j:new className="sun.misc.BASE64Encoder" var="BASE64Encoder" />
+                    var base64EncodedFile = '${BASE64Encoder.encode(fileItem.get()).replaceAll("\n", "\\n")}';
+                    if (base64EncodedFile.length > 0) {
+                        parent.document.getElementById('${request.getParameter("inputId")}').value = base64EncodedFile;
+                    }
+                </j:if>
+            }
+        </script>
+    </head>
+    <body style="margin:0;" onload="onLoad();">
+        <form method="post" action="upload?inputId=${request.getParameter('inputId')}" enctype="multipart/form-data" style="margin:0;">
+            <input type="file" name="file" onchange="this.form.submit();" jsonAware="yes" style="float:left;" />
+            <j:if test="${fileItem != null}">
+                <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    Uploaded: ${request.getFileItem("file").getName()}
+                </div>
+            </j:if>
+        </form>
+    </body>
+</j:jelly>
