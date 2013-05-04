@@ -1,9 +1,9 @@
 package org.jenkinsci.plugins.iosbuilder.signing;
 
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1InputStream;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.ASN1OctetString;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.cms.ContentInfo;
-import org.jenkinsci.plugins.iosbuilder.bouncycastle.asn1.cms.SignedData;
+import org.jenkinsci.plugins.iosbuilder.signing.bouncycastle.asn1.ASN1InputStream;
+import org.jenkinsci.plugins.iosbuilder.signing.bouncycastle.asn1.ASN1OctetString;
+import org.jenkinsci.plugins.iosbuilder.signing.bouncycastle.asn1.cms.ContentInfo;
+import org.jenkinsci.plugins.iosbuilder.signing.bouncycastle.asn1.cms.SignedData;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.EntityResolver;
