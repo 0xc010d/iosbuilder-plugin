@@ -8,11 +8,10 @@ import hudson.model.BuildListener;
 import org.jenkinsci.plugins.iosbuilder.signing.Identity;
 import org.jenkinsci.plugins.iosbuilder.signing.Mobileprovision;
 import org.jenkinsci.plugins.iosbuilder.signing.PKCS12Archive;
+import org.jenkinsci.plugins.iosbuilder.util.Zip;
 
 import java.io.*;
 import java.util.*;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 public class iOSBuilderExecutor {
     private final AbstractBuild build;
@@ -154,7 +153,7 @@ public class iOSBuilderExecutor {
                 FilePath filePath = iterator.next();
                 if (filePath.isDirectory() && filePath.getName().endsWith("dSYM")) {
                     File zipFile = new File(build.getArtifactsDir(), filePath.getName() + ".zip");
-                    zip(filePath, zipFile);
+                    Zip.archive(filePath, zipFile);
                 }
             }
         }
@@ -183,48 +182,5 @@ public class iOSBuilderExecutor {
             e.printStackTrace();
         }
         return 0;
-    }
-
-    private void zip(FilePath directory, File zipFile) throws Exception {
-        zipFile.getParentFile().mkdirs();
-        zipFile.createNewFile();
-        FileOutputStream fileOutputStream = new FileOutputStream(zipFile);
-        ZipOutputStream zipOutputStream = new ZipOutputStream(fileOutputStream);
-        try {
-            zip(directory, "", zipOutputStream);
-        }
-        catch (Exception e) {
-            zipOutputStream.close();
-        }
-    }
-
-    private void zip(FilePath directory, String name, ZipOutputStream zipOutputStream) throws Exception {
-        byte[] buffer = new byte[1024];
-        List<FilePath> children = directory.list();
-        for (Iterator<FilePath> iterator = children.iterator(); iterator.hasNext();) {
-            FilePath child = iterator.next();
-            String fileName = (name.isEmpty() || name.endsWith("/") ? name : name + "/") + child.getName();
-            if (child.isDirectory()) {
-                zip(child, fileName, zipOutputStream);
-            }
-            else {
-                zipOutputStream.putNextEntry(new ZipEntry(fileName));
-
-                InputStream inputStream = child.read();
-                try {
-                    while (true) {
-                        int readCount = inputStream.read(buffer);
-                        if (readCount < 0) {
-                            break;
-                        }
-                        zipOutputStream.write(buffer, 0, readCount);
-                    }
-                } finally {
-                    inputStream.close();
-                }
-
-                zipOutputStream.closeEntry();
-            }
-        }
     }
 }
