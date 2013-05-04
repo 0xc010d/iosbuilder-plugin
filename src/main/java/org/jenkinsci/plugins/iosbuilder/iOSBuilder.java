@@ -103,6 +103,7 @@ public class iOSBuilder extends Builder {
             if (result && doBuildIPA) {
                 result = executor.buildIpa() == 0;
             }
+            executor.cleanup();
             return result;
         }
         catch (Exception e) {
