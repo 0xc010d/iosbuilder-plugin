@@ -5,6 +5,7 @@ import hudson.FilePath;
 import hudson.Launcher;
 import hudson.model.AbstractBuild;
 import hudson.model.BuildListener;
+import org.apache.commons.io.IOUtils;
 import org.jenkinsci.plugins.iosbuilder.signing.Identity;
 import org.jenkinsci.plugins.iosbuilder.signing.Mobileprovision;
 import org.jenkinsci.plugins.iosbuilder.signing.PKCS12Archive;
@@ -29,6 +30,7 @@ public class iOSBuilderExecutor {
     private String keychainName;
     private String keychainPassword;
     private Mobileprovision mobileprovision;
+    private FilePath mobileprovisionFilePath;
     private String buildPath;
 
     iOSBuilderExecutor(AbstractBuild build, Launcher launcher, BuildListener listener, FilePath projectRootPath, String podPath, String securityPath, String xcodebuildPath, String xcrunPath) throws Exception {
@@ -84,7 +86,7 @@ public class iOSBuilderExecutor {
             this.mobileprovision = mobileprovision;
 
             String mobileprovisionPath = "Library/MobileDevice/Provisioning Profiles/" + mobileprovision.getUUID() + ".mobileprovision";
-            FilePath mobileprovisionFilePath = new FilePath(new File(envVars.get("HOME"), mobileprovisionPath));
+            mobileprovisionFilePath = new FilePath(new File(envVars.get("HOME"), mobileprovisionPath));
             //TODO: set the flag which shows that we'll need to delete mobileprovision
             mobileprovisionFilePath.write().write(mobileprovision.getBytes());
         }
@@ -134,11 +136,7 @@ public class iOSBuilderExecutor {
             }
             buildPath = new FilePath(new File(envVars.get("TMPDIR"))).createTempDir(UUID.randomUUID().toString(), "").absolutize().getRemote();
             buildCommand.add("CONFIGURATION_BUILD_DIR="+ buildPath);
-            int result = launcher.launch().envs(envVars).cmds(buildCommand).stdout(listener).pwd(projectRootPath).join();
-            if (result == 0) {
-                result = collectBuildArtifacts();
-            }
-            return result;
+            return launcher.launch().envs(envVars).cmds(buildCommand).stdout(listener).pwd(projectRootPath).join();
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -146,7 +144,23 @@ public class iOSBuilderExecutor {
         return 0;
     }
 
-    private int collectBuildArtifacts() {
+    int buildIpa() {
+        try {
+            List<FilePath> filePaths = new FilePath(new File(buildPath)).list();
+            for (Iterator<FilePath> iterator = filePaths.iterator(); iterator.hasNext(); ) {
+                FilePath filePath = iterator.next();
+                if (filePath.isDirectory() && filePath.getName().endsWith("app")) {
+                    launcher.launch().envs(envVars).cmds(xcrunPath, "-sdk", "iphoneos", "PackageApplication", "-v", filePath.getName(), "--sign", identity.getCommonName(), "--embed", mobileprovisionFilePath.absolutize().getRemote(), "-o", filePath.getRemote().replaceAll("app$", "ipa")).stdout(listener).pwd(buildPath).join();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 1;
+        }
+        return 0;
+    }
+
+    void collectArtifacts() {
         try {
             List<FilePath> filePaths = new FilePath(new File(buildPath)).list();
             for (Iterator<FilePath> iterator = filePaths.iterator(); iterator.hasNext(); ) {
@@ -155,20 +169,18 @@ public class iOSBuilderExecutor {
                     File zipFile = new File(build.getArtifactsDir(), filePath.getName() + ".zip");
                     Zip.archive(filePath, zipFile);
                 }
+                if (!filePath.isDirectory() && filePath.getName().endsWith("ipa")) {
+                    FileOutputStream fileOutputStream = new FileOutputStream(new File(build.getArtifactsDir(), filePath.getName()));
+                    IOUtils.copy(filePath.read(), fileOutputStream);
+                }
             }
         }
         catch (Exception e) {
             e.printStackTrace();
-            return 1;
         }
-        return 0;
     }
 
-    int buildIpa() {
-        return 0;
-    }
-
-    int cleanup() {
+    void cleanup() {
         try {
             new FilePath(new File(identityPath)).delete();
         }
@@ -181,6 +193,5 @@ public class iOSBuilderExecutor {
         catch (Exception e) {
             e.printStackTrace();
         }
-        return 0;
     }
 }

@@ -19,7 +19,6 @@ import org.jenkinsci.plugins.iosbuilder.signing.MobileprovisionFactory;
 import org.jenkinsci.plugins.iosbuilder.signing.PKCS12Archive;
 import org.jenkinsci.plugins.iosbuilder.signing.PKCS12ArchiveFactory;
 import org.kohsuke.stapler.*;
-import sun.misc.BASE64Encoder;
 
 public class iOSBuilder extends Builder {
     private final static Logger LOG = Logger.getLogger(PluginImpl.class.getName());
@@ -103,6 +102,7 @@ public class iOSBuilder extends Builder {
             if (result && doBuildIPA) {
                 result = executor.buildIpa() == 0;
             }
+            executor.collectArtifacts();
             executor.cleanup();
             return result;
         }
