@@ -1,13 +1,13 @@
 package org.jenkinsci.plugins.iosbuilder;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import hudson.Extension;
 import hudson.Launcher;
-import hudson.model.AbstractBuild;
-import hudson.model.AbstractProject;
-import hudson.model.BuildListener;
+import hudson.model.*;
 import hudson.tasks.Builder;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.util.FormValidation;
@@ -104,6 +104,14 @@ public class iOSBuilder extends Builder {
             }
             executor.collectArtifacts();
             executor.cleanup();
+
+            iOSBuilderAction action = build.getAction(iOSBuilderAction.class);
+
+            if (action == null) {
+                action = new iOSBuilderAction();
+                build.addAction(action);
+            }
+
             return result;
         }
         catch (Exception e) {
