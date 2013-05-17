@@ -101,4 +101,7 @@
             <f:checkbox />
         </f:entry>
     </f:optionalBlock>
+    <f:entry title="Artifacts template" field="artifactsTemplate">
+        <f:textbox default="$APP_NAME" />
+    </f:entry>
 </j:jelly>
