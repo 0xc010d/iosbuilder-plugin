@@ -36,9 +36,10 @@ public class iOSBuilder extends Builder {
     private final String pkcs12ArchivePassword;
     private final String mobileprovisionData;
     private final boolean doBuildIPA;
+    private final String artifactsTemplate;
 
     @DataBoundConstructor
-    public iOSBuilder(boolean doInstallPods, String xcworkspacePath, String xcodeprojPath, String target, String scheme, String configuration, String sdk, String additionalParameters, CodeSign codeSign) {
+    public iOSBuilder(boolean doInstallPods, String xcworkspacePath, String xcodeprojPath, String target, String scheme, String configuration, String sdk, String additionalParameters, CodeSign codeSign, String artifactsTemplate) {
         this.doInstallPods = doInstallPods;
         this.xcworkspacePath = xcworkspacePath;
         this.xcodeprojPath = xcodeprojPath;
@@ -52,6 +53,7 @@ public class iOSBuilder extends Builder {
         this.pkcs12ArchivePassword = this.doSign ? codeSign.pkcs12ArchivePassword : null;
         this.mobileprovisionData = this.doSign ? codeSign.mobileprovisionData : null;
         this.doBuildIPA = this.doSign && codeSign.doBuildIPA;
+        this.artifactsTemplate = artifactsTemplate != null && artifactsTemplate.length() != 0 ? artifactsTemplate : "$APP_NAME";
     }
 
     public boolean isDoInstallPods() { return doInstallPods; }
@@ -67,6 +69,7 @@ public class iOSBuilder extends Builder {
     public String getPkcs12ArchivePassword() { return pkcs12ArchivePassword; }
     public String getMobileprovisionData() { return mobileprovisionData; }
     public boolean isDoBuildIPA() { return doBuildIPA; }
+    public String getArtifactsTemplate() { return artifactsTemplate; }
 
     public static final class CodeSign {
         private final String pkcs12ArchiveData;
@@ -102,7 +105,7 @@ public class iOSBuilder extends Builder {
             if (result && doBuildIPA) {
                 result = executor.buildIpa() == 0;
             }
-            executor.collectArtifacts();
+            executor.collectArtifacts(artifactsTemplate);
             executor.cleanup();
             return result;
         }

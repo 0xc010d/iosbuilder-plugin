@@ -1,6 +1,4 @@
-<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
-    <j:set var="resize" value="javascript:this.style.height=this.contentWindow.document.body.scrollHeight+'px';"/>
-    <j:set var="baseURL" value="${rootURL}/descriptor/org.jenkinsci.plugins.iosbuilder.iOSBuilder/uploadForm?"/>
+<j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
     <f:entry title="Perform `pod install`" field="doInstallPods">
         <f:checkbox />
     </f:entry>
@@ -26,33 +24,38 @@
         <f:textbox />
     </f:entry>
     <f:optionalBlock name="codeSign" title="Sign the binary" checked="${instance.doSign}">
-        <f:entry title=".p12 key file">
+        <j:set var="resize" value="javascript:this.style.height=this.contentWindow.document.body.scrollHeight+'px';"/>
+        <j:set var="baseURL" value="${rootURL}/descriptor/org.jenkinsci.plugins.iosbuilder.iOSBuilder/uploadForm?"/>
+
+        <f:entry title=".p12 key archive">
+            <j:invokeStatic className="java.util.UUID" method="randomUUID" var="inputId" />
+            <j:invokeStatic className="java.util.UUID" method="randomUUID" var="detailsId" />
+            <j:set var="url" value="${baseURL}inputId=${inputId}"/>
+
             <j:invokeStatic className="org.jenkinsci.plugins.iosbuilder.signing.PKCS12ArchiveFactory" method="newInstance" var="pkcs12Archive">
                 <j:arg type="java.lang.String" value="${instance.pkcs12ArchiveData}" />
                 <j:arg type="java.lang.String" value="${instance.pkcs12ArchivePassword}" />
             </j:invokeStatic>
             <j:if test="${pkcs12Archive != null}">
-                Current archive: (<a href="javascript:void(0)">Delete</a>)
-                <dl>
-                    <j:forEach items="${pkcs12Archive.content}" var="item">
-                        <dt>Private key</dt>
-                        <dd>
-                            ${item.getKey().getAlias()}
-                            <j:if test="${item.getValue().commonName != null}">
-                                <dl>
-                                    <dt>Certificate</dt>
-                                    <dd>${item.getValue().commonName}</dd>
-                                </dl>
-                            </j:if>
-                        </dd>
-                    </j:forEach>
-                </dl>
-                Select another:<br />
+                <div id="${detailsId}">
+                    Current archive: (<a href="javascript:document.getElementById('${inputId}').value = ''; var details = document.getElementById('${detailsId}'); details.parentNode.removeChild(details);">Delete</a>)
+                    <dl>
+                        <j:forEach items="${pkcs12Archive.content}" var="item">
+                            <dt>Private key</dt>
+                            <dd>
+                                ${item.getKey().getAlias()}
+                                <j:if test="${item.getValue().commonName != null}">
+                                    <dl>
+                                        <dt>Certificate</dt>
+                                        <dd>${item.getValue().commonName}</dd>
+                                    </dl>
+                                </j:if>
+                            </dd>
+                        </j:forEach>
+                    </dl>
+                    Select another:<br />
+                </div>
             </j:if>
-
-            <j:invokeStatic className="java.util.UUID" method="randomUUID" var="UUID" />
-            <j:set var="inputId" value="${UUID.toString()}" />
-            <j:set var="url" value="${baseURL}inputId=${inputId}"/>
 
             <input type="hidden" name="pkcs12ArchiveData" id="${inputId}" value="${instance.pkcs12ArchiveData}" />
             <iframe src="${url}" frameborder="0" width="100%" height="0" onload="${resize}" scrolling="no">
@@ -63,29 +66,31 @@
             <f:password />
         </f:entry>
         <f:entry title=".mobileprovision file">
+            <j:invokeStatic className="java.util.UUID" method="randomUUID" var="inputId" />
+            <j:invokeStatic className="java.util.UUID" method="randomUUID" var="detailsId" />
+            <j:set var="url" value="${baseURL}inputId=${inputId}"/>
+
             <j:invokeStatic className="org.jenkinsci.plugins.iosbuilder.signing.MobileprovisionFactory" method="newInstance" var="mobileprovision">
                 <j:arg type="java.lang.String" value="${instance.mobileprovisionData}" />
             </j:invokeStatic>
             <j:if test="${mobileprovision != null}">
-                Current profile: (<a href="javascript:void(0)">Delete</a>)
-                <dl>
-                    <dt>Mobileprovision</dt>
-                    <dd>${mobileprovision.name}</dd>
-                    <dt>Certificates</dt>
-                    <dd>
-                        <ul>
-                            <j:forEach items="${mobileprovision.certificates}" var="certificate">
-                                <li>${certificate.commonName}</li>
-                            </j:forEach>
-                        </ul>
-                    </dd>
-                </dl>
-                Select another:<br />
+                <div id="${detailsId}">
+                    Current profile: (<a href="javascript:document.getElementById('${inputId}').value = ''; var details = document.getElementById('${detailsId}'); details.parentNode.removeChild(details);">Delete</a>)
+                    <dl>
+                        <dt>Mobileprovision</dt>
+                        <dd>${mobileprovision.name}</dd>
+                        <dt>Certificates</dt>
+                        <dd>
+                            <ul>
+                                <j:forEach items="${mobileprovision.certificates}" var="certificate">
+                                    <li>${certificate.commonName}</li>
+                                </j:forEach>
+                            </ul>
+                        </dd>
+                    </dl>
+                    Select another:<br />
+                </div>
             </j:if>
-
-            <j:invokeStatic className="java.util.UUID" method="randomUUID" var="UUID" />
-            <j:set var="inputId" value="${UUID.toString()}" />
-            <j:set var="url" value="${baseURL}inputId=${inputId}"/>
 
             <input type="hidden" name="mobileprovisionData" id="${inputId}" value="${instance.mobileprovisionData}" />
             <iframe src="${url}" frameborder="0" width="100%" height="0" onload="${resize}" scrolling="no">
@@ -96,4 +101,7 @@
             <f:checkbox />
         </f:entry>
     </f:optionalBlock>
+    <f:entry title="Artifacts template" field="artifactsTemplate">
+        <f:textbox default="$APP_NAME" />
+    </f:entry>
 </j:jelly>

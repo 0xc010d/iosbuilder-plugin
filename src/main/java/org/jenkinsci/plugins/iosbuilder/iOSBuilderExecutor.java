@@ -160,17 +160,19 @@ public class iOSBuilderExecutor {
         return 0;
     }
 
-    void collectArtifacts() {
+    void collectArtifacts(String artifactsTemplate) {
         try {
             List<FilePath> filePaths = new FilePath(new File(buildPath)).list();
             for (Iterator<FilePath> iterator = filePaths.iterator(); iterator.hasNext(); ) {
                 FilePath filePath = iterator.next();
-                if (filePath.isDirectory() && filePath.getName().endsWith("dSYM")) {
-                    File zipFile = new File(build.getArtifactsDir(), filePath.getName() + ".zip");
+                if (filePath.isDirectory() && filePath.getName().endsWith(".app.dSYM")) {
+                    String fileName = getFileNameWithTemplate(filePath, artifactsTemplate, "\\.app\\.dSYM$");
+                    File zipFile = new File(build.getArtifactsDir(), fileName + ".zip");
                     Zip.archive(filePath, zipFile);
                 }
-                if (!filePath.isDirectory() && filePath.getName().endsWith("ipa")) {
-                    FileOutputStream fileOutputStream = new FileOutputStream(new File(build.getArtifactsDir(), filePath.getName()));
+                if (!filePath.isDirectory() && filePath.getName().endsWith(".ipa")) {
+                    String fileName = getFileNameWithTemplate(filePath, artifactsTemplate, "\\.ipa$");
+                    FileOutputStream fileOutputStream = new FileOutputStream(new File(build.getArtifactsDir(), fileName));
                     IOUtils.copy(filePath.read(), fileOutputStream);
                 }
             }
@@ -193,5 +195,11 @@ public class iOSBuilderExecutor {
         catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private String getFileNameWithTemplate(FilePath filePath, String artifactsTemplate, String extensionRegex) {
+        String fileBasename = filePath.getName().replaceAll(extensionRegex, "");
+        String newFileBasename = artifactsTemplate.replaceAll("\\$APP_NAME", fileBasename);
+        return filePath.getName().replaceFirst(fileBasename, newFileBasename);
     }
 }
