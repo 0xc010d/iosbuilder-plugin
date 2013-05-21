@@ -11,8 +11,6 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 public class PKCS12Archive {
-    private final static Logger LOG = Logger.getLogger(org.jenkinsci.plugins.iosbuilder.PluginImpl.class.getName());
-
     private Map<PrivateKey, Certificate> content;
 
     public Map<PrivateKey, Certificate> getContent() { return content; }
