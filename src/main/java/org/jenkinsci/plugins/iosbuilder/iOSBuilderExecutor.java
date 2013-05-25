@@ -5,6 +5,7 @@ import hudson.FilePath;
 import hudson.Launcher;
 import hudson.model.AbstractBuild;
 import hudson.model.BuildListener;
+import hudson.util.QuotedStringTokenizer;
 import org.apache.commons.io.IOUtils;
 import org.jenkinsci.plugins.iosbuilder.signing.Identity;
 import org.jenkinsci.plugins.iosbuilder.signing.Mobileprovision;
@@ -123,7 +124,9 @@ public class iOSBuilderExecutor {
             buildCommand.add("-sdk");
             buildCommand.add(sdk);
             if (additionalParameters != null && !additionalParameters.isEmpty()) {
-                buildCommand.add(additionalParameters);
+                for (String parameter : QuotedStringTokenizer.tokenize(additionalParameters)) {
+                    buildCommand.add(parameter);
+                }
             }
             if (codeSign) {
                 if (mobileprovision != null) {
