@@ -103,28 +103,28 @@ public class iOSBuilderExecutor {
             buildCommand.add(xcodebuildPath);
             if (xcworkspacePath != null && !xcworkspacePath.isEmpty()) {
                 buildCommand.add("-workspace");
-                buildCommand.add(new File(xcworkspacePath).getName());
+                buildCommand.add(new File(envVars.expand(xcworkspacePath)).getName());
             }
             if (xcodeprojPath != null && !xcodeprojPath.isEmpty()) {
                 buildCommand.add("-project");
-                buildCommand.add(xcodeprojPath);
+                buildCommand.add(envVars.expand(xcodeprojPath));
             }
             if (target != null && !target.isEmpty()) {
                 buildCommand.add("-target");
-                buildCommand.add(target);
+                buildCommand.add(envVars.expand(target));
             }
             if (scheme != null && !scheme.isEmpty()) {
                 buildCommand.add("-scheme");
-                buildCommand.add(scheme);
+                buildCommand.add(envVars.expand(scheme));
             }
             if (configuration != null && !configuration.isEmpty()) {
                 buildCommand.add("-configuration");
-                buildCommand.add(configuration);
+                buildCommand.add(envVars.expand(configuration));
             }
             buildCommand.add("-sdk");
             buildCommand.add(sdk);
             if (additionalParameters != null && !additionalParameters.isEmpty()) {
-                for (String parameter : QuotedStringTokenizer.tokenize(additionalParameters)) {
+                for (String parameter : QuotedStringTokenizer.tokenize(envVars.expand(additionalParameters))) {
                     buildCommand.add(parameter);
                 }
             }
@@ -166,6 +166,7 @@ public class iOSBuilderExecutor {
 
     void collectArtifacts(String artifactsTemplate) {
         try {
+            artifactsTemplate = envVars.expand(artifactsTemplate);
             List<FilePath> filePaths = new FilePath(new File(buildPath)).list();
             for (Iterator<FilePath> iterator = filePaths.iterator(); iterator.hasNext(); ) {
                 FilePath filePath = iterator.next();
