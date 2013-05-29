@@ -21,8 +21,6 @@ import org.jenkinsci.plugins.iosbuilder.signing.PKCS12ArchiveFactory;
 import org.kohsuke.stapler.*;
 
 public class iOSBuilder extends Builder {
-    private final static Logger LOG = Logger.getLogger(PluginImpl.class.getName());
-
     private final boolean doInstallPods;
     private final String xcworkspacePath;
     private final String xcodeprojPath;

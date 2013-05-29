@@ -5,6 +5,7 @@ import hudson.FilePath;
 import hudson.Launcher;
 import hudson.model.AbstractBuild;
 import hudson.model.BuildListener;
+import hudson.util.QuotedStringTokenizer;
 import org.apache.commons.io.IOUtils;
 import org.jenkinsci.plugins.iosbuilder.signing.Identity;
 import org.jenkinsci.plugins.iosbuilder.signing.Mobileprovision;
@@ -66,13 +67,13 @@ public class iOSBuilderExecutor {
         try {
             identity = pkcs12Archive.chooseIdentity(mobileprovision.getCertificates());
             if (identity != null) {
-                FilePath filePath = new FilePath(new File(envVars.get("TMPDIR"))).createTempFile("identity.", ".p12").absolutize();
+                FilePath filePath = new FilePath(new File("/tmp")).createTempFile("identity", ".p12");
                 identityPassword = UUID.randomUUID().toString();
                 identity.save(filePath.write(), identityPassword.toCharArray());
                 identityPath = filePath.getRemote();
 
                 //create a keychain, import identity
-                keychainName = UUID.randomUUID().toString();
+                keychainName = UUID.randomUUID().toString() + ".keychain";
                 keychainPassword = UUID.randomUUID().toString();
                 launcher.launch().envs(envVars).cmds(securityPath, "create-keychain", "-p", keychainPassword, keychainName).stdout(listener).join();
                 launcher.launch().envs(envVars).cmds(securityPath, "import", identityPath, "-k", keychainName, "-P", identityPassword, "-A").stdout(listener).join();
@@ -102,28 +103,30 @@ public class iOSBuilderExecutor {
             buildCommand.add(xcodebuildPath);
             if (xcworkspacePath != null && !xcworkspacePath.isEmpty()) {
                 buildCommand.add("-workspace");
-                buildCommand.add(new File(xcworkspacePath).getName());
+                buildCommand.add(new File(envVars.expand(xcworkspacePath)).getName());
             }
             if (xcodeprojPath != null && !xcodeprojPath.isEmpty()) {
                 buildCommand.add("-project");
-                buildCommand.add(xcodeprojPath);
+                buildCommand.add(envVars.expand(xcodeprojPath));
             }
             if (target != null && !target.isEmpty()) {
                 buildCommand.add("-target");
-                buildCommand.add(target);
+                buildCommand.add(envVars.expand(target));
             }
             if (scheme != null && !scheme.isEmpty()) {
                 buildCommand.add("-scheme");
-                buildCommand.add(scheme);
+                buildCommand.add(envVars.expand(scheme));
             }
             if (configuration != null && !configuration.isEmpty()) {
                 buildCommand.add("-configuration");
-                buildCommand.add(configuration);
+                buildCommand.add(envVars.expand(configuration));
             }
             buildCommand.add("-sdk");
             buildCommand.add(sdk);
             if (additionalParameters != null && !additionalParameters.isEmpty()) {
-                buildCommand.add(additionalParameters);
+                for (String parameter : QuotedStringTokenizer.tokenize(envVars.expand(additionalParameters))) {
+                    buildCommand.add(parameter);
+                }
             }
             if (codeSign) {
                 if (mobileprovision != null) {
@@ -131,10 +134,11 @@ public class iOSBuilderExecutor {
                 }
                 if (identity != null) {
                     buildCommand.add("CODE_SIGN_IDENTITY=" + identity.getCommonName());
-                    buildCommand.add("OTHER_CODE_SIGN_FLAGS=--keychain " + keychainName);
+                    String keychainPath = envVars.get("HOME").replaceAll("/$", "") + "/Library/Keychains/" + keychainName;
+                    buildCommand.add("OTHER_CODE_SIGN_FLAGS=--keychain " + keychainPath);
                 }
             }
-            buildPath = new FilePath(new File(envVars.get("TMPDIR"))).createTempDir(UUID.randomUUID().toString(), "").absolutize().getRemote();
+            buildPath = new FilePath(new File("/tmp")).createTempDir("build", "").getRemote();
             buildCommand.add("CONFIGURATION_BUILD_DIR="+ buildPath);
             return launcher.launch().envs(envVars).cmds(buildCommand).stdout(listener).pwd(projectRootPath).join();
         }
@@ -150,7 +154,7 @@ public class iOSBuilderExecutor {
             for (Iterator<FilePath> iterator = filePaths.iterator(); iterator.hasNext(); ) {
                 FilePath filePath = iterator.next();
                 if (filePath.isDirectory() && filePath.getName().endsWith("app")) {
-                    launcher.launch().envs(envVars).cmds(xcrunPath, "-sdk", "iphoneos", "PackageApplication", "-v", filePath.getName(), "--sign", identity.getCommonName(), "--embed", mobileprovisionFilePath.absolutize().getRemote(), "-o", filePath.getRemote().replaceAll("app$", "ipa")).stdout(listener).pwd(buildPath).join();
+                    launcher.launch().envs(envVars).cmds(xcrunPath, "-sdk", "iphoneos", "PackageApplication", "-v", filePath.getName(), "--sign", identity.getCommonName(), "--embed", mobileprovisionFilePath.getRemote(), "-o", filePath.getRemote().replaceAll("app$", "ipa")).stdout(listener).pwd(buildPath).join();
                 }
             }
         } catch (Exception e) {
@@ -162,6 +166,7 @@ public class iOSBuilderExecutor {
 
     void collectArtifacts(String artifactsTemplate) {
         try {
+            artifactsTemplate = envVars.expand(artifactsTemplate);
             List<FilePath> filePaths = new FilePath(new File(buildPath)).list();
             for (Iterator<FilePath> iterator = filePaths.iterator(); iterator.hasNext(); ) {
                 FilePath filePath = iterator.next();
