@@ -34,7 +34,7 @@ public class iOSBuilderExecutor {
     private FilePath mobileprovisionFilePath;
     private String buildPath;
 
-    iOSBuilderExecutor(AbstractBuild build, Launcher launcher, BuildListener listener, FilePath projectRootPath, String podPath, String securityPath, String xcodebuildPath, String xcrunPath) throws Exception {
+    iOSBuilderExecutor(String podPath, String securityPath, String xcodebuildPath, String xcrunPath, AbstractBuild build, Launcher launcher, BuildListener listener, FilePath projectRootPath, String buildDirectory) throws Exception {
         this.build = build;
         this.launcher = launcher;
         this.listener = listener;
@@ -50,6 +50,7 @@ public class iOSBuilderExecutor {
             e.printStackTrace();
             throw new Exception("Could not get BuildListener environment");
         }
+        buildPath = new FilePath(this.build.getWorkspace(), buildDirectory).getRemote();
     }
 
     int installPods() throws Exception {
@@ -82,6 +83,7 @@ public class iOSBuilderExecutor {
         }
         catch (Exception e) {
             e.printStackTrace();
+            return 1;
         }
         try {
             this.mobileprovision = mobileprovision;
@@ -93,6 +95,7 @@ public class iOSBuilderExecutor {
         }
         catch (Exception e) {
             e.printStackTrace();
+            return 1;
         }
         return 0;
     }
@@ -134,11 +137,9 @@ public class iOSBuilderExecutor {
                 }
                 if (identity != null) {
                     buildCommand.add("CODE_SIGN_IDENTITY=" + identity.getCommonName());
-                    String keychainPath = envVars.get("HOME").replaceAll("/$", "") + "/Library/Keychains/" + keychainName;
-                    buildCommand.add("OTHER_CODE_SIGN_FLAGS=--keychain " + keychainPath);
+                    buildCommand.add("OTHER_CODE_SIGN_FLAGS=--keychain " + keychainName);
                 }
             }
-            buildPath = new FilePath(new File("/tmp")).createTempDir("build", "").getRemote();
             buildCommand.add("CONFIGURATION_BUILD_DIR="+ buildPath);
             return launcher.launch().envs(envVars).cmds(buildCommand).stdout(listener).pwd(projectRootPath).join();
         }
@@ -164,7 +165,7 @@ public class iOSBuilderExecutor {
         return 0;
     }
 
-    void collectArtifacts(String artifactsTemplate) {
+    int archiveArtifacts(String artifactsTemplate) {
         try {
             artifactsTemplate = envVars.expand(artifactsTemplate);
             List<FilePath> filePaths = new FilePath(new File(buildPath)).list();
@@ -184,7 +185,9 @@ public class iOSBuilderExecutor {
         }
         catch (Exception e) {
             e.printStackTrace();
+            return 1;
         }
+        return 0;
     }
 
     void cleanup() {
