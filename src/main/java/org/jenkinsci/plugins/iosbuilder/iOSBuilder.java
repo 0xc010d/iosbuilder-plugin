@@ -34,10 +34,11 @@ public class iOSBuilder extends Builder {
     private final String mobileprovisionData;
     private final boolean doBuildIPA;
     private final String buildDirectory;
+    private final boolean doArchiveArtifacts;
     private final String artifactsTemplate;
 
     @DataBoundConstructor
-    public iOSBuilder(boolean doInstallPods, String xcworkspacePath, String xcodeprojPath, String target, String scheme, String configuration, String sdk, String additionalParameters, CodeSign codeSign, String buildDirectory, String artifactsTemplate) {
+    public iOSBuilder(boolean doInstallPods, String xcworkspacePath, String xcodeprojPath, String target, String scheme, String configuration, String sdk, String additionalParameters, CodeSign codeSign, String buildDirectory, boolean doArchiveArtifacts, String artifactsTemplate) {
         this.doInstallPods = doInstallPods;
         this.xcworkspacePath = xcworkspacePath;
         this.xcodeprojPath = xcodeprojPath;
@@ -52,7 +53,8 @@ public class iOSBuilder extends Builder {
         this.mobileprovisionData = this.doSign ? codeSign.mobileprovisionData : null;
         this.doBuildIPA = this.doSign && codeSign.doBuildIPA;
         this.buildDirectory = buildDirectory;
-        this.artifactsTemplate = artifactsTemplate.length() != 0 ? artifactsTemplate : "$APP_NAME";
+        this.doArchiveArtifacts = doArchiveArtifacts;
+        this.artifactsTemplate = doArchiveArtifacts && artifactsTemplate.length() > 0 ? artifactsTemplate : "$APP_NAME";
     }
 
     public boolean isDoInstallPods() { return doInstallPods; }
@@ -69,6 +71,7 @@ public class iOSBuilder extends Builder {
     public String getMobileprovisionData() { return mobileprovisionData; }
     public boolean isDoBuildIPA() { return doBuildIPA; }
     public String getBuildDirectory() { return buildDirectory; }
+    public boolean isDoArchiveArtifacts() { return doArchiveArtifacts; }
     public String getArtifactsTemplate() { return artifactsTemplate; }
 
     public static final class CodeSign {
@@ -109,7 +112,9 @@ public class iOSBuilder extends Builder {
             if (result && doBuildIPA) {
                 result = executor.buildIpa() == 0;
             }
-            executor.collectArtifacts(artifactsTemplate);
+            if (result && doArchiveArtifacts) {
+                result = executor.archiveArtifacts(artifactsTemplate) == 0;
+            }
             executor.cleanup();
             return result;
         }

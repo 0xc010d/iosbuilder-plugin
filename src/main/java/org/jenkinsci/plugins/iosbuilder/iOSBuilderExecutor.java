@@ -83,6 +83,7 @@ public class iOSBuilderExecutor {
         }
         catch (Exception e) {
             e.printStackTrace();
+            return 1;
         }
         try {
             this.mobileprovision = mobileprovision;
@@ -94,6 +95,7 @@ public class iOSBuilderExecutor {
         }
         catch (Exception e) {
             e.printStackTrace();
+            return 1;
         }
         return 0;
     }
@@ -163,7 +165,7 @@ public class iOSBuilderExecutor {
         return 0;
     }
 
-    void collectArtifacts(String artifactsTemplate) {
+    int archiveArtifacts(String artifactsTemplate) {
         try {
             artifactsTemplate = envVars.expand(artifactsTemplate);
             List<FilePath> filePaths = new FilePath(new File(buildPath)).list();
@@ -183,7 +185,9 @@ public class iOSBuilderExecutor {
         }
         catch (Exception e) {
             e.printStackTrace();
+            return 1;
         }
+        return 0;
     }
 
     void cleanup() {
