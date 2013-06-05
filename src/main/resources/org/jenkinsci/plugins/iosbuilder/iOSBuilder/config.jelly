@@ -1,5 +1,5 @@
 <j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
-    <f:entry title="Perform `pod install`" field="doInstallPods">
+    <f:entry title="Perform `pod install/update`" field="doInstallPods">
         <f:checkbox />
     </f:entry>
     <f:entry title=".xcworkspace path" field="xcworkspacePath">
@@ -27,7 +27,7 @@
         <j:set var="resize" value="javascript:this.style.height=this.contentWindow.document.body.scrollHeight+'px';"/>
         <j:set var="baseURL" value="${rootURL}/descriptor/org.jenkinsci.plugins.iosbuilder.iOSBuilder/uploadForm?"/>
 
-        <f:entry title=".p12 key archive">
+        <f:entry title=".p12 archive">
             <j:invokeStatic className="java.util.UUID" method="randomUUID" var="inputId" />
             <j:invokeStatic className="java.util.UUID" method="randomUUID" var="detailsId" />
             <j:set var="url" value="${baseURL}inputId=${inputId}"/>
@@ -62,7 +62,7 @@
                 <a href="${url}" target="_blank">Upload .mobileprovision file...</a>
             </iframe>
         </f:entry>
-        <f:entry title=".p12 key password" field="pkcs12ArchivePassword">
+        <f:entry title=".p12 archive password" field="pkcs12ArchivePassword">
             <f:password />
         </f:entry>
         <f:entry title=".mobileprovision file">
@@ -101,6 +101,9 @@
             <f:checkbox />
         </f:entry>
     </f:optionalBlock>
+    <f:entry title="Build directory path" field="buildDirectory">
+        <f:textbox default="build" />
+    </f:entry>
     <f:entry title="Artifacts template" field="artifactsTemplate">
         <f:textbox default="$APP_NAME" />
     </f:entry>

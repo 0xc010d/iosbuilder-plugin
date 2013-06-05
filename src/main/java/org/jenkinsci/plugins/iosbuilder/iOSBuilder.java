@@ -1,7 +1,6 @@
 package org.jenkinsci.plugins.iosbuilder;
 
 import java.io.IOException;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import hudson.Extension;
 import hudson.Launcher;
@@ -34,10 +33,11 @@ public class iOSBuilder extends Builder {
     private final String pkcs12ArchivePassword;
     private final String mobileprovisionData;
     private final boolean doBuildIPA;
+    private final String buildDirectory;
     private final String artifactsTemplate;
 
     @DataBoundConstructor
-    public iOSBuilder(boolean doInstallPods, String xcworkspacePath, String xcodeprojPath, String target, String scheme, String configuration, String sdk, String additionalParameters, CodeSign codeSign, String artifactsTemplate) {
+    public iOSBuilder(boolean doInstallPods, String xcworkspacePath, String xcodeprojPath, String target, String scheme, String configuration, String sdk, String additionalParameters, CodeSign codeSign, String buildDirectory, String artifactsTemplate) {
         this.doInstallPods = doInstallPods;
         this.xcworkspacePath = xcworkspacePath;
         this.xcodeprojPath = xcodeprojPath;
@@ -51,7 +51,8 @@ public class iOSBuilder extends Builder {
         this.pkcs12ArchivePassword = this.doSign ? codeSign.pkcs12ArchivePassword : null;
         this.mobileprovisionData = this.doSign ? codeSign.mobileprovisionData : null;
         this.doBuildIPA = this.doSign && codeSign.doBuildIPA;
-        this.artifactsTemplate = artifactsTemplate != null && artifactsTemplate.length() != 0 ? artifactsTemplate : "$APP_NAME";
+        this.buildDirectory = buildDirectory;
+        this.artifactsTemplate = artifactsTemplate.length() != 0 ? artifactsTemplate : "$APP_NAME";
     }
 
     public boolean isDoInstallPods() { return doInstallPods; }
@@ -67,6 +68,7 @@ public class iOSBuilder extends Builder {
     public String getPkcs12ArchivePassword() { return pkcs12ArchivePassword; }
     public String getMobileprovisionData() { return mobileprovisionData; }
     public boolean isDoBuildIPA() { return doBuildIPA; }
+    public String getBuildDirectory() { return buildDirectory; }
     public String getArtifactsTemplate() { return artifactsTemplate; }
 
     public static final class CodeSign {
@@ -88,7 +90,11 @@ public class iOSBuilder extends Builder {
     public boolean perform(AbstractBuild build, Launcher launcher, BuildListener listener) {
         try {
             boolean result = true;
-            iOSBuilderExecutor executor = new iOSBuilderExecutor(build, launcher, listener, build.getWorkspace(), getDescriptor().getPodPath(), getDescriptor().getSecurityPath(), getDescriptor().getXcodebuildPath(), getDescriptor().getXcrunPath());
+            String podPath = getDescriptor().getPodPath();
+            String securityPath = getDescriptor().getSecurityPath();
+            String xcodebuildPath = getDescriptor().getXcodebuildPath();
+            String xcrunPath = getDescriptor().getXcrunPath();
+            iOSBuilderExecutor executor = new iOSBuilderExecutor(podPath, securityPath, xcodebuildPath, xcrunPath, build, launcher, listener, build.getWorkspace(), buildDirectory);
             if (doInstallPods) {
                 result = executor.installPods() == 0;
             }
