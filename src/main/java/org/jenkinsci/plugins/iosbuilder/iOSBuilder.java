@@ -1,5 +1,6 @@
 package org.jenkinsci.plugins.iosbuilder;
 
+import java.io.File;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import hudson.Extension;
@@ -54,7 +55,7 @@ public class iOSBuilder extends Builder {
         this.doBuildIPA = this.doSign && codeSign.doBuildIPA;
         this.buildDirectory = buildDirectory;
         this.doArchiveArtifacts = doArchiveArtifacts;
-        this.artifactsTemplate = doArchiveArtifacts && artifactsTemplate.length() > 0 ? artifactsTemplate : "$APP_NAME";
+        this.artifactsTemplate = doArchiveArtifacts && !artifactsTemplate.isEmpty() ? artifactsTemplate : "$APP_NAME";
     }
 
     public boolean isDoInstallPods() { return doInstallPods; }
@@ -97,9 +98,16 @@ public class iOSBuilder extends Builder {
             String securityPath = getDescriptor().getSecurityPath();
             String xcodebuildPath = getDescriptor().getXcodebuildPath();
             String xcrunPath = getDescriptor().getXcrunPath();
-            iOSBuilderExecutor executor = new iOSBuilderExecutor(podPath, securityPath, xcodebuildPath, xcrunPath, build, launcher, listener, build.getWorkspace(), buildDirectory);
+            iOSBuilderExecutor executor = new iOSBuilderExecutor(podPath, securityPath, xcodebuildPath, xcrunPath, build, launcher, listener, buildDirectory);
             if (doInstallPods) {
-                result = executor.installPods() == 0;
+                String projectRootPath = "";
+                if (xcworkspacePath != null && !xcworkspacePath.isEmpty() && xcworkspacePath.lastIndexOf(File.separator) >= 0) {
+                    projectRootPath = xcworkspacePath.substring(0, xcworkspacePath.lastIndexOf(File.separator));
+                }
+                else if (xcodeprojPath != null && !xcodeprojPath.isEmpty() && xcodeprojPath.lastIndexOf(File.separator) >= 0) {
+                    projectRootPath = xcodeprojPath.substring(0, xcodeprojPath.lastIndexOf(File.separator));
+                }
+                result = executor.installPods(projectRootPath) == 0;
             }
             if (result && doSign) {
                 PKCS12Archive pkcs12Archive = PKCS12ArchiveFactory.newInstance(pkcs12ArchiveData, pkcs12ArchivePassword);
@@ -119,7 +127,7 @@ public class iOSBuilder extends Builder {
             return result;
         }
         catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(listener.getLogger());
             return false;
         }
     }

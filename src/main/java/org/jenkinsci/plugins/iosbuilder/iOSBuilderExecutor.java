@@ -19,7 +19,6 @@ public class iOSBuilderExecutor {
     private final AbstractBuild build;
     private final Launcher launcher;
     private final BuildListener listener;
-    private final FilePath projectRootPath;
     private final String podPath;
     private final String securityPath;
     private final String xcodebuildPath;
@@ -34,32 +33,32 @@ public class iOSBuilderExecutor {
     private FilePath mobileprovisionFilePath;
     private String buildPath;
 
-    iOSBuilderExecutor(String podPath, String securityPath, String xcodebuildPath, String xcrunPath, AbstractBuild build, Launcher launcher, BuildListener listener, FilePath projectRootPath, String buildDirectory) throws Exception {
-        this.build = build;
-        this.launcher = launcher;
-        this.listener = listener;
-        this.projectRootPath = projectRootPath;
+    iOSBuilderExecutor(String podPath, String securityPath, String xcodebuildPath, String xcrunPath, AbstractBuild build, Launcher launcher, BuildListener listener, String buildDirectory) throws Exception {
         this.podPath = podPath;
         this.securityPath = securityPath;
         this.xcodebuildPath = xcodebuildPath;
         this.xcrunPath = xcrunPath;
+        this.build = build;
+        this.launcher = launcher;
+        this.listener = listener;
         try {
             envVars = build.getEnvironment(listener);
         }
         catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(listener.getLogger());
             throw new Exception("Could not get BuildListener environment");
         }
-        buildPath = new FilePath(this.build.getWorkspace(), buildDirectory).getRemote();
+        buildPath = new FilePath(this.build.getWorkspace(), envVars.expand(buildDirectory)).getRemote();
     }
 
-    int installPods() throws Exception {
+    int installPods(String projectRootPath) throws Exception {
         try {
-            String action = projectRootPath.child("Podfile.lock").exists() ? "update" : "install";
-            return launcher.launch().envs(envVars).cmds(podPath, action).stdout(listener).pwd(projectRootPath).join();
+            FilePath rootPath = new FilePath(build.getWorkspace(), envVars.expand(projectRootPath));
+            String action = rootPath.child("Podfile.lock").exists() ? "update" : "install";
+            return launcher.launch().envs(envVars).cmds(podPath, action).stdout(listener).stderr(listener.getLogger()).pwd(rootPath).join();
         }
         catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(listener.getLogger());
             throw new Exception("Can not install pods");
         }
     }
@@ -76,13 +75,13 @@ public class iOSBuilderExecutor {
                 //create a keychain, import identity
                 keychainName = UUID.randomUUID().toString() + ".keychain";
                 keychainPassword = UUID.randomUUID().toString();
-                launcher.launch().envs(envVars).cmds(securityPath, "create-keychain", "-p", keychainPassword, keychainName).stdout(listener).join();
-                launcher.launch().envs(envVars).cmds(securityPath, "import", identityPath, "-k", keychainName, "-P", identityPassword, "-A").stdout(listener).join();
-                launcher.launch().envs(envVars).cmds(securityPath, "unlock-keychain", "-p", keychainPassword, keychainName).stdout(listener).join();
+                launcher.launch().envs(envVars).cmds(securityPath, "create-keychain", "-p", keychainPassword, keychainName).stdout(listener).stderr(listener.getLogger()).join();
+                launcher.launch().envs(envVars).cmds(securityPath, "import", identityPath, "-k", keychainName, "-P", identityPassword, "-A").stdout(listener).stderr(listener.getLogger()).join();
+                launcher.launch().envs(envVars).cmds(securityPath, "unlock-keychain", "-p", keychainPassword, keychainName).stdout(listener).stderr(listener.getLogger()).join();
             }
         }
         catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(listener.getLogger());
             return 1;
         }
         try {
@@ -94,7 +93,7 @@ public class iOSBuilderExecutor {
             mobileprovisionFilePath.write().write(mobileprovision.getBytes());
         }
         catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(listener.getLogger());
             return 1;
         }
         return 0;
@@ -106,23 +105,23 @@ public class iOSBuilderExecutor {
             buildCommand.add(xcodebuildPath);
             if (xcworkspacePath != null && !xcworkspacePath.isEmpty()) {
                 buildCommand.add("-workspace");
-                buildCommand.add(new File(envVars.expand(xcworkspacePath)).getName());
+                buildCommand.add(xcworkspacePath);
             }
             if (xcodeprojPath != null && !xcodeprojPath.isEmpty()) {
                 buildCommand.add("-project");
-                buildCommand.add(envVars.expand(xcodeprojPath));
+                buildCommand.add(xcodeprojPath);
             }
             if (target != null && !target.isEmpty()) {
                 buildCommand.add("-target");
-                buildCommand.add(envVars.expand(target));
+                buildCommand.add(target);
             }
             if (scheme != null && !scheme.isEmpty()) {
                 buildCommand.add("-scheme");
-                buildCommand.add(envVars.expand(scheme));
+                buildCommand.add(scheme);
             }
             if (configuration != null && !configuration.isEmpty()) {
                 buildCommand.add("-configuration");
-                buildCommand.add(envVars.expand(configuration));
+                buildCommand.add(configuration);
             }
             buildCommand.add("-sdk");
             buildCommand.add(sdk);
@@ -140,11 +139,11 @@ public class iOSBuilderExecutor {
                     buildCommand.add("OTHER_CODE_SIGN_FLAGS=--keychain " + keychainName);
                 }
             }
-            buildCommand.add("CONFIGURATION_BUILD_DIR="+ buildPath);
-            return launcher.launch().envs(envVars).cmds(buildCommand).stdout(listener).pwd(projectRootPath).join();
+            buildCommand.add("CONFIGURATION_BUILD_DIR=" + buildPath);
+            return launcher.launch().envs(envVars).cmds(buildCommand).stdout(listener).stderr(listener.getLogger()).pwd(build.getWorkspace()).join();
         }
         catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(listener.getLogger());
         }
         return 0;
     }
@@ -155,11 +154,11 @@ public class iOSBuilderExecutor {
             for (Iterator<FilePath> iterator = filePaths.iterator(); iterator.hasNext(); ) {
                 FilePath filePath = iterator.next();
                 if (filePath.isDirectory() && filePath.getName().endsWith("app")) {
-                    launcher.launch().envs(envVars).cmds(xcrunPath, "-sdk", "iphoneos", "PackageApplication", "-v", filePath.getName(), "--sign", identity.getCommonName(), "--embed", mobileprovisionFilePath.getRemote(), "-o", filePath.getRemote().replaceAll("app$", "ipa")).stdout(listener).pwd(buildPath).join();
+                    launcher.launch().envs(envVars).cmds(xcrunPath, "-sdk", "iphoneos", "PackageApplication", "-v", filePath.getName(), "--sign", identity.getCommonName(), "--embed", mobileprovisionFilePath.getRemote(), "-o", filePath.getRemote().replaceAll("app$", "ipa")).stdout(listener).stderr(listener.getLogger()).pwd(buildPath).join();
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(listener.getLogger());
             return 1;
         }
         return 0;
@@ -184,7 +183,7 @@ public class iOSBuilderExecutor {
             }
         }
         catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(listener.getLogger());
             return 1;
         }
         return 0;
@@ -195,13 +194,13 @@ public class iOSBuilderExecutor {
             new FilePath(new File(identityPath)).delete();
         }
         catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(listener.getLogger());
         }
         try {
-            launcher.launch().envs(envVars).cmds(securityPath, "delete-keychain", keychainName).stdout(listener).join();
+            launcher.launch().envs(envVars).cmds(securityPath, "delete-keychain", keychainName).stdout(listener).stderr(listener.getLogger()).join();
         }
         catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(listener.getLogger());
         }
     }
 
