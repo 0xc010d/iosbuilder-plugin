@@ -20,6 +20,9 @@
     <f:entry title="SDK" field="sdk">
         <f:select />
     </f:entry>
+    <f:entry title="Build directory path" field="buildDirectory">
+        <f:textbox default="build" />
+    </f:entry>
     <f:entry title="Additional xcodebuild parameters" field="additionalParameters">
         <f:textbox />
     </f:entry>
@@ -101,9 +104,6 @@
             <f:checkbox />
         </f:entry>
     </f:optionalBlock>
-    <f:entry title="Build directory path" field="buildDirectory">
-        <f:textbox default="build" />
-    </f:entry>
     <f:optionalBlock title="Archive artifacts" name="doArchiveArtifacts" inline="true" checked="${instance.doArchiveArtifacts}">
         <f:entry title="Artifacts template" field="artifactsTemplate">
             <f:textbox default="$APP_NAME" />

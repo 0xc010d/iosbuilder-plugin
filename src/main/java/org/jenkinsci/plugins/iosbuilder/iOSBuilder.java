@@ -28,18 +28,18 @@ public class iOSBuilder extends Builder {
     private final String scheme;
     private final String configuration;
     private final String sdk;
+    private final String buildDirectory;
     private final String additionalParameters;
     private final boolean doSign;
     private final String pkcs12ArchiveData;
     private final String pkcs12ArchivePassword;
     private final String mobileprovisionData;
     private final boolean doBuildIPA;
-    private final String buildDirectory;
     private final boolean doArchiveArtifacts;
     private final String artifactsTemplate;
 
     @DataBoundConstructor
-    public iOSBuilder(boolean doInstallPods, String xcworkspacePath, String xcodeprojPath, String target, String scheme, String configuration, String sdk, String additionalParameters, CodeSign codeSign, String buildDirectory, boolean doArchiveArtifacts, String artifactsTemplate) {
+    public iOSBuilder(boolean doInstallPods, String xcworkspacePath, String xcodeprojPath, String target, String scheme, String configuration, String sdk, String buildDirectory, String additionalParameters, CodeSign codeSign, boolean doArchiveArtifacts, String artifactsTemplate) {
         this.doInstallPods = doInstallPods;
         this.xcworkspacePath = xcworkspacePath;
         this.xcodeprojPath = xcodeprojPath;
@@ -47,13 +47,13 @@ public class iOSBuilder extends Builder {
         this.scheme = scheme;
         this.configuration = configuration;
         this.sdk = sdk;
+        this.buildDirectory = buildDirectory;
         this.additionalParameters = additionalParameters;
         this.doSign = codeSign != null;
         this.pkcs12ArchiveData = this.doSign ? codeSign.pkcs12ArchiveData : null;
         this.pkcs12ArchivePassword = this.doSign ? codeSign.pkcs12ArchivePassword : null;
         this.mobileprovisionData = this.doSign ? codeSign.mobileprovisionData : null;
         this.doBuildIPA = this.doSign && codeSign.doBuildIPA;
-        this.buildDirectory = buildDirectory;
         this.doArchiveArtifacts = doArchiveArtifacts;
         this.artifactsTemplate = doArchiveArtifacts && !artifactsTemplate.isEmpty() ? artifactsTemplate : "$APP_NAME";
     }
@@ -65,13 +65,13 @@ public class iOSBuilder extends Builder {
     public String getScheme() { return scheme; }
     public String getConfiguration() { return configuration; }
     public String getSdk() { return sdk; }
+    public String getBuildDirectory() { return buildDirectory; }
     public String getAdditionalParameters() { return additionalParameters; }
     public boolean isDoSign() { return doSign; }
     public String getPkcs12ArchiveData() { return pkcs12ArchiveData; }
     public String getPkcs12ArchivePassword() { return pkcs12ArchivePassword; }
     public String getMobileprovisionData() { return mobileprovisionData; }
     public boolean isDoBuildIPA() { return doBuildIPA; }
-    public String getBuildDirectory() { return buildDirectory; }
     public boolean isDoArchiveArtifacts() { return doArchiveArtifacts; }
     public String getArtifactsTemplate() { return artifactsTemplate; }
 

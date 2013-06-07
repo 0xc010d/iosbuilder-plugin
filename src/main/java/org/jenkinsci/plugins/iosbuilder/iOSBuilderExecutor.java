@@ -125,6 +125,7 @@ public class iOSBuilderExecutor {
             }
             buildCommand.add("-sdk");
             buildCommand.add(sdk);
+            buildCommand.add("CONFIGURATION_BUILD_DIR=" + buildPath);
             if (additionalParameters != null && !additionalParameters.isEmpty()) {
                 for (String parameter : QuotedStringTokenizer.tokenize(envVars.expand(additionalParameters))) {
                     buildCommand.add(parameter);
@@ -139,7 +140,6 @@ public class iOSBuilderExecutor {
                     buildCommand.add("OTHER_CODE_SIGN_FLAGS=--keychain " + keychainName);
                 }
             }
-            buildCommand.add("CONFIGURATION_BUILD_DIR=" + buildPath);
             return launcher.launch().envs(envVars).cmds(buildCommand).stdout(listener).stderr(listener.getLogger()).pwd(build.getWorkspace()).join();
         }
         catch (Exception e) {
