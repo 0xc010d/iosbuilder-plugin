@@ -6,11 +6,9 @@ import hudson.Launcher;
 import hudson.model.AbstractBuild;
 import hudson.model.BuildListener;
 import hudson.util.QuotedStringTokenizer;
-import org.apache.commons.io.IOUtils;
 import org.jenkinsci.plugins.iosbuilder.signing.Identity;
 import org.jenkinsci.plugins.iosbuilder.signing.Mobileprovision;
 import org.jenkinsci.plugins.iosbuilder.signing.PKCS12Archive;
-import org.jenkinsci.plugins.iosbuilder.util.Zip;
 
 import java.io.*;
 import java.util.*;
@@ -31,7 +29,7 @@ public class iOSBuilderExecutor {
     private String keychainPassword;
     private Mobileprovision mobileprovision;
     private FilePath mobileprovisionFilePath;
-    private String buildPath;
+    private FilePath buildPath;
 
     iOSBuilderExecutor(String podPath, String securityPath, String xcodebuildPath, String xcrunPath, AbstractBuild build, Launcher launcher, BuildListener listener, String buildDirectory) throws Exception {
         this.podPath = podPath;
@@ -48,14 +46,14 @@ public class iOSBuilderExecutor {
             e.printStackTrace(listener.getLogger());
             throw new Exception("Could not get BuildListener environment");
         }
-        buildPath = new FilePath(this.build.getWorkspace(), envVars.expand(buildDirectory)).getRemote();
+        this.buildPath = new FilePath(this.build.getWorkspace(), envVars.expand(buildDirectory));
     }
 
     int installPods(String projectRootPath) throws Exception {
         try {
             FilePath rootPath = new FilePath(build.getWorkspace(), envVars.expand(projectRootPath));
             String action = rootPath.child("Podfile.lock").exists() ? "update" : "install";
-            return launcher.launch().envs(envVars).cmds(podPath, action).stdout(listener).stderr(listener.getLogger()).pwd(rootPath).join();
+            return launcher.launch().envs(envVars).cmds(podPath, action, "--no-color").stdout(listener).stderr(listener.getLogger()).pwd(rootPath).join();
         }
         catch (Exception e) {
             e.printStackTrace(listener.getLogger());
@@ -148,13 +146,17 @@ public class iOSBuilderExecutor {
         return 0;
     }
 
-    int buildIpa() {
+    int buildIpa(String ipaNameTemplate) {
         try {
-            List<FilePath> filePaths = new FilePath(new File(buildPath)).list();
+            ipaNameTemplate = envVars.expand(ipaNameTemplate);
+            List<FilePath> filePaths = buildPath.list();
             for (Iterator<FilePath> iterator = filePaths.iterator(); iterator.hasNext(); ) {
                 FilePath filePath = iterator.next();
                 if (filePath.isDirectory() && filePath.getName().endsWith("app")) {
-                    launcher.launch().envs(envVars).cmds(xcrunPath, "-sdk", "iphoneos", "PackageApplication", "-v", filePath.getName(), "--sign", identity.getCommonName(), "--embed", mobileprovisionFilePath.getRemote(), "-o", filePath.getRemote().replaceAll("app$", "ipa")).stdout(listener).stderr(listener.getLogger()).pwd(buildPath).join();
+                    String outFileName = getFileBasenameWithTemplate(filePath, ipaNameTemplate, "\\.app$") + ".ipa";
+                    FilePath outFilePath = build.getWorkspace().child(outFileName);
+                    outFilePath.getParent().mkdirs();
+                    launcher.launch().envs(envVars).cmds(xcrunPath, "-sdk", "iphoneos", "PackageApplication", filePath.getName(), "--sign", identity.getCommonName(), "--embed", mobileprovisionFilePath.getRemote(), "-o", outFilePath.getRemote()).stdout(listener).stderr(listener.getLogger()).pwd(buildPath).join();
                 }
             }
         } catch (Exception e) {
@@ -164,25 +166,20 @@ public class iOSBuilderExecutor {
         return 0;
     }
 
-    int archiveArtifacts(String artifactsTemplate) {
+    int zipDSYM(String dSYMNameTemplate) {
         try {
-            artifactsTemplate = envVars.expand(artifactsTemplate);
-            List<FilePath> filePaths = new FilePath(new File(buildPath)).list();
+            dSYMNameTemplate = envVars.expand(dSYMNameTemplate);
+            List<FilePath> filePaths = buildPath.list();
             for (Iterator<FilePath> iterator = filePaths.iterator(); iterator.hasNext(); ) {
                 FilePath filePath = iterator.next();
-                if (filePath.isDirectory() && filePath.getName().endsWith(".app.dSYM")) {
-                    String fileName = getFileNameWithTemplate(filePath, artifactsTemplate, "\\.app\\.dSYM$");
-                    File zipFile = new File(build.getArtifactsDir(), fileName + ".zip");
-                    Zip.archive(filePath, zipFile);
-                }
-                if (!filePath.isDirectory() && filePath.getName().endsWith(".ipa")) {
-                    String fileName = getFileNameWithTemplate(filePath, artifactsTemplate, "\\.ipa$");
-                    FileOutputStream fileOutputStream = new FileOutputStream(new File(build.getArtifactsDir(), fileName));
-                    IOUtils.copy(filePath.read(), fileOutputStream);
+                if (filePath.isDirectory() && filePath.getName().endsWith("app.dSYM")) {
+                    String outFileName = getFileNameWithTemplate(filePath, dSYMNameTemplate, "\\.app\\.dSYM$") + ".zip";
+                    FilePath outFilePath = build.getWorkspace().child(outFileName);
+                    outFilePath.getParent().mkdirs();
+                    filePath.zip(outFilePath);
                 }
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace(listener.getLogger());
             return 1;
         }
@@ -204,9 +201,13 @@ public class iOSBuilderExecutor {
         }
     }
 
-    private String getFileNameWithTemplate(FilePath filePath, String artifactsTemplate, String extensionRegex) {
+    private String getFileNameWithTemplate(FilePath filePath, String template, String extensionRegex) {
         String fileBasename = filePath.getName().replaceAll(extensionRegex, "");
-        String newFileBasename = artifactsTemplate.replaceAll("\\$APP_NAME", fileBasename);
+        String newFileBasename = template.replaceAll("\\$APP_NAME", fileBasename);
         return filePath.getName().replaceFirst(fileBasename, newFileBasename);
+    }
+    private String getFileBasenameWithTemplate(FilePath filePath, String template, String extensionRegex) {
+        String fileBasename = filePath.getName().replaceAll(extensionRegex, "");
+        return template.replaceAll("\\$APP_NAME", fileBasename);
     }
 }

@@ -35,11 +35,12 @@ public class iOSBuilder extends Builder {
     private final String pkcs12ArchivePassword;
     private final String mobileprovisionData;
     private final boolean doBuildIPA;
-    private final boolean doArchiveArtifacts;
-    private final String artifactsTemplate;
+    private final String ipaNameTemplate;
+    private final boolean doZipDSYM;
+    private final String dSYMNameTemplate;
 
     @DataBoundConstructor
-    public iOSBuilder(boolean doInstallPods, String xcworkspacePath, String xcodeprojPath, String target, String scheme, String configuration, String sdk, String buildDirectory, String additionalParameters, CodeSign codeSign, boolean doArchiveArtifacts, String artifactsTemplate) {
+    public iOSBuilder(boolean doInstallPods, String xcworkspacePath, String xcodeprojPath, String target, String scheme, String configuration, String sdk, String buildDirectory, String additionalParameters, CodeSign codeSign, boolean doZipDSYM, String dSYMNameTemplate) {
         this.doInstallPods = doInstallPods;
         this.xcworkspacePath = xcworkspacePath;
         this.xcodeprojPath = xcodeprojPath;
@@ -54,8 +55,9 @@ public class iOSBuilder extends Builder {
         this.pkcs12ArchivePassword = this.doSign ? codeSign.pkcs12ArchivePassword : null;
         this.mobileprovisionData = this.doSign ? codeSign.mobileprovisionData : null;
         this.doBuildIPA = this.doSign && codeSign.doBuildIPA;
-        this.doArchiveArtifacts = doArchiveArtifacts;
-        this.artifactsTemplate = doArchiveArtifacts && !artifactsTemplate.isEmpty() ? artifactsTemplate : "$APP_NAME";
+        this.ipaNameTemplate = this.doSign ? codeSign.ipaNameTemplate : "$APP_NAME";
+        this.doZipDSYM = doZipDSYM;
+        this.dSYMNameTemplate = doZipDSYM && !dSYMNameTemplate.isEmpty() ? dSYMNameTemplate : "$APP_NAME";
     }
 
     public boolean isDoInstallPods() { return doInstallPods; }
@@ -72,21 +74,24 @@ public class iOSBuilder extends Builder {
     public String getPkcs12ArchivePassword() { return pkcs12ArchivePassword; }
     public String getMobileprovisionData() { return mobileprovisionData; }
     public boolean isDoBuildIPA() { return doBuildIPA; }
-    public boolean isDoArchiveArtifacts() { return doArchiveArtifacts; }
-    public String getArtifactsTemplate() { return artifactsTemplate; }
+    public String getIpaNameTemplate() { return ipaNameTemplate; }
+    public boolean isDoZipDSYM() { return doZipDSYM; }
+    public String getdSYMNameTemplate() { return dSYMNameTemplate; }
 
     public static final class CodeSign {
         private final String pkcs12ArchiveData;
         private final String pkcs12ArchivePassword;
         private final String mobileprovisionData;
         private final boolean doBuildIPA;
+        private final String ipaNameTemplate;
 
         @DataBoundConstructor
-        public CodeSign(String pkcs12ArchiveFile, String mobileprovisionFile, String pkcs12ArchiveData, String pkcs12ArchivePassword, String mobileprovisionData, boolean doBuildIPA) {
+        public CodeSign(String pkcs12ArchiveFile, String mobileprovisionFile, String pkcs12ArchiveData, String pkcs12ArchivePassword, String mobileprovisionData, boolean doBuildIPA, String ipaNameTemplate) {
             this.pkcs12ArchiveData = pkcs12ArchiveData;
             this.pkcs12ArchivePassword = pkcs12ArchivePassword;
             this.mobileprovisionData = mobileprovisionData;
             this.doBuildIPA = doBuildIPA;
+            this.ipaNameTemplate = doBuildIPA && !ipaNameTemplate.isEmpty() ? ipaNameTemplate : "$APP_NAME";
         }
     }
 
@@ -118,10 +123,10 @@ public class iOSBuilder extends Builder {
                 result = executor.runXcodebuild(xcworkspacePath, xcodeprojPath, target, scheme, configuration, sdk, additionalParameters, doSign) == 0;
             }
             if (result && doBuildIPA) {
-                result = executor.buildIpa() == 0;
+                result = executor.buildIpa(ipaNameTemplate) == 0;
             }
-            if (result && doArchiveArtifacts) {
-                result = executor.archiveArtifacts(artifactsTemplate) == 0;
+            if (result && doZipDSYM) {
+                result = executor.zipDSYM(dSYMNameTemplate) == 0;
             }
             executor.cleanup();
             return result;
