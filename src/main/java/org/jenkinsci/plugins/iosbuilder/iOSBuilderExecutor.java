@@ -156,7 +156,7 @@ public class iOSBuilderExecutor {
                     String outFileName = getFileBasenameWithTemplate(filePath, ipaNameTemplate, "\\.app$") + ".ipa";
                     FilePath outFilePath = build.getWorkspace().child(outFileName);
                     outFilePath.getParent().mkdirs();
-                    launcher.launch().envs(envVars).cmds(xcrunPath, "-sdk", "iphoneos", "PackageApplication", filePath.getName(), "--sign", identity.getCommonName(), "--embed", mobileprovisionFilePath.getRemote(), "-o", outFilePath.getRemote()).stdout(listener).stderr(listener.getLogger()).pwd(buildPath).join();
+                    launcher.launch().envs(envVars).cmds(xcrunPath, "-sdk", "iphoneos", "PackageApplication", filePath.getName(), "-o", outFilePath.getRemote()).stdout(listener).stderr(listener.getLogger()).pwd(buildPath).join();
                 }
             }
         } catch (Exception e) {

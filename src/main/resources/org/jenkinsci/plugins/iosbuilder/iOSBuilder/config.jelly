@@ -102,13 +102,13 @@
         </f:entry>
         <f:optionalBlock title="Build .ipa" name="doBuildIPA" inline="true" checked="${instance.doBuildIPA}">
             <f:entry title=".ipa name template" field="ipaNameTemplate">
-                <f:textbox default="$APP_NAME" />
+                <f:textbox default="build/$APP_NAME" />
             </f:entry>
         </f:optionalBlock>
     </f:optionalBlock>
     <f:optionalBlock title="Make zip of .app.dSYM folder" name="doZipDSYM" inline="true" checked="${instance.doZipDSYM}">
         <f:entry title=".app.dSYM name template" field="dSYMNameTemplate">
-            <f:textbox default="$APP_NAME" />
+            <f:textbox default="build/$APP_NAME" />
         </f:entry>
     </f:optionalBlock>
 </j:jelly>
