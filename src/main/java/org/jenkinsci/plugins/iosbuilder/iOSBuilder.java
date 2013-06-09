@@ -12,6 +12,7 @@ import hudson.tasks.Builder;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.util.FormValidation;
 import hudson.util.ListBoxModel;
+import hudson.util.Secret;
 import net.sf.json.JSONObject;
 import org.apache.commons.fileupload.FileItem;
 import org.jenkinsci.plugins.iosbuilder.signing.Mobileprovision;
@@ -32,7 +33,7 @@ public class iOSBuilder extends Builder {
     private final String additionalParameters;
     private final boolean doSign;
     private final String pkcs12ArchiveData;
-    private final String pkcs12ArchivePassword;
+    private final Secret pkcs12ArchivePassword;
     private final String mobileprovisionData;
     private final boolean doBuildIPA;
     private final String ipaNameTemplate;
@@ -71,7 +72,7 @@ public class iOSBuilder extends Builder {
     public String getAdditionalParameters() { return additionalParameters; }
     public boolean isDoSign() { return doSign; }
     public String getPkcs12ArchiveData() { return pkcs12ArchiveData; }
-    public String getPkcs12ArchivePassword() { return pkcs12ArchivePassword; }
+    public Secret getPkcs12ArchivePassword() { return pkcs12ArchivePassword; }
     public String getMobileprovisionData() { return mobileprovisionData; }
     public boolean isDoBuildIPA() { return doBuildIPA; }
     public String getIpaNameTemplate() { return ipaNameTemplate; }
@@ -80,7 +81,7 @@ public class iOSBuilder extends Builder {
 
     public static final class CodeSign {
         private final String pkcs12ArchiveData;
-        private final String pkcs12ArchivePassword;
+        private final Secret pkcs12ArchivePassword;
         private final String mobileprovisionData;
         private final boolean doBuildIPA;
         private final String ipaNameTemplate;
@@ -88,7 +89,7 @@ public class iOSBuilder extends Builder {
         @DataBoundConstructor
         public CodeSign(String pkcs12ArchiveFile, String mobileprovisionFile, String pkcs12ArchiveData, String pkcs12ArchivePassword, String mobileprovisionData, boolean doBuildIPA, String ipaNameTemplate) {
             this.pkcs12ArchiveData = pkcs12ArchiveData;
-            this.pkcs12ArchivePassword = pkcs12ArchivePassword;
+            this.pkcs12ArchivePassword = Secret.fromString(pkcs12ArchivePassword);
             this.mobileprovisionData = mobileprovisionData;
             this.doBuildIPA = doBuildIPA;
             this.ipaNameTemplate = doBuildIPA && !ipaNameTemplate.isEmpty() ? ipaNameTemplate : "$APP_NAME";
