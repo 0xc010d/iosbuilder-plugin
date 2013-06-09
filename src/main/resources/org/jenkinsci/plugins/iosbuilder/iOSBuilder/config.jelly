@@ -37,7 +37,7 @@
 
             <j:invokeStatic className="org.jenkinsci.plugins.iosbuilder.signing.PKCS12ArchiveFactory" method="newInstance" var="pkcs12Archive">
                 <j:arg type="java.lang.String" value="${instance.pkcs12ArchiveData}" />
-                <j:arg type="java.lang.String" value="${instance.pkcs12ArchivePassword}" />
+                <j:arg type="hudson.util.Secret" value="${instance.pkcs12ArchivePassword}" />
             </j:invokeStatic>
             <j:if test="${pkcs12Archive != null}">
                 <div id="${detailsId}">
