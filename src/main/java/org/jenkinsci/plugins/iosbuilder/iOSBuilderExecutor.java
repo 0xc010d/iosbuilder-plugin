@@ -17,10 +17,10 @@ public class iOSBuilderExecutor {
     private final AbstractBuild build;
     private final Launcher launcher;
     private final BuildListener listener;
-    private final String podPath;
-    private final String securityPath;
-    private final String xcodebuildPath;
-    private final String xcrunPath;
+    private final String pod;
+    private final String security;
+    private final String xcodebuild;
+    private final String xcrun;
     private EnvVars envVars = null;
     private Identity identity;
     private String identityPath;
@@ -32,10 +32,10 @@ public class iOSBuilderExecutor {
     private FilePath buildPath;
 
     iOSBuilderExecutor(String podPath, String securityPath, String xcodebuildPath, String xcrunPath, AbstractBuild build, Launcher launcher, BuildListener listener, String buildDirectory) throws Exception {
-        this.podPath = podPath;
-        this.securityPath = securityPath;
-        this.xcodebuildPath = xcodebuildPath;
-        this.xcrunPath = xcrunPath;
+        this.pod = podPath;
+        this.security = securityPath;
+        this.xcodebuild = xcodebuildPath;
+        this.xcrun = xcrunPath;
         this.build = build;
         this.launcher = launcher;
         this.listener = listener;
@@ -53,7 +53,7 @@ public class iOSBuilderExecutor {
         try {
             FilePath rootPath = new FilePath(build.getWorkspace(), envVars.expand(projectRootPath));
             String action = rootPath.child("Podfile.lock").exists() ? "update" : "install";
-            return launcher.launch().envs(envVars).cmds(podPath, action, "--no-color").stdout(listener).stderr(listener.getLogger()).pwd(rootPath).join();
+            return executeAt(rootPath, pod, action, "--no-color");
         }
         catch (Exception e) {
             e.printStackTrace(listener.getLogger());
@@ -73,9 +73,10 @@ public class iOSBuilderExecutor {
                 //create a keychain, import identity
                 keychainName = UUID.randomUUID().toString() + ".keychain";
                 keychainPassword = UUID.randomUUID().toString();
-                launcher.launch().envs(envVars).cmds(securityPath, "create-keychain", "-p", keychainPassword, keychainName).stdout(listener).stderr(listener.getLogger()).join();
-                launcher.launch().envs(envVars).cmds(securityPath, "import", identityPath, "-k", keychainName, "-P", identityPassword, "-A").stdout(listener).stderr(listener.getLogger()).join();
-                launcher.launch().envs(envVars).cmds(securityPath, "unlock-keychain", "-p", keychainPassword, keychainName).stdout(listener).stderr(listener.getLogger()).join();
+                execute(security, "create-keychain", "-p", keychainPassword, keychainName);
+                execute(security, "import", identityPath, "-k", keychainName, "-P", identityPassword, "-A");
+                execute(security, "unlock-keychain", "-p", keychainPassword, keychainName);
+                execute(security, "set-keychain-settings", "-u", keychainName);
             }
         }
         catch (Exception e) {
@@ -100,7 +101,7 @@ public class iOSBuilderExecutor {
     int runXcodebuild(String xcworkspacePath, String xcodeprojPath, String target, String scheme, String configuration, String sdk, String additionalParameters, boolean codeSign) {
         try {
             ArrayList<String> buildCommand = new ArrayList<String>();
-            buildCommand.add(xcodebuildPath);
+            buildCommand.add(xcodebuild);
             if (xcworkspacePath != null && !xcworkspacePath.isEmpty()) {
                 buildCommand.add("-workspace");
                 buildCommand.add(xcworkspacePath);
@@ -138,7 +139,7 @@ public class iOSBuilderExecutor {
                     buildCommand.add("OTHER_CODE_SIGN_FLAGS=--keychain " + keychainName);
                 }
             }
-            return launcher.launch().envs(envVars).cmds(buildCommand).stdout(listener).stderr(listener.getLogger()).pwd(build.getWorkspace()).join();
+            return executeAt(build.getWorkspace(), buildCommand);
         }
         catch (Exception e) {
             e.printStackTrace(listener.getLogger());
@@ -156,7 +157,7 @@ public class iOSBuilderExecutor {
                     String outFileName = getFileBasenameWithTemplate(filePath, ipaNameTemplate, "\\.app$") + ".ipa";
                     FilePath outFilePath = build.getWorkspace().child(outFileName);
                     outFilePath.getParent().mkdirs();
-                    launcher.launch().envs(envVars).cmds(xcrunPath, "-sdk", "iphoneos", "PackageApplication", filePath.getName(), "-o", outFilePath.getRemote()).stdout(listener).stderr(listener.getLogger()).pwd(buildPath).join();
+                    executeAt(buildPath, xcrun, "-sdk", "iphoneos", "PackageApplication", filePath.getName(), "-o", outFilePath.getRemote());
                 }
             }
         } catch (Exception e) {
@@ -194,7 +195,7 @@ public class iOSBuilderExecutor {
             e.printStackTrace(listener.getLogger());
         }
         try {
-            launcher.launch().envs(envVars).cmds(securityPath, "delete-keychain", keychainName).stdout(listener).stderr(listener.getLogger()).join();
+            execute(security, "delete-keychain", keychainName);
         }
         catch (Exception e) {
             e.printStackTrace(listener.getLogger());
@@ -206,8 +207,21 @@ public class iOSBuilderExecutor {
         String newFileBasename = template.replaceAll("\\$APP_NAME", fileBasename);
         return filePath.getName().replaceFirst(fileBasename, newFileBasename);
     }
+
     private String getFileBasenameWithTemplate(FilePath filePath, String template, String extensionRegex) {
         String fileBasename = filePath.getName().replaceAll(extensionRegex, "");
         return template.replaceAll("\\$APP_NAME", fileBasename);
+    }
+
+    private int execute(String... args) throws Exception {
+        return launcher.launch().envs(envVars).stdout(listener).stderr(listener.getLogger()).cmds(args).join();
+    }
+
+    private int executeAt(FilePath path, String... args) throws Exception {
+        return launcher.launch().pwd(path).envs(envVars).stdout(listener).stderr(listener.getLogger()).cmds(args).join();
+    }
+
+    private int executeAt(FilePath path, List<String> args) throws Exception {
+        return launcher.launch().pwd(path).envs(envVars).stdout(listener).stderr(listener.getLogger()).cmds(args).join();
     }
 }

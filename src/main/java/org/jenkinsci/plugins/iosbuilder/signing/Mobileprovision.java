@@ -7,11 +7,11 @@ import org.jenkinsci.plugins.iosbuilder.signing.bouncycastle.asn1.cms.ContentInf
 import org.jenkinsci.plugins.iosbuilder.signing.bouncycastle.asn1.cms.SignedData;
 
 public class Mobileprovision {
-    private byte[] bytes;
-    private String name;
-    private String UUID;
-    private String applicationIdentifier;
-    private Certificate[] certificates;
+    private final byte[] bytes;
+    private final String name;
+    private final String UUID;
+    private final String applicationIdentifier;
+    private final Certificate[] certificates;
 
     public byte[] getBytes() { return bytes; }
     public String getName() { return name; }

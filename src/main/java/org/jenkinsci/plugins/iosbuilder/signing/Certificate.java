@@ -8,9 +8,9 @@ import java.security.cert.X509Certificate;
 import java.util.Date;
 
 public class Certificate {
-    private X509Certificate x509Certificate;
-    private String commonName;
-    private Date expirationDate;
+    private final X509Certificate x509Certificate;
+    private final String commonName;
+    private final Date expirationDate;
 
     X509Certificate getX509Certificate() { return x509Certificate; }
     public String getCommonName() { return commonName; }

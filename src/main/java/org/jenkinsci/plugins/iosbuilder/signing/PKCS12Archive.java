@@ -8,10 +8,9 @@ import java.util.Enumeration;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
 
 public class PKCS12Archive {
-    private Map<PrivateKey, Certificate> content;
+    private final Map<PrivateKey, Certificate> content;
 
     public Map<PrivateKey, Certificate> getContent() { return content; }
 
