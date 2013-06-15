@@ -25,6 +25,3 @@ Once it's built – you should see `iOSBuilder.hpi` file in `target` subfolder w
 Now go to your project, add `iOS builder` as a build step, configure it and run. Isn't it cool?
 
 ![Yes, it's cool!](http://sharpland.github.io/iosbuilder-plugin/images/screenshot.png)
-
-### Warning!
-The private key/password pair is accessible by the people who have rights to configure Jenkins jobs. That's gonna be improved in future.
