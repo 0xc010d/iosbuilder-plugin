@@ -1,5 +1,6 @@
 package org.jenkinsci.plugins.iosbuilder;
 
+import java.io.File;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import hudson.Extension;
@@ -11,6 +12,7 @@ import hudson.tasks.Builder;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.util.FormValidation;
 import hudson.util.ListBoxModel;
+import hudson.util.Secret;
 import net.sf.json.JSONObject;
 import org.apache.commons.fileupload.FileItem;
 import org.jenkinsci.plugins.iosbuilder.signing.Mobileprovision;
@@ -27,18 +29,19 @@ public class iOSBuilder extends Builder {
     private final String scheme;
     private final String configuration;
     private final String sdk;
+    private final String buildDirectory;
     private final String additionalParameters;
     private final boolean doSign;
     private final String pkcs12ArchiveData;
-    private final String pkcs12ArchivePassword;
+    private final Secret pkcs12ArchivePassword;
     private final String mobileprovisionData;
     private final boolean doBuildIPA;
-    private final String buildDirectory;
-    private final boolean doArchiveArtifacts;
-    private final String artifactsTemplate;
+    private final String ipaNameTemplate;
+    private final boolean doZipDSYM;
+    private final String dSYMNameTemplate;
 
     @DataBoundConstructor
-    public iOSBuilder(boolean doInstallPods, String xcworkspacePath, String xcodeprojPath, String target, String scheme, String configuration, String sdk, String additionalParameters, CodeSign codeSign, String buildDirectory, boolean doArchiveArtifacts, String artifactsTemplate) {
+    public iOSBuilder(boolean doInstallPods, String xcworkspacePath, String xcodeprojPath, String target, String scheme, String configuration, String sdk, String buildDirectory, String additionalParameters, CodeSign codeSign, boolean doZipDSYM, String dSYMNameTemplate) {
         this.doInstallPods = doInstallPods;
         this.xcworkspacePath = xcworkspacePath;
         this.xcodeprojPath = xcodeprojPath;
@@ -46,15 +49,16 @@ public class iOSBuilder extends Builder {
         this.scheme = scheme;
         this.configuration = configuration;
         this.sdk = sdk;
+        this.buildDirectory = buildDirectory;
         this.additionalParameters = additionalParameters;
         this.doSign = codeSign != null;
         this.pkcs12ArchiveData = this.doSign ? codeSign.pkcs12ArchiveData : null;
         this.pkcs12ArchivePassword = this.doSign ? codeSign.pkcs12ArchivePassword : null;
         this.mobileprovisionData = this.doSign ? codeSign.mobileprovisionData : null;
         this.doBuildIPA = this.doSign && codeSign.doBuildIPA;
-        this.buildDirectory = buildDirectory;
-        this.doArchiveArtifacts = doArchiveArtifacts;
-        this.artifactsTemplate = doArchiveArtifacts && artifactsTemplate.length() > 0 ? artifactsTemplate : "$APP_NAME";
+        this.ipaNameTemplate = this.doSign ? codeSign.ipaNameTemplate : "$APP_NAME";
+        this.doZipDSYM = doZipDSYM;
+        this.dSYMNameTemplate = doZipDSYM && !dSYMNameTemplate.isEmpty() ? dSYMNameTemplate : "$APP_NAME";
     }
 
     public boolean isDoInstallPods() { return doInstallPods; }
@@ -64,28 +68,31 @@ public class iOSBuilder extends Builder {
     public String getScheme() { return scheme; }
     public String getConfiguration() { return configuration; }
     public String getSdk() { return sdk; }
+    public String getBuildDirectory() { return buildDirectory; }
     public String getAdditionalParameters() { return additionalParameters; }
     public boolean isDoSign() { return doSign; }
     public String getPkcs12ArchiveData() { return pkcs12ArchiveData; }
-    public String getPkcs12ArchivePassword() { return pkcs12ArchivePassword; }
+    public Secret getPkcs12ArchivePassword() { return pkcs12ArchivePassword; }
     public String getMobileprovisionData() { return mobileprovisionData; }
     public boolean isDoBuildIPA() { return doBuildIPA; }
-    public String getBuildDirectory() { return buildDirectory; }
-    public boolean isDoArchiveArtifacts() { return doArchiveArtifacts; }
-    public String getArtifactsTemplate() { return artifactsTemplate; }
+    public String getIpaNameTemplate() { return ipaNameTemplate; }
+    public boolean isDoZipDSYM() { return doZipDSYM; }
+    public String getdSYMNameTemplate() { return dSYMNameTemplate; }
 
     public static final class CodeSign {
         private final String pkcs12ArchiveData;
-        private final String pkcs12ArchivePassword;
+        private final Secret pkcs12ArchivePassword;
         private final String mobileprovisionData;
         private final boolean doBuildIPA;
+        private final String ipaNameTemplate;
 
         @DataBoundConstructor
-        public CodeSign(String pkcs12ArchiveFile, String mobileprovisionFile, String pkcs12ArchiveData, String pkcs12ArchivePassword, String mobileprovisionData, boolean doBuildIPA) {
+        public CodeSign(String pkcs12ArchiveFile, String mobileprovisionFile, String pkcs12ArchiveData, String pkcs12ArchivePassword, String mobileprovisionData, boolean doBuildIPA, String ipaNameTemplate) {
             this.pkcs12ArchiveData = pkcs12ArchiveData;
-            this.pkcs12ArchivePassword = pkcs12ArchivePassword;
+            this.pkcs12ArchivePassword = Secret.fromString(pkcs12ArchivePassword);
             this.mobileprovisionData = mobileprovisionData;
             this.doBuildIPA = doBuildIPA;
+            this.ipaNameTemplate = doBuildIPA && !ipaNameTemplate.isEmpty() ? ipaNameTemplate : "$APP_NAME";
         }
     }
 
@@ -97,9 +104,16 @@ public class iOSBuilder extends Builder {
             String securityPath = getDescriptor().getSecurityPath();
             String xcodebuildPath = getDescriptor().getXcodebuildPath();
             String xcrunPath = getDescriptor().getXcrunPath();
-            iOSBuilderExecutor executor = new iOSBuilderExecutor(podPath, securityPath, xcodebuildPath, xcrunPath, build, launcher, listener, build.getWorkspace(), buildDirectory);
+            iOSBuilderExecutor executor = new iOSBuilderExecutor(podPath, securityPath, xcodebuildPath, xcrunPath, build, launcher, listener, buildDirectory);
             if (doInstallPods) {
-                result = executor.installPods() == 0;
+                String projectRootPath = "";
+                if (xcworkspacePath != null && !xcworkspacePath.isEmpty() && xcworkspacePath.lastIndexOf(File.separator) >= 0) {
+                    projectRootPath = xcworkspacePath.substring(0, xcworkspacePath.lastIndexOf(File.separator));
+                }
+                else if (xcodeprojPath != null && !xcodeprojPath.isEmpty() && xcodeprojPath.lastIndexOf(File.separator) >= 0) {
+                    projectRootPath = xcodeprojPath.substring(0, xcodeprojPath.lastIndexOf(File.separator));
+                }
+                result = executor.installPods(projectRootPath) == 0;
             }
             if (result && doSign) {
                 PKCS12Archive pkcs12Archive = PKCS12ArchiveFactory.newInstance(pkcs12ArchiveData, pkcs12ArchivePassword);
@@ -110,16 +124,16 @@ public class iOSBuilder extends Builder {
                 result = executor.runXcodebuild(xcworkspacePath, xcodeprojPath, target, scheme, configuration, sdk, additionalParameters, doSign) == 0;
             }
             if (result && doBuildIPA) {
-                result = executor.buildIpa() == 0;
+                result = executor.buildIpa(ipaNameTemplate) == 0;
             }
-            if (result && doArchiveArtifacts) {
-                result = executor.archiveArtifacts(artifactsTemplate) == 0;
+            if (result && doZipDSYM) {
+                result = executor.zipDSYM(dSYMNameTemplate) == 0;
             }
             executor.cleanup();
             return result;
         }
         catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(listener.getLogger());
             return false;
         }
     }

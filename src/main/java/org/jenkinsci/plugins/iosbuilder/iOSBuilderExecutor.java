@@ -6,11 +6,9 @@ import hudson.Launcher;
 import hudson.model.AbstractBuild;
 import hudson.model.BuildListener;
 import hudson.util.QuotedStringTokenizer;
-import org.apache.commons.io.IOUtils;
 import org.jenkinsci.plugins.iosbuilder.signing.Identity;
 import org.jenkinsci.plugins.iosbuilder.signing.Mobileprovision;
 import org.jenkinsci.plugins.iosbuilder.signing.PKCS12Archive;
-import org.jenkinsci.plugins.iosbuilder.util.Zip;
 
 import java.io.*;
 import java.util.*;
@@ -19,11 +17,10 @@ public class iOSBuilderExecutor {
     private final AbstractBuild build;
     private final Launcher launcher;
     private final BuildListener listener;
-    private final FilePath projectRootPath;
-    private final String podPath;
-    private final String securityPath;
-    private final String xcodebuildPath;
-    private final String xcrunPath;
+    private final String pod;
+    private final String security;
+    private final String xcodebuild;
+    private final String xcrun;
     private EnvVars envVars = null;
     private Identity identity;
     private String identityPath;
@@ -32,34 +29,34 @@ public class iOSBuilderExecutor {
     private String keychainPassword;
     private Mobileprovision mobileprovision;
     private FilePath mobileprovisionFilePath;
-    private String buildPath;
+    private FilePath buildPath;
 
-    iOSBuilderExecutor(String podPath, String securityPath, String xcodebuildPath, String xcrunPath, AbstractBuild build, Launcher launcher, BuildListener listener, FilePath projectRootPath, String buildDirectory) throws Exception {
+    iOSBuilderExecutor(String podPath, String securityPath, String xcodebuildPath, String xcrunPath, AbstractBuild build, Launcher launcher, BuildListener listener, String buildDirectory) throws Exception {
+        this.pod = podPath;
+        this.security = securityPath;
+        this.xcodebuild = xcodebuildPath;
+        this.xcrun = xcrunPath;
         this.build = build;
         this.launcher = launcher;
         this.listener = listener;
-        this.projectRootPath = projectRootPath;
-        this.podPath = podPath;
-        this.securityPath = securityPath;
-        this.xcodebuildPath = xcodebuildPath;
-        this.xcrunPath = xcrunPath;
         try {
             envVars = build.getEnvironment(listener);
         }
         catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(listener.getLogger());
             throw new Exception("Could not get BuildListener environment");
         }
-        buildPath = new FilePath(this.build.getWorkspace(), buildDirectory).getRemote();
+        this.buildPath = new FilePath(this.build.getWorkspace(), envVars.expand(buildDirectory));
     }
 
-    int installPods() throws Exception {
+    int installPods(String projectRootPath) throws Exception {
         try {
-            String action = projectRootPath.child("Podfile.lock").exists() ? "update" : "install";
-            return launcher.launch().envs(envVars).cmds(podPath, action).stdout(listener).pwd(projectRootPath).join();
+            FilePath rootPath = new FilePath(build.getWorkspace(), envVars.expand(projectRootPath));
+            String action = rootPath.child("Podfile.lock").exists() ? "update" : "install";
+            return executeAt(rootPath, pod, action, "--no-color");
         }
         catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(listener.getLogger());
             throw new Exception("Can not install pods");
         }
     }
@@ -76,13 +73,14 @@ public class iOSBuilderExecutor {
                 //create a keychain, import identity
                 keychainName = UUID.randomUUID().toString() + ".keychain";
                 keychainPassword = UUID.randomUUID().toString();
-                launcher.launch().envs(envVars).cmds(securityPath, "create-keychain", "-p", keychainPassword, keychainName).stdout(listener).join();
-                launcher.launch().envs(envVars).cmds(securityPath, "import", identityPath, "-k", keychainName, "-P", identityPassword, "-A").stdout(listener).join();
-                launcher.launch().envs(envVars).cmds(securityPath, "unlock-keychain", "-p", keychainPassword, keychainName).stdout(listener).join();
+                execute(security, "create-keychain", "-p", keychainPassword, keychainName);
+                execute(security, "import", identityPath, "-k", keychainName, "-P", identityPassword, "-A");
+                execute(security, "unlock-keychain", "-p", keychainPassword, keychainName);
+                execute(security, "set-keychain-settings", "-u", keychainName);
             }
         }
         catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(listener.getLogger());
             return 1;
         }
         try {
@@ -94,7 +92,7 @@ public class iOSBuilderExecutor {
             mobileprovisionFilePath.write().write(mobileprovision.getBytes());
         }
         catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(listener.getLogger());
             return 1;
         }
         return 0;
@@ -103,29 +101,30 @@ public class iOSBuilderExecutor {
     int runXcodebuild(String xcworkspacePath, String xcodeprojPath, String target, String scheme, String configuration, String sdk, String additionalParameters, boolean codeSign) {
         try {
             ArrayList<String> buildCommand = new ArrayList<String>();
-            buildCommand.add(xcodebuildPath);
+            buildCommand.add(xcodebuild);
             if (xcworkspacePath != null && !xcworkspacePath.isEmpty()) {
                 buildCommand.add("-workspace");
-                buildCommand.add(new File(envVars.expand(xcworkspacePath)).getName());
+                buildCommand.add(xcworkspacePath);
             }
             if (xcodeprojPath != null && !xcodeprojPath.isEmpty()) {
                 buildCommand.add("-project");
-                buildCommand.add(envVars.expand(xcodeprojPath));
+                buildCommand.add(xcodeprojPath);
             }
             if (target != null && !target.isEmpty()) {
                 buildCommand.add("-target");
-                buildCommand.add(envVars.expand(target));
+                buildCommand.add(target);
             }
             if (scheme != null && !scheme.isEmpty()) {
                 buildCommand.add("-scheme");
-                buildCommand.add(envVars.expand(scheme));
+                buildCommand.add(scheme);
             }
             if (configuration != null && !configuration.isEmpty()) {
                 buildCommand.add("-configuration");
-                buildCommand.add(envVars.expand(configuration));
+                buildCommand.add(configuration);
             }
             buildCommand.add("-sdk");
             buildCommand.add(sdk);
+            buildCommand.add("CONFIGURATION_BUILD_DIR=" + buildPath);
             if (additionalParameters != null && !additionalParameters.isEmpty()) {
                 for (String parameter : QuotedStringTokenizer.tokenize(envVars.expand(additionalParameters))) {
                     buildCommand.add(parameter);
@@ -140,51 +139,49 @@ public class iOSBuilderExecutor {
                     buildCommand.add("OTHER_CODE_SIGN_FLAGS=--keychain " + keychainName);
                 }
             }
-            buildCommand.add("CONFIGURATION_BUILD_DIR="+ buildPath);
-            return launcher.launch().envs(envVars).cmds(buildCommand).stdout(listener).pwd(projectRootPath).join();
+            return executeAt(build.getWorkspace(), buildCommand);
         }
         catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(listener.getLogger());
         }
         return 0;
     }
 
-    int buildIpa() {
+    int buildIpa(String ipaNameTemplate) {
         try {
-            List<FilePath> filePaths = new FilePath(new File(buildPath)).list();
+            ipaNameTemplate = envVars.expand(ipaNameTemplate);
+            List<FilePath> filePaths = buildPath.list();
             for (Iterator<FilePath> iterator = filePaths.iterator(); iterator.hasNext(); ) {
                 FilePath filePath = iterator.next();
                 if (filePath.isDirectory() && filePath.getName().endsWith("app")) {
-                    launcher.launch().envs(envVars).cmds(xcrunPath, "-sdk", "iphoneos", "PackageApplication", "-v", filePath.getName(), "--sign", identity.getCommonName(), "--embed", mobileprovisionFilePath.getRemote(), "-o", filePath.getRemote().replaceAll("app$", "ipa")).stdout(listener).pwd(buildPath).join();
+                    String outFileName = getFileBasenameWithTemplate(filePath, ipaNameTemplate, "\\.app$") + ".ipa";
+                    FilePath outFilePath = build.getWorkspace().child(outFileName);
+                    outFilePath.getParent().mkdirs();
+                    executeAt(buildPath, xcrun, "-sdk", "iphoneos", "PackageApplication", filePath.getName(), "-o", outFilePath.getRemote());
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(listener.getLogger());
             return 1;
         }
         return 0;
     }
 
-    int archiveArtifacts(String artifactsTemplate) {
+    int zipDSYM(String dSYMNameTemplate) {
         try {
-            artifactsTemplate = envVars.expand(artifactsTemplate);
-            List<FilePath> filePaths = new FilePath(new File(buildPath)).list();
+            dSYMNameTemplate = envVars.expand(dSYMNameTemplate);
+            List<FilePath> filePaths = buildPath.list();
             for (Iterator<FilePath> iterator = filePaths.iterator(); iterator.hasNext(); ) {
                 FilePath filePath = iterator.next();
-                if (filePath.isDirectory() && filePath.getName().endsWith(".app.dSYM")) {
-                    String fileName = getFileNameWithTemplate(filePath, artifactsTemplate, "\\.app\\.dSYM$");
-                    File zipFile = new File(build.getArtifactsDir(), fileName + ".zip");
-                    Zip.archive(filePath, zipFile);
-                }
-                if (!filePath.isDirectory() && filePath.getName().endsWith(".ipa")) {
-                    String fileName = getFileNameWithTemplate(filePath, artifactsTemplate, "\\.ipa$");
-                    FileOutputStream fileOutputStream = new FileOutputStream(new File(build.getArtifactsDir(), fileName));
-                    IOUtils.copy(filePath.read(), fileOutputStream);
+                if (filePath.isDirectory() && filePath.getName().endsWith("app.dSYM")) {
+                    String outFileName = getFileNameWithTemplate(filePath, dSYMNameTemplate, "\\.app\\.dSYM$") + ".zip";
+                    FilePath outFilePath = build.getWorkspace().child(outFileName);
+                    outFilePath.getParent().mkdirs();
+                    filePath.zip(outFilePath);
                 }
             }
-        }
-        catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace(listener.getLogger());
             return 1;
         }
         return 0;
@@ -195,19 +192,36 @@ public class iOSBuilderExecutor {
             new FilePath(new File(identityPath)).delete();
         }
         catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(listener.getLogger());
         }
         try {
-            launcher.launch().envs(envVars).cmds(securityPath, "delete-keychain", keychainName).stdout(listener).join();
+            execute(security, "delete-keychain", keychainName);
         }
         catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(listener.getLogger());
         }
     }
 
-    private String getFileNameWithTemplate(FilePath filePath, String artifactsTemplate, String extensionRegex) {
+    private String getFileNameWithTemplate(FilePath filePath, String template, String extensionRegex) {
         String fileBasename = filePath.getName().replaceAll(extensionRegex, "");
-        String newFileBasename = artifactsTemplate.replaceAll("\\$APP_NAME", fileBasename);
+        String newFileBasename = template.replaceAll("\\$APP_NAME", fileBasename);
         return filePath.getName().replaceFirst(fileBasename, newFileBasename);
+    }
+
+    private String getFileBasenameWithTemplate(FilePath filePath, String template, String extensionRegex) {
+        String fileBasename = filePath.getName().replaceAll(extensionRegex, "");
+        return template.replaceAll("\\$APP_NAME", fileBasename);
+    }
+
+    private int execute(String... args) throws Exception {
+        return launcher.launch().envs(envVars).stdout(listener).stderr(listener.getLogger()).cmds(args).join();
+    }
+
+    private int executeAt(FilePath path, String... args) throws Exception {
+        return launcher.launch().pwd(path).envs(envVars).stdout(listener).stderr(listener.getLogger()).cmds(args).join();
+    }
+
+    private int executeAt(FilePath path, List<String> args) throws Exception {
+        return launcher.launch().pwd(path).envs(envVars).stdout(listener).stderr(listener.getLogger()).cmds(args).join();
     }
 }
