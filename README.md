@@ -20,7 +20,7 @@ $ cd iosbuilder-plugin
 $ mvn package
 ```
 
-Once it's built – you should see `iOSBuilder.hpi` file in `target` subfolder which should be used to install that plugin in Jenkins. Simply go to `http://<jenkins_root_url>/pluginManager/advanced` (same as Manage Jenkins -> Manage Plugins -> Advanced), upload iOSBuilder.hpi file in "Upload plugin" section and restart Jenkins.
+Once it's built – you'll see `iOSBuilder.hpi` file in `target` subfolder which should be used to install that plugin in Jenkins. Simply go to `http://<jenkins_root_url>/pluginManager/advanced` (same as Manage Jenkins -> Manage Plugins -> Advanced), upload iOSBuilder.hpi file in "Upload plugin" section and restart Jenkins.
 
 Now go to your project, add `iOS builder` as a build step, configure it and run. Isn't it cool?
 
