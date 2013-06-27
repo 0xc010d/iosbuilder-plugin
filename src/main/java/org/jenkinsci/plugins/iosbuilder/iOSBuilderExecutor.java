@@ -5,12 +5,12 @@ import hudson.FilePath;
 import hudson.Launcher;
 import hudson.model.AbstractBuild;
 import hudson.model.BuildListener;
+import hudson.model.Node;
 import hudson.util.QuotedStringTokenizer;
 import org.jenkinsci.plugins.iosbuilder.signing.Identity;
 import org.jenkinsci.plugins.iosbuilder.signing.Mobileprovision;
 import org.jenkinsci.plugins.iosbuilder.signing.PKCS12Archive;
 
-import java.io.*;
 import java.util.*;
 
 public class iOSBuilderExecutor {
@@ -23,12 +23,8 @@ public class iOSBuilderExecutor {
     private final String xcrun;
     private EnvVars envVars = null;
     private Identity identity;
-    private String identityPath;
-    private String identityPassword;
     private String keychainName;
-    private String keychainPassword;
     private Mobileprovision mobileprovision;
-    private FilePath mobileprovisionFilePath;
     private FilePath buildPath;
 
     iOSBuilderExecutor(String podPath, String securityPath, String xcodebuildPath, String xcrunPath, AbstractBuild build, Launcher launcher, BuildListener listener, String buildDirectory) throws Exception {
@@ -62,40 +58,52 @@ public class iOSBuilderExecutor {
     }
 
     int installIdentity(PKCS12Archive pkcs12Archive, Mobileprovision mobileprovision) {
+        int result = 0;
+        FilePath identityPath = null;
         try {
             identity = pkcs12Archive.chooseIdentity(mobileprovision.getCertificates());
             if (identity != null) {
-                FilePath filePath = new FilePath(new File("/tmp")).createTempFile("identity", ".p12");
-                identityPassword = UUID.randomUUID().toString();
-                identity.save(filePath.write(), identityPassword.toCharArray());
-                identityPath = filePath.getRemote();
+                identityPath = build.getWorkspace().createTempFile("identity", ".p12");
+                String identityPassword = UUID.randomUUID().toString();
+                identity.save(identityPath.write(), identityPassword.toCharArray());
 
                 //create a keychain, import identity
                 keychainName = UUID.randomUUID().toString() + ".keychain";
-                keychainPassword = UUID.randomUUID().toString();
+                String keychainPassword = UUID.randomUUID().toString();
                 execute(security, "create-keychain", "-p", keychainPassword, keychainName);
-                execute(security, "import", identityPath, "-k", keychainName, "-P", identityPassword, "-A");
+                execute(security, "import", identityPath.getRemote(), "-k", keychainName, "-P", identityPassword, "-A");
                 execute(security, "unlock-keychain", "-p", keychainPassword, keychainName);
                 execute(security, "set-keychain-settings", "-u", keychainName);
             }
         }
         catch (Exception e) {
             e.printStackTrace(listener.getLogger());
-            return 1;
+            result = 1;
         }
-        try {
-            this.mobileprovision = mobileprovision;
+        finally {
+            try {
+                identityPath.delete();
+            }
+            catch (Exception e) {
+                e.printStackTrace(listener.getLogger());
+            }
+        }
+        if (result == 0) {
+            try {
+                this.mobileprovision = mobileprovision;
 
-            String mobileprovisionPath = "Library/MobileDevice/Provisioning Profiles/" + mobileprovision.getUUID() + ".mobileprovision";
-            mobileprovisionFilePath = new FilePath(new File(envVars.get("HOME"), mobileprovisionPath));
-            //TODO: set the flag which shows that we'll need to delete mobileprovision
-            mobileprovisionFilePath.write().write(mobileprovision.getBytes());
+                String mobileprovisionPath = "/Library/MobileDevice/Provisioning Profiles/" + mobileprovision.getUUID() + ".mobileprovision";
+                String mobileprovisionAbsolutePath = envVars.get("HOME").replaceAll("/$", "") + mobileprovisionPath;
+                Node node = build.getBuiltOn();
+                FilePath mobileprovisionFilePath = node.createPath(mobileprovisionAbsolutePath);
+                mobileprovisionFilePath.write().write(mobileprovision.getBytes());
+            }
+            catch (Exception e) {
+                e.printStackTrace(listener.getLogger());
+                result = 1;
+            }
         }
-        catch (Exception e) {
-            e.printStackTrace(listener.getLogger());
-            return 1;
-        }
-        return 0;
+        return result;
     }
 
     int runXcodebuild(String xcworkspacePath, String xcodeprojPath, String target, String scheme, String configuration, String sdk, String additionalParameters, boolean codeSign) {
@@ -188,12 +196,6 @@ public class iOSBuilderExecutor {
     }
 
     void cleanup() {
-        try {
-            new FilePath(new File(identityPath)).delete();
-        }
-        catch (Exception e) {
-            e.printStackTrace(listener.getLogger());
-        }
         try {
             execute(security, "delete-keychain", keychainName);
         }
