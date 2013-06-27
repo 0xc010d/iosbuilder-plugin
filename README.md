@@ -24,4 +24,4 @@ Once it's built – you'll see `iOSBuilder.hpi` file in `target` subfolder which
 
 Now go to your project, add `iOS builder` as a build step, configure it and run. Isn't it cool?
 
-![Yes, it's cool!](http://sharpland.github.io/iosbuilder-plugin/images/screenshot.png)
+![Yes, it's cool!](http://sharpland.github.io/iosbuilder-plugin/images/interface_screenshot.png)
