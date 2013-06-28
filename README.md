@@ -5,7 +5,7 @@ It's Jenkins CI extension which simplifies build step setup for iOS projects. iO
 This plugin is in beta state now so please be patient.
 
 ### Where to get it
-For now you can download an .hpi file which I've built [here](http://sharpland.github.io/iosbuilder-plugin/downloads/iOSBuilder.hpi). The plugin would be available in Jenkins' repository soon so you'd be able to use Plugin Manager to install/upgrade it.
+For now you can download an .hpi file which I've built [here](http://0xc010d.github.io/iosbuilder-plugin/downloads/iOSBuilder.hpi). The plugin would be available in Jenkins' repository soon so you'd be able to use Plugin Manager to install/upgrade it.
 
 ### How to build it
 That plugin could be built using maven. The simplest way to get maven on your machine is to use Homebrew:
@@ -15,7 +15,7 @@ $ brew install maven
 
 Once you have maven installed – use these lines in your terminal to grab the sources and build the plugin.
 ```
-$ git clone git://github.com/sharpland/iosbuilder-plugin.git
+$ git clone git://github.com/0xc010d/iosbuilder-plugin.git
 $ cd iosbuilder-plugin
 $ mvn package
 ```
@@ -24,4 +24,4 @@ Once it's built – you'll see `iOSBuilder.hpi` file in `target` subfolder which
 
 Now go to your project, add `iOS builder` as a build step, configure it and run. Isn't it cool?
 
-![Yes, it's cool!](http://sharpland.github.io/iosbuilder-plugin/images/interface_screenshot.png)
+![Yes, it's cool!](http://0xc010d.github.io/iosbuilder-plugin/images/interface_screenshot.png)
