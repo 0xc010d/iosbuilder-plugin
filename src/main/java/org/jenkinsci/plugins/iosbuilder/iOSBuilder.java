@@ -2,12 +2,16 @@ package org.jenkinsci.plugins.iosbuilder;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 import javax.servlet.ServletException;
+
+import hudson.EnvVars;
 import hudson.Extension;
 import hudson.Launcher;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 import hudson.model.BuildListener;
+import hudson.model.EnvironmentContributingAction;
 import hudson.tasks.Builder;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.util.FormValidation;
@@ -56,9 +60,9 @@ public class iOSBuilder extends Builder {
         this.pkcs12ArchivePassword = this.doSign ? codeSign.pkcs12ArchivePassword : null;
         this.mobileprovisionData = this.doSign ? codeSign.mobileprovisionData : null;
         this.doBuildIPA = this.doSign && codeSign.doBuildIPA;
-        this.ipaNameTemplate = this.doSign ? codeSign.ipaNameTemplate : "$APP_NAME";
+        this.ipaNameTemplate = this.doSign ? codeSign.ipaNameTemplate : "$APP_NAME-$BUNDLE_VERSION";
         this.doZipDSYM = doZipDSYM;
-        this.dSYMNameTemplate = doZipDSYM && !dSYMNameTemplate.isEmpty() ? dSYMNameTemplate : "$APP_NAME";
+        this.dSYMNameTemplate = doZipDSYM && !dSYMNameTemplate.isEmpty() ? dSYMNameTemplate : "$APP_NAME-$BUNDLE_VERSION";
     }
 
     public boolean isDoInstallPods() { return doInstallPods; }
@@ -92,7 +96,7 @@ public class iOSBuilder extends Builder {
             this.pkcs12ArchivePassword = Secret.fromString(pkcs12ArchivePassword);
             this.mobileprovisionData = mobileprovisionData;
             this.doBuildIPA = doBuildIPA;
-            this.ipaNameTemplate = doBuildIPA && !ipaNameTemplate.isEmpty() ? ipaNameTemplate : "$APP_NAME";
+            this.ipaNameTemplate = doBuildIPA && !ipaNameTemplate.isEmpty() ? ipaNameTemplate : "$APP_NAME-$BUNDLE_VERSION";
         }
     }
 
@@ -123,6 +127,12 @@ public class iOSBuilder extends Builder {
             if (result) {
                 result = executor.runXcodebuild(xcworkspacePath, xcodeprojPath, target, scheme, configuration, sdk, additionalParameters, doSign) == 0;
             }
+            if (result) {
+                result = executor.exportInfo() == 0;
+            }
+            if (result) {
+                build.addAction(new EnvironmentContributingActionImpl(executor.getExportedInfo()));
+            }
             if (result && doBuildIPA) {
                 result = executor.buildIpa(ipaNameTemplate) == 0;
             }
@@ -136,6 +146,20 @@ public class iOSBuilder extends Builder {
             e.printStackTrace(listener.getLogger());
             return false;
         }
+    }
+
+    private class EnvironmentContributingActionImpl implements EnvironmentContributingAction {
+        Map<String, String> exportedEnvVars;
+
+        EnvironmentContributingActionImpl(Map<String, String> exportedEnvVars) {
+            this.exportedEnvVars = exportedEnvVars;
+        }
+        public void buildEnvVars(AbstractBuild<?, ?> build, EnvVars env) {
+            env.putAll(exportedEnvVars);
+        }
+        public String getIconFileName() { return null; }
+        public String getDisplayName() { return null; }
+        public String getUrlName() { return null; }
     }
 
     @Override

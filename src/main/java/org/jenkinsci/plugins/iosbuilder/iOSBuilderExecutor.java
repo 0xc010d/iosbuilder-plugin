@@ -3,13 +3,12 @@ package org.jenkinsci.plugins.iosbuilder;
 import hudson.EnvVars;
 import hudson.FilePath;
 import hudson.Launcher;
-import hudson.model.AbstractBuild;
-import hudson.model.BuildListener;
-import hudson.model.Node;
+import hudson.model.*;
 import hudson.util.QuotedStringTokenizer;
 import org.jenkinsci.plugins.iosbuilder.signing.Identity;
 import org.jenkinsci.plugins.iosbuilder.signing.Mobileprovision;
 import org.jenkinsci.plugins.iosbuilder.signing.PKCS12Archive;
+import org.jenkinsci.plugins.iosbuilder.util.AppInfoExtractor;
 
 import java.util.*;
 
@@ -21,11 +20,12 @@ public class iOSBuilderExecutor {
     private final String security;
     private final String xcodebuild;
     private final String xcrun;
-    private EnvVars envVars = null;
+    private final EnvVars envVars;
     private Identity identity;
     private String keychainName;
     private Mobileprovision mobileprovision;
     private FilePath buildPath;
+    private Map<String, AppInfoExtractor.AppInfo> appInfoMap = new HashMap<String, AppInfoExtractor.AppInfo>();
 
     iOSBuilderExecutor(String podPath, String securityPath, String xcodebuildPath, String xcrunPath, AbstractBuild build, Launcher launcher, BuildListener listener, String buildDirectory) throws Exception {
         this.pod = podPath;
@@ -35,13 +35,7 @@ public class iOSBuilderExecutor {
         this.build = build;
         this.launcher = launcher;
         this.listener = listener;
-        try {
-            envVars = build.getEnvironment(listener);
-        }
-        catch (Exception e) {
-            e.printStackTrace(listener.getLogger());
-            throw new Exception("Could not get BuildListener environment");
-        }
+        this.envVars = build.getEnvironment(listener);
         this.buildPath = new FilePath(this.build.getWorkspace(), envVars.expand(buildDirectory));
     }
 
@@ -151,21 +145,57 @@ public class iOSBuilderExecutor {
         }
         catch (Exception e) {
             e.printStackTrace(listener.getLogger());
+            return 1;
+        }
+    }
+
+    int exportInfo() {
+        try {
+            List<FilePath> filePaths = buildPath.list();
+            for (Iterator<FilePath> iterator = filePaths.iterator(); iterator.hasNext(); ) {
+                FilePath filePath = iterator.next();
+                if (filePath.isDirectory() && filePath.getName().endsWith(".app")) {
+                    AppInfoExtractor.AppInfo appInfo = AppInfoExtractor.extract(filePath);
+                    appInfoMap.put(filePath.getBaseName(), appInfo);
+                }
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace(listener.getLogger());
+            return 1;
         }
         return 0;
+    }
+
+    Map<String, String>getExportedInfo() {
+        Map<String, String> info = new HashMap<String, String>();
+        if (appInfoMap.size() > 0) {
+            Map.Entry<String, AppInfoExtractor.AppInfo> appInfoEntry = appInfoMap.entrySet().iterator().next();
+            String appName = appInfoEntry.getKey();
+            AppInfoExtractor.AppInfo appInfo = appInfoEntry.getValue();
+            info.put("IOSBUILDER_APP_NAME", appName);
+            info.put("IOSBUILDER_BUNDLE_NAME", appInfo.getBundleName());
+            info.put("IOSBUILDER_BUNDLE_DISPLAY_NAME", appInfo.getBundleDisplayName());
+            info.put("IOSBUILDER_BUNDLE_EXECUTABLE", appInfo.getBundleExecutable());
+            info.put("IOSBUILDER_BUNDLE_IDENTIFIER", appInfo.getBundleIdentifier());
+            info.put("IOSBUILDER_BUNDLE_VERSION", appInfo.getBundleVersion());
+            info.put("IOSBUILDER_BUNDLE_SHORT_VERSION_STRING", appInfo.getBundleShortVersionString());
+        }
+        return info;
     }
 
     int buildIpa(String ipaNameTemplate) {
         try {
             ipaNameTemplate = envVars.expand(ipaNameTemplate);
-            List<FilePath> filePaths = buildPath.list();
-            for (Iterator<FilePath> iterator = filePaths.iterator(); iterator.hasNext(); ) {
-                FilePath filePath = iterator.next();
-                if (filePath.isDirectory() && filePath.getName().endsWith("app")) {
-                    String outFileName = getFileBasenameWithTemplate(filePath, ipaNameTemplate, "\\.app$") + ".ipa";
+            for (Map.Entry<String, AppInfoExtractor.AppInfo> appInfo : appInfoMap.entrySet()) {
+                String basename = appInfo.getKey();
+                String filename = basename + ".app";
+                FilePath filePath = buildPath.child(filename);
+                if (filePath.exists() && filePath.isDirectory()) {
+                    String outFileName = applyTemplate(basename, ipaNameTemplate) + ".ipa";
                     FilePath outFilePath = build.getWorkspace().child(outFileName);
                     outFilePath.getParent().mkdirs();
-                    executeAt(buildPath, xcrun, "-sdk", "iphoneos", "PackageApplication", filePath.getName(), "-o", outFilePath.getRemote());
+                    executeAt(buildPath, xcrun, "-sdk", "iphoneos", "PackageApplication", filename, "-o", outFilePath.getRemote());
                 }
             }
         } catch (Exception e) {
@@ -178,11 +208,12 @@ public class iOSBuilderExecutor {
     int zipDSYM(String dSYMNameTemplate) {
         try {
             dSYMNameTemplate = envVars.expand(dSYMNameTemplate);
-            List<FilePath> filePaths = buildPath.list();
-            for (Iterator<FilePath> iterator = filePaths.iterator(); iterator.hasNext(); ) {
-                FilePath filePath = iterator.next();
-                if (filePath.isDirectory() && filePath.getName().endsWith("app.dSYM")) {
-                    String outFileName = getFileNameWithTemplate(filePath, dSYMNameTemplate, "\\.app\\.dSYM$") + ".zip";
+            for (Map.Entry<String, AppInfoExtractor.AppInfo> appInfo : appInfoMap.entrySet()) {
+                String basename = appInfo.getKey();
+                String filename = basename + ".app.dSYM";
+                FilePath filePath = buildPath.child(filename);
+                if (filePath.exists() && filePath.isDirectory()) {
+                    String outFileName = applyTemplate(basename, dSYMNameTemplate) + ".app.dSYM.zip";
                     FilePath outFilePath = build.getWorkspace().child(outFileName);
                     outFilePath.getParent().mkdirs();
                     filePath.zip(outFilePath);
@@ -204,15 +235,16 @@ public class iOSBuilderExecutor {
         }
     }
 
-    private String getFileNameWithTemplate(FilePath filePath, String template, String extensionRegex) {
-        String fileBasename = filePath.getName().replaceAll(extensionRegex, "");
-        String newFileBasename = template.replaceAll("\\$APP_NAME", fileBasename);
-        return filePath.getName().replaceFirst(fileBasename, newFileBasename);
-    }
-
-    private String getFileBasenameWithTemplate(FilePath filePath, String template, String extensionRegex) {
-        String fileBasename = filePath.getName().replaceAll(extensionRegex, "");
-        return template.replaceAll("\\$APP_NAME", fileBasename);
+    private String applyTemplate(String basename, String template) {
+        String result = template.replaceAll("\\$APP_NAME", basename);
+        AppInfoExtractor.AppInfo appInfo = appInfoMap.get(basename);
+        if (appInfo != null) {
+            String bundleVersion = appInfoMap.get(basename).getBundleVersion();
+            if (bundleVersion != null) {
+                result = result.replaceAll("\\$BUNDLE_VERSION", bundleVersion);
+            }
+        }
+        return result;
     }
 
     private int execute(String... args) throws Exception {
