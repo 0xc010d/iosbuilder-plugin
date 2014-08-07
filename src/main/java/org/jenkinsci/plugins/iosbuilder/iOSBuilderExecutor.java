@@ -10,6 +10,9 @@ import org.jenkinsci.plugins.iosbuilder.signing.Mobileprovision;
 import org.jenkinsci.plugins.iosbuilder.signing.PKCS12Archive;
 import org.jenkinsci.plugins.iosbuilder.util.AppInfoExtractor;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.*;
 
 public class iOSBuilderExecutor {
@@ -65,6 +68,19 @@ public class iOSBuilderExecutor {
                 keychainName = UUID.randomUUID().toString() + ".keychain";
                 String keychainPassword = UUID.randomUUID().toString();
                 execute(security, "create-keychain", "-p", keychainPassword, keychainName);
+
+                String[] keychains = executeAndParse(security, "list-keychains");
+                for (int i = 0; i < keychains.length; i++) {
+                    keychains[i] = keychains[i].trim();
+                }
+                ArrayList<String> command = new ArrayList<String>();
+                command.add(security);
+                command.add("list-keychains");
+                command.add("-s");
+                command.addAll(Arrays.asList(keychains));
+                command.add(keychainName);
+                execute(command);
+
                 execute(security, "import", identityPath.getRemote(), "-k", keychainName, "-P", identityPassword, "-A");
                 execute(security, "unlock-keychain", "-p", keychainPassword, keychainName);
                 execute(security, "set-keychain-settings", "-u", keychainName);
@@ -76,7 +92,9 @@ public class iOSBuilderExecutor {
         }
         finally {
             try {
-                identityPath.delete();
+                if (identityPath != null) {
+                    identityPath.delete();
+                }
             }
             catch (Exception e) {
                 e.printStackTrace(listener.getLogger());
@@ -251,11 +269,22 @@ public class iOSBuilderExecutor {
         return launcher.launch().envs(envVars).stdout(listener).stderr(listener.getLogger()).cmds(args).join();
     }
 
+    private int execute(List<String> args) throws Exception {
+        return launcher.launch().envs(envVars).stdout(listener).stderr(listener.getLogger()).cmds(args).join();
+    }
+
     private int executeAt(FilePath path, String... args) throws Exception {
         return launcher.launch().pwd(path).envs(envVars).stdout(listener).stderr(listener.getLogger()).cmds(args).join();
     }
 
     private int executeAt(FilePath path, List<String> args) throws Exception {
         return launcher.launch().pwd(path).envs(envVars).stdout(listener).stderr(listener.getLogger()).cmds(args).join();
+    }
+
+    private String[] executeAndParse(String... args) throws Exception {
+        OutputStream outputStream = new ByteArrayOutputStream();
+        launcher.launch().envs(envVars).stdout(outputStream).stderr(listener.getLogger()).cmds(args).join();
+        String output = outputStream.toString();
+        return output.split(System.getProperty("line.separator"));
     }
 }
