@@ -13,6 +13,7 @@ import org.jenkinsci.plugins.iosbuilder.util.AppInfoExtractor;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class iOSBuilderExecutor {
@@ -69,15 +70,16 @@ public class iOSBuilderExecutor {
                 String keychainPassword = UUID.randomUUID().toString();
                 execute(security, "create-keychain", "-p", keychainPassword, keychainName);
 
-                String[] keychains = executeAndParse(security, "list-keychains");
-                for (int i = 0; i < keychains.length; i++) {
-                    keychains[i] = keychains[i].trim();
+                List<String> keychains = executeAndParse(security, "list-keychains", "-d", "user");
+                for (int i = 0; i < keychains.size(); i++) {
+                    String keychain = keychains.get(i);
+                    keychains.set(i, keychain.trim().replaceAll("^\"|\"$", ""));
                 }
                 ArrayList<String> command = new ArrayList<String>();
                 command.add(security);
                 command.add("list-keychains");
                 command.add("-s");
-                command.addAll(Arrays.asList(keychains));
+                command.addAll(keychains);
                 command.add(keychainName);
                 execute(command);
 
@@ -146,9 +148,7 @@ public class iOSBuilderExecutor {
             buildCommand.add(sdk);
             buildCommand.add("CONFIGURATION_BUILD_DIR=" + buildPath);
             if (additionalParameters != null && !additionalParameters.isEmpty()) {
-                for (String parameter : QuotedStringTokenizer.tokenize(envVars.expand(additionalParameters))) {
-                    buildCommand.add(parameter);
-                }
+                Collections.addAll(buildCommand, QuotedStringTokenizer.tokenize(envVars.expand(additionalParameters)));
             }
             if (codeSign) {
                 if (mobileprovision != null) {
@@ -281,10 +281,10 @@ public class iOSBuilderExecutor {
         return launcher.launch().pwd(path).envs(envVars).stdout(listener).stderr(listener.getLogger()).cmds(args).join();
     }
 
-    private String[] executeAndParse(String... args) throws Exception {
+    private List<String> executeAndParse(String... args) throws Exception {
         OutputStream outputStream = new ByteArrayOutputStream();
         launcher.launch().envs(envVars).stdout(outputStream).stderr(listener.getLogger()).cmds(args).join();
         String output = outputStream.toString();
-        return output.split(System.getProperty("line.separator"));
+        return Arrays.asList(output.split(System.getProperty("line.separator")));
     }
 }
