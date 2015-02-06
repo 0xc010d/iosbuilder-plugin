@@ -26,7 +26,6 @@ import org.jenkinsci.plugins.iosbuilder.signing.PKCS12ArchiveFactory;
 import org.kohsuke.stapler.*;
 
 public class iOSBuilder extends Builder {
-    private final boolean doInstallPods;
     private final String xcworkspacePath;
     private final String xcodeprojPath;
     private final String target;
@@ -45,8 +44,7 @@ public class iOSBuilder extends Builder {
     private final String dSYMNameTemplate;
 
     @DataBoundConstructor
-    public iOSBuilder(boolean doInstallPods, String xcworkspacePath, String xcodeprojPath, String target, String scheme, String configuration, String sdk, String buildDirectory, String additionalParameters, CodeSign codeSign, boolean doZipDSYM, String dSYMNameTemplate) {
-        this.doInstallPods = doInstallPods;
+    public iOSBuilder(String xcworkspacePath, String xcodeprojPath, String target, String scheme, String configuration, String sdk, String buildDirectory, String additionalParameters, CodeSign codeSign, boolean doZipDSYM, String dSYMNameTemplate) {
         this.xcworkspacePath = xcworkspacePath;
         this.xcodeprojPath = xcodeprojPath;
         this.target = target;
@@ -65,7 +63,6 @@ public class iOSBuilder extends Builder {
         this.dSYMNameTemplate = doZipDSYM && !dSYMNameTemplate.isEmpty() ? dSYMNameTemplate : "$APP_NAME-$BUNDLE_VERSION";
     }
 
-    public boolean isDoInstallPods() { return doInstallPods; }
     public String getXcworkspacePath() { return xcworkspacePath; }
     public String getXcodeprojPath() { return xcodeprojPath; }
     public String getTarget() { return target; }
@@ -104,22 +101,11 @@ public class iOSBuilder extends Builder {
     public boolean perform(AbstractBuild build, Launcher launcher, BuildListener listener) {
         try {
             boolean result = true;
-            String podPath = getDescriptor().getPodPath();
             String securityPath = getDescriptor().getSecurityPath();
             String xcodebuildPath = getDescriptor().getXcodebuildPath();
             String xcrunPath = getDescriptor().getXcrunPath();
-            iOSBuilderExecutor executor = new iOSBuilderExecutor(podPath, securityPath, xcodebuildPath, xcrunPath, build, launcher, listener, buildDirectory);
-            if (doInstallPods) {
-                String projectRootPath = "";
-                if (xcworkspacePath != null && !xcworkspacePath.isEmpty() && xcworkspacePath.lastIndexOf(File.separator) >= 0) {
-                    projectRootPath = xcworkspacePath.substring(0, xcworkspacePath.lastIndexOf(File.separator));
-                }
-                else if (xcodeprojPath != null && !xcodeprojPath.isEmpty() && xcodeprojPath.lastIndexOf(File.separator) >= 0) {
-                    projectRootPath = xcodeprojPath.substring(0, xcodeprojPath.lastIndexOf(File.separator));
-                }
-                result = executor.installPods(projectRootPath) == 0;
-            }
-            if (result && doSign) {
+            iOSBuilderExecutor executor = new iOSBuilderExecutor(securityPath, xcodebuildPath, xcrunPath, build, launcher, listener, buildDirectory);
+            if (doSign) {
                 PKCS12Archive pkcs12Archive = PKCS12ArchiveFactory.newInstance(pkcs12ArchiveData, pkcs12ArchivePassword);
                 Mobileprovision mobileprovision = MobileprovisionFactory.newInstance(mobileprovisionData);
                 result = executor.installIdentity(pkcs12Archive, mobileprovision) == 0;
@@ -172,12 +158,10 @@ public class iOSBuilder extends Builder {
         private static final String DEFAULT_XCODEBUILD_PATH = "/usr/bin/xcodebuild";
         private static final String DEFAULT_SECURITY_PATH = "/usr/bin/security";
         private static final String DEFAULT_XCRUN_PATH = "/usr/bin/xcrun";
-        private static final String DEFAULT_POD_PATH = "/usr/bin/pod";
 
         private String xcodebuildPath;
         private String securityPath;
         private String xcrunPath;
-        private String podPath;
 
         private FormValidation checkPath(@QueryParameter String path, String name) throws IOException, ServletException {
             if (path.length() == 0) {
@@ -208,9 +192,6 @@ public class iOSBuilder extends Builder {
         public FormValidation doCheckXcrunPath(@QueryParameter String value) throws IOException, ServletException {
             return checkPath(value, "xcrun");
         }
-        public FormValidation doCheckPodPath(@QueryParameter String value) throws IOException, ServletException {
-            return checkPath(value, "pod");
-        }
 
         // TODO: Get available SDKs list from xcodebuild
         public ListBoxModel doFillSdkItems() {
@@ -233,13 +214,11 @@ public class iOSBuilder extends Builder {
             xcodebuildPath = formData.getString("xcodebuildPath");
             securityPath = formData.getString("securityPath");
             xcrunPath = formData.getString("xcrunPath");
-            podPath = formData.getString("podPath");
             return super.configure(req, formData);
         }
 
         public String getXcodebuildPath() { return xcodebuildPath != null ? xcodebuildPath : DEFAULT_XCODEBUILD_PATH; }
         public String getSecurityPath() { return securityPath != null ? securityPath : DEFAULT_SECURITY_PATH; }
         public String getXcrunPath() { return xcrunPath != null ? xcrunPath : DEFAULT_XCRUN_PATH; }
-        public String getPodPath() { return podPath != null ? podPath : DEFAULT_POD_PATH; }
     }
 }
