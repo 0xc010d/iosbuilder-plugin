@@ -11,9 +11,7 @@ import org.jenkinsci.plugins.iosbuilder.signing.PKCS12Archive;
 import org.jenkinsci.plugins.iosbuilder.util.AppInfoExtractor;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class iOSBuilderExecutor {
@@ -170,8 +168,7 @@ public class iOSBuilderExecutor {
     int exportInfo() {
         try {
             List<FilePath> filePaths = buildPath.list();
-            for (Iterator<FilePath> iterator = filePaths.iterator(); iterator.hasNext(); ) {
-                FilePath filePath = iterator.next();
+            for (FilePath filePath : filePaths) {
                 if (filePath.isDirectory() && filePath.getName().endsWith(".app")) {
                     AppInfoExtractor.AppInfo appInfo = AppInfoExtractor.extract(filePath);
                     appInfoMap.put(filePath.getBaseName(), appInfo);
