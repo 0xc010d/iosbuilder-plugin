@@ -18,7 +18,6 @@ public class iOSBuilderExecutor {
     private final AbstractBuild build;
     private final Launcher launcher;
     private final BuildListener listener;
-    private final String pod;
     private final String security;
     private final String xcodebuild;
     private final String xcrun;
@@ -29,8 +28,7 @@ public class iOSBuilderExecutor {
     private FilePath buildPath;
     private Map<String, AppInfoExtractor.AppInfo> appInfoMap = new HashMap<String, AppInfoExtractor.AppInfo>();
 
-    iOSBuilderExecutor(String podPath, String securityPath, String xcodebuildPath, String xcrunPath, AbstractBuild build, Launcher launcher, BuildListener listener, String buildDirectory) throws Exception {
-        this.pod = podPath;
+    iOSBuilderExecutor(String securityPath, String xcodebuildPath, String xcrunPath, AbstractBuild build, Launcher launcher, BuildListener listener, String buildDirectory) throws Exception {
         this.security = securityPath;
         this.xcodebuild = xcodebuildPath;
         this.xcrun = xcrunPath;
@@ -39,18 +37,6 @@ public class iOSBuilderExecutor {
         this.listener = listener;
         this.envVars = build.getEnvironment(listener);
         this.buildPath = new FilePath(this.build.getWorkspace(), envVars.expand(buildDirectory));
-    }
-
-    int installPods(String projectRootPath) throws Exception {
-        try {
-            FilePath rootPath = new FilePath(build.getWorkspace(), envVars.expand(projectRootPath));
-            String action = rootPath.child("Podfile.lock").exists() ? "update" : "install";
-            return executeAt(rootPath, pod, action, "--no-color");
-        }
-        catch (Exception e) {
-            e.printStackTrace(listener.getLogger());
-            throw new Exception("Can not install pods");
-        }
     }
 
     int installIdentity(PKCS12Archive pkcs12Archive, Mobileprovision mobileprovision) {
