@@ -1,4 +1,18 @@
 <j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
+    <f:optionalBlock title="Isolate derived data folder" name="doIsolateDerivedData" inline="true" checked="${instance.doIsolateDerivedData}">
+        <f:entry title="$OBJROOT path" field="objRootPath">
+            <f:textbox default="/tmp/DerivedData/$JOB_NAME/Build/Intermediates" />
+        </f:entry>
+        <f:entry title="$SYMROOT path" field="symRootPath">
+            <f:textbox default="/tmp/DerivedData/$JOB_NAME/Build/Products" />
+        </f:entry>
+        <f:entry title="$SHARED_PRECOMPS_DIR path" field="sharedPrecompsDirPath">
+            <f:textbox default="/tmp/DerivedData/$JOB_NAME/Build/Intermediates/PrecompiledHeaders" />
+        </f:entry>
+        <f:entry title="$MODULE_CACHE_DIR path" field="moduleCacheDirPath">
+            <f:textbox default="/tmp/DerivedData/$JOB_NAME/ModuleCache" />
+        </f:entry>
+    </f:optionalBlock>
     <f:entry title=".xcworkspace path" field="xcworkspacePath">
         <f:textbox />
     </f:entry>

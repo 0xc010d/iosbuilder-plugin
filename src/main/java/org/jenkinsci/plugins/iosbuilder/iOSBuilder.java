@@ -1,6 +1,5 @@
 package org.jenkinsci.plugins.iosbuilder;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 import javax.servlet.ServletException;
@@ -26,6 +25,11 @@ import org.jenkinsci.plugins.iosbuilder.signing.PKCS12ArchiveFactory;
 import org.kohsuke.stapler.*;
 
 public class iOSBuilder extends Builder {
+    private final boolean doIsolateDerivedData;
+    private final String objRootPath;
+    private final String symRootPath;
+    private final String sharedPrecompsDirPath;
+    private final String moduleCacheDirPath;
     private final String xcworkspacePath;
     private final String xcodeprojPath;
     private final String target;
@@ -44,7 +48,12 @@ public class iOSBuilder extends Builder {
     private final String dSYMNameTemplate;
 
     @DataBoundConstructor
-    public iOSBuilder(String xcworkspacePath, String xcodeprojPath, String target, String scheme, String configuration, String sdk, String buildDirectory, String additionalParameters, CodeSign codeSign, boolean doZipDSYM, String dSYMNameTemplate) {
+    public iOSBuilder(boolean doIsolateDerivedData, String objRootPath, String symRootPath, String sharedPrecompsDirPath, String moduleCacheDirPath, String xcworkspacePath, String xcodeprojPath, String target, String scheme, String configuration, String sdk, String buildDirectory, String additionalParameters, CodeSign codeSign, boolean doZipDSYM, String dSYMNameTemplate) {
+        this.doIsolateDerivedData = doIsolateDerivedData;
+        this.objRootPath = objRootPath;
+        this.symRootPath = symRootPath;
+        this.sharedPrecompsDirPath = sharedPrecompsDirPath;
+        this.moduleCacheDirPath = moduleCacheDirPath;
         this.xcworkspacePath = xcworkspacePath;
         this.xcodeprojPath = xcodeprojPath;
         this.target = target;
@@ -63,6 +72,11 @@ public class iOSBuilder extends Builder {
         this.dSYMNameTemplate = doZipDSYM && !dSYMNameTemplate.isEmpty() ? dSYMNameTemplate : "$APP_NAME-$BUNDLE_VERSION";
     }
 
+    public boolean isDoIsolateDerivedData() { return doIsolateDerivedData; }
+    public String getObjRootPath() { return objRootPath; }
+    public String getSymRootPath() { return symRootPath; }
+    public String getSharedPrecompsDirPath() { return sharedPrecompsDirPath; }
+    public String getModuleCacheDirPath() { return moduleCacheDirPath; }
     public String getXcworkspacePath() { return xcworkspacePath; }
     public String getXcodeprojPath() { return xcodeprojPath; }
     public String getTarget() { return target; }
@@ -111,7 +125,7 @@ public class iOSBuilder extends Builder {
                 result = executor.installIdentity(pkcs12Archive, mobileprovision) == 0;
             }
             if (result) {
-                result = executor.runXcodebuild(xcworkspacePath, xcodeprojPath, target, scheme, configuration, sdk, additionalParameters, doSign) == 0;
+                result = executor.runXcodebuild(xcworkspacePath, xcodeprojPath, target, scheme, configuration, sdk, additionalParameters, doSign, doIsolateDerivedData, objRootPath, symRootPath, sharedPrecompsDirPath, moduleCacheDirPath) == 0;
             }
             if (result) {
                 result = executor.exportInfo() == 0;
