@@ -26,6 +26,7 @@ import org.kohsuke.stapler.*;
 
 public class iOSBuilder extends Builder {
     private final boolean doIsolateDerivedData;
+    private final boolean doClearDerivedData;
     private final String objRootPath;
     private final String symRootPath;
     private final String sharedPrecompsDirPath;
@@ -48,8 +49,9 @@ public class iOSBuilder extends Builder {
     private final String dSYMNameTemplate;
 
     @DataBoundConstructor
-    public iOSBuilder(boolean doIsolateDerivedData, String objRootPath, String symRootPath, String sharedPrecompsDirPath, String moduleCacheDirPath, String xcworkspacePath, String xcodeprojPath, String target, String scheme, String configuration, String sdk, String buildDirectory, String additionalParameters, CodeSign codeSign, boolean doZipDSYM, String dSYMNameTemplate) {
+    public iOSBuilder(boolean doIsolateDerivedData, boolean doClearDerivedData, String objRootPath, String symRootPath, String sharedPrecompsDirPath, String moduleCacheDirPath, String xcworkspacePath, String xcodeprojPath, String target, String scheme, String configuration, String sdk, String buildDirectory, String additionalParameters, CodeSign codeSign, boolean doZipDSYM, String dSYMNameTemplate) {
         this.doIsolateDerivedData = doIsolateDerivedData;
+        this.doClearDerivedData = doClearDerivedData;
         this.objRootPath = objRootPath;
         this.symRootPath = symRootPath;
         this.sharedPrecompsDirPath = sharedPrecompsDirPath;
@@ -73,6 +75,7 @@ public class iOSBuilder extends Builder {
     }
 
     public boolean isDoIsolateDerivedData() { return doIsolateDerivedData; }
+    public boolean isDoClearDerivedData() { return doClearDerivedData; }
     public String getObjRootPath() { return objRootPath; }
     public String getSymRootPath() { return symRootPath; }
     public String getSharedPrecompsDirPath() { return sharedPrecompsDirPath; }
@@ -123,6 +126,9 @@ public class iOSBuilder extends Builder {
                 PKCS12Archive pkcs12Archive = PKCS12ArchiveFactory.newInstance(pkcs12ArchiveData, pkcs12ArchivePassword);
                 Mobileprovision mobileprovision = MobileprovisionFactory.newInstance(mobileprovisionData);
                 result = executor.installIdentity(pkcs12Archive, mobileprovision) == 0;
+            }
+            if (result && doIsolateDerivedData && doClearDerivedData) {
+                result = executor.clearDerivedData(objRootPath, symRootPath, sharedPrecompsDirPath, moduleCacheDirPath) == 0;
             }
             if (result) {
                 result = executor.runXcodebuild(xcworkspacePath, xcodeprojPath, target, scheme, configuration, sdk, additionalParameters, doSign, doIsolateDerivedData, objRootPath, symRootPath, sharedPrecompsDirPath, moduleCacheDirPath) == 0;

@@ -1,5 +1,8 @@
 <j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
     <f:optionalBlock title="Isolate derived data folder" name="doIsolateDerivedData" inline="true" checked="${instance.doIsolateDerivedData}">
+        <f:entry title="Clear derived data folder before build" field="doClearDerivedData">
+            <f:checkbox />
+        </f:entry>
         <f:entry title="$OBJROOT path" field="objRootPath">
             <f:textbox default="/tmp/DerivedData/$JOB_NAME/Build/Intermediates" />
         </f:entry>
