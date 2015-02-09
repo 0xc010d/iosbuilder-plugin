@@ -104,7 +104,7 @@ public class iOSBuilderExecutor {
         return result;
     }
 
-    int runXcodebuild(String xcworkspacePath, String xcodeprojPath, String target, String scheme, String configuration, String sdk, String additionalParameters, boolean codeSign) {
+    int runXcodebuild(String xcworkspacePath, String xcodeprojPath, String target, String scheme, String configuration, String sdk, String additionalParameters, boolean codeSign, boolean doIsolateDerivedData, String objRootPath, String symRootPath, String sharedPrecompsDirPath, String moduleCacheDirPath) {
         try {
             ArrayList<String> buildCommand = new ArrayList<String>();
             buildCommand.add(xcodebuild);
@@ -142,6 +142,12 @@ public class iOSBuilderExecutor {
                     buildCommand.add("CODE_SIGN_IDENTITY=" + identity.getCommonName());
                     buildCommand.add("OTHER_CODE_SIGN_FLAGS=--keychain " + keychainName);
                 }
+            }
+            if (doIsolateDerivedData) {
+                buildCommand.add("OBJROOT=" + envVars.expand(objRootPath));
+                buildCommand.add("SYMROOT=" + envVars.expand(symRootPath));
+                buildCommand.add("SHARED_PRECOMPS_DIR=" + envVars.expand(sharedPrecompsDirPath));
+                buildCommand.add("MODULE_CACHE_DIR=" + envVars.expand(moduleCacheDirPath));
             }
             return executeAt(build.getWorkspace(), buildCommand);
         }
