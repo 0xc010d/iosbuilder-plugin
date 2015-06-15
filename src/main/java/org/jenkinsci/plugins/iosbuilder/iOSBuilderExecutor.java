@@ -11,7 +11,6 @@ import org.jenkinsci.plugins.iosbuilder.signing.PKCS12Archive;
 import org.jenkinsci.plugins.iosbuilder.util.AppInfoExtractor;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.OutputStream;
 import java.util.*;
 
@@ -107,10 +106,11 @@ public class iOSBuilderExecutor {
 
     int clearDerivedData(String objRootPath, String symRootPath, String sharedPrecompsDirPath, String moduleCacheDirPath) {
         try {
-            new FilePath(this.build.getWorkspace(), envVars.expand(objRootPath)).deleteRecursive();
-            new FilePath(this.build.getWorkspace(), envVars.expand(symRootPath)).deleteRecursive();
-            new FilePath(this.build.getWorkspace(), envVars.expand(sharedPrecompsDirPath)).deleteRecursive();
-            new FilePath(this.build.getWorkspace(), envVars.expand(moduleCacheDirPath)).deleteRecursive();
+            FilePath workspace = build.getWorkspace();
+            executeAt(workspace, "rm -rf", envVars.expand(objRootPath));
+            executeAt(workspace, "rm -rf", envVars.expand(symRootPath));
+            executeAt(workspace, "rm -rf", envVars.expand(sharedPrecompsDirPath));
+            executeAt(workspace, "rm -rf", envVars.expand(moduleCacheDirPath));
         }
         catch (Exception e) {
             e.printStackTrace(listener.getLogger());
