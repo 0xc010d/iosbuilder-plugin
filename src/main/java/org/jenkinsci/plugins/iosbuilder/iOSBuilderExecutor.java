@@ -15,20 +15,22 @@ import java.io.OutputStream;
 import java.util.*;
 
 public class iOSBuilderExecutor {
-    private final AbstractBuild build;
-    private final Launcher launcher;
-    private final BuildListener listener;
+    private final String rm;
     private final String security;
     private final String xcodebuild;
     private final String xcrun;
+    private final AbstractBuild build;
+    private final Launcher launcher;
+    private final BuildListener listener;
     private final EnvVars envVars;
+    private final FilePath buildPath;
     private Identity identity;
     private String keychainName;
     private Mobileprovision mobileprovision;
-    private FilePath buildPath;
     private Map<String, AppInfoExtractor.AppInfo> appInfoMap = new HashMap<String, AppInfoExtractor.AppInfo>();
 
     iOSBuilderExecutor(String securityPath, String xcodebuildPath, String xcrunPath, AbstractBuild build, Launcher launcher, BuildListener listener, String buildDirectory) throws Exception {
+        this.rm = "/bin/rm";
         this.security = securityPath;
         this.xcodebuild = xcodebuildPath;
         this.xcrun = xcrunPath;
@@ -107,10 +109,10 @@ public class iOSBuilderExecutor {
     int clearDerivedData(String objRootPath, String symRootPath, String sharedPrecompsDirPath, String moduleCacheDirPath) {
         try {
             FilePath workspace = build.getWorkspace();
-            executeAt(workspace, "rm", "-rf", envVars.expand(objRootPath));
-            executeAt(workspace, "rm", "-rf", envVars.expand(symRootPath));
-            executeAt(workspace, "rm", "-rf", envVars.expand(sharedPrecompsDirPath));
-            executeAt(workspace, "rm", "-rf", envVars.expand(moduleCacheDirPath));
+            executeAt(workspace, rm, "-rf", envVars.expand(objRootPath));
+            executeAt(workspace, rm, "-rf", envVars.expand(symRootPath));
+            executeAt(workspace, rm, "-rf", envVars.expand(sharedPrecompsDirPath));
+            executeAt(workspace, rm, "-rf", envVars.expand(moduleCacheDirPath));
         }
         catch (Exception e) {
             e.printStackTrace(listener.getLogger());
