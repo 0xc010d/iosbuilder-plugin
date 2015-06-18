@@ -107,10 +107,10 @@ public class iOSBuilderExecutor {
     int clearDerivedData(String objRootPath, String symRootPath, String sharedPrecompsDirPath, String moduleCacheDirPath) {
         try {
             FilePath workspace = build.getWorkspace();
-            executeAt(workspace, "rm -rf", envVars.expand(objRootPath));
-            executeAt(workspace, "rm -rf", envVars.expand(symRootPath));
-            executeAt(workspace, "rm -rf", envVars.expand(sharedPrecompsDirPath));
-            executeAt(workspace, "rm -rf", envVars.expand(moduleCacheDirPath));
+            executeAt(workspace, "/bin/rm -rf", envVars.expand(objRootPath));
+            executeAt(workspace, "/bin/rm -rf", envVars.expand(symRootPath));
+            executeAt(workspace, "/bin/rm -rf", envVars.expand(sharedPrecompsDirPath));
+            executeAt(workspace, "/bin/rm -rf", envVars.expand(moduleCacheDirPath));
         }
         catch (Exception e) {
             e.printStackTrace(listener.getLogger());
