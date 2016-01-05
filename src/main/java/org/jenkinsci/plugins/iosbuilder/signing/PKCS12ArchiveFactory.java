@@ -13,4 +13,12 @@ public class PKCS12ArchiveFactory {
     public static PKCS12Archive newInstance(String encodedData, Secret password) throws IOException {
         return newInstance(new BASE64Decoder().decodeBuffer(encodedData), Secret.toString(password).toCharArray());
     }
+
+    public static PKCS12Archive newSafeInstance(String encodedData, Secret password) throws IOException {
+        try {
+            return newInstance(encodedData, password);
+        } catch (IOException e) {
+            return null;
+        }
+    }
 }

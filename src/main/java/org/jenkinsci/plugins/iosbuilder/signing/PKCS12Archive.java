@@ -12,6 +12,9 @@ import java.util.Map;
 public class PKCS12Archive {
     private final Map<PrivateKey, Certificate> content;
 
+    // Used in the jelly templates
+    public Map<PrivateKey, Certificate> getContent() { return content; }
+
     PKCS12Archive(byte[] data, char[] password) throws IOException {
         try {
             content = new HashMap<PrivateKey, Certificate>();

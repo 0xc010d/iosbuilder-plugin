@@ -49,7 +49,7 @@
             <j:invokeStatic className="java.util.UUID" method="randomUUID" var="detailsId" />
             <j:set var="url" value="${baseURL}inputId=${inputId}"/>
 
-            <j:invokeStatic className="org.jenkinsci.plugins.iosbuilder.signing.PKCS12ArchiveFactory" method="newInstance" var="pkcs12Archive">
+            <j:invokeStatic className="org.jenkinsci.plugins.iosbuilder.signing.PKCS12ArchiveFactory" method="newSafeInstance" var="pkcs12Archive">
                 <j:arg type="java.lang.String" value="${instance.pkcs12ArchiveData}" />
                 <j:arg type="hudson.util.Secret" value="${instance.pkcs12ArchivePassword}" />
             </j:invokeStatic>
