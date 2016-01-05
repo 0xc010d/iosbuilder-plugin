@@ -12,8 +12,6 @@ import java.util.Map;
 public class PKCS12Archive {
     private final Map<PrivateKey, Certificate> content;
 
-    public Map<PrivateKey, Certificate> getContent() { return content; }
-
     PKCS12Archive(byte[] data, char[] password) throws IOException {
         try {
             content = new HashMap<PrivateKey, Certificate>();
@@ -21,20 +19,14 @@ public class PKCS12Archive {
             keyStore.load(new ByteArrayInputStream(data), password);
             Enumeration<String> aliases = keyStore.aliases();
             while (aliases.hasMoreElements()) {
-                try {
-                    String alias = aliases.nextElement();
-                    PrivateKey privateKey = PrivateKeyFactory.newInstance(alias, keyStore, password);
-                    Certificate certificate = CertificateFactory.newInstance((X509Certificate) keyStore.getCertificate(alias));
-                    content.put(privateKey, certificate);
-                }
-                catch (Exception e) {
-                    e.printStackTrace();
-                }
+                String alias = aliases.nextElement();
+                PrivateKey privateKey = PrivateKeyFactory.newInstance(alias, keyStore, password);
+                Certificate certificate = CertificateFactory.newInstance((X509Certificate) keyStore.getCertificate(alias));
+                content.put(privateKey, certificate);
             }
         }
         catch (Exception e) {
-            e.printStackTrace();
-            throw new IOException("Can not instantiate PKCS#12 archive object");
+            throw new IOException("Can not instantiate PKCS#12 archive object", e);
         }
         if (content.size() == 0) {
             throw new IOException("Can not instantiate PKCS#12 archive object: private keys were not found");
@@ -42,18 +34,12 @@ public class PKCS12Archive {
     }
 
     public Identity chooseIdentity(Certificate[] certificates) {
-        try {
-            for (Certificate certificate : certificates) {
-                for (PrivateKey privateKey : content.keySet()) {
-                    if (privateKey.checkPublicKey(certificate.getPublicKey())) {
-                        return new Identity(privateKey, certificate);
-                    }
+        for (Certificate certificate : certificates) {
+            for (PrivateKey privateKey : content.keySet()) {
+                if (privateKey.checkPublicKey(certificate.getPublicKey())) {
+                    return new Identity(privateKey, certificate);
                 }
             }
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-            return null;
         }
         return null;
     }
